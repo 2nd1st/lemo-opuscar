@@ -239,14 +239,14 @@ agent 会读三份指南，像一个小工作室一样开工。指南是英文�
 
 ### 谢谢每一颗星
 
-每到一个里程碑做一支感谢片，和库里所有片子一样全部用代码做成。点海报观看（720p）；1080p 原片在 <a href="https://github.com/lemomo-ai/lemo-opuscar/releases/tag/thanks">Release</a> 里。
+每到一个里程碑做一支感谢片，和库里所有片子一样全部用代码做成。点海报到<a href="https://lemomo-ai.github.io/lemo-opuscar/thanks/">感谢片页面</a>在线观看。
 
-<a href="https://github.com/lemomo-ai/lemo-opuscar/releases/download/thanks/stars2000-720p.mp4"><img src="docs/thanks/thanks-2000.jpg" alt="2000 星 · 刷新（50 秒）" width="100%"></a>
+<a href="https://lemomo-ai.github.io/lemo-opuscar/thanks/#stars2000"><img src="docs/thanks/thanks-2000.jpg" alt="2000 星 · 刷新（50 秒）" width="100%"></a>
 <sub>2000 星 · 刷新（50 秒）</sub>
 
 <table><tr>
-<td width="50%" valign="top"><a href="https://github.com/lemomo-ai/lemo-opuscar/releases/download/thanks/stars800-720p.mp4"><img src="docs/thanks/thanks-800.jpg" alt="800 星 · 反打（39 秒）"></a><br><sub>800 星 · 反打（39 秒）</sub></td>
-<td width="50%" valign="top"><a href="https://github.com/lemomo-ai/lemo-opuscar/releases/download/thanks/stars300-720p.mp4"><img src="docs/thanks/thanks-300.jpg" alt="300 星 · 点灯人（18 秒）"></a><br><sub>300 星 · 点灯人（18 秒）</sub></td>
+<td width="50%" valign="top"><a href="https://lemomo-ai.github.io/lemo-opuscar/thanks/#stars800"><img src="docs/thanks/thanks-800.jpg" alt="800 星 · 反打（39 秒）"></a><br><sub>800 星 · 反打（39 秒）</sub></td>
+<td width="50%" valign="top"><a href="https://lemomo-ai.github.io/lemo-opuscar/thanks/#stars300"><img src="docs/thanks/thanks-300.jpg" alt="300 星 · 点灯人（18 秒）"></a><br><sub>300 星 · 点灯人（18 秒）</sub></td>
 </tr></table>
 
 ## 授权

@@ -243,14 +243,14 @@ Click a frame for its `STYLE.md`.
 
 ### Thank you for every star
 
-A thank-you film at each milestone, made in code like everything here. Click a poster to watch (720p); 1080p files are in the <a href="https://github.com/lemomo-ai/lemo-opuscar/releases/tag/thanks">release</a>.
+A thank-you film at each milestone, made in code like everything here. Click a poster to watch on the <a href="https://lemomo-ai.github.io/lemo-opuscar/thanks/">thank-you page</a>.
 
-<a href="https://github.com/lemomo-ai/lemo-opuscar/releases/download/thanks/stars2000-720p.mp4"><img src="docs/thanks/thanks-2000.jpg" alt="2,000 stars · Refresh (50 s)" width="100%"></a>
+<a href="https://lemomo-ai.github.io/lemo-opuscar/thanks/#stars2000"><img src="docs/thanks/thanks-2000.jpg" alt="2,000 stars · Refresh (50 s)" width="100%"></a>
 <sub>2,000 stars · Refresh (50 s)</sub>
 
 <table><tr>
-<td width="50%" valign="top"><a href="https://github.com/lemomo-ai/lemo-opuscar/releases/download/thanks/stars800-720p.mp4"><img src="docs/thanks/thanks-800.jpg" alt="800 stars · Reverse Shot (39 s)"></a><br><sub>800 stars · Reverse Shot (39 s)</sub></td>
-<td width="50%" valign="top"><a href="https://github.com/lemomo-ai/lemo-opuscar/releases/download/thanks/stars300-720p.mp4"><img src="docs/thanks/thanks-300.jpg" alt="300 stars · The Lamplighter (18 s)"></a><br><sub>300 stars · The Lamplighter (18 s)</sub></td>
+<td width="50%" valign="top"><a href="https://lemomo-ai.github.io/lemo-opuscar/thanks/#stars800"><img src="docs/thanks/thanks-800.jpg" alt="800 stars · Reverse Shot (39 s)"></a><br><sub>800 stars · Reverse Shot (39 s)</sub></td>
+<td width="50%" valign="top"><a href="https://lemomo-ai.github.io/lemo-opuscar/thanks/#stars300"><img src="docs/thanks/thanks-300.jpg" alt="300 stars · The Lamplighter (18 s)"></a><br><sub>300 stars · The Lamplighter (18 s)</sub></td>
 </tr></table>
 
 ## Licence
