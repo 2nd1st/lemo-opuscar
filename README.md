@@ -4,8 +4,8 @@
 
 **English** · [简体中文](README.zh-CN.md)
 
-**<!--n-->43<!--/n--> film styles, each with a short film made entirely in code.**<br>
-**<!--n-->43<!--/n--> 种影片风格，每种都配一支完全用代码做出来的短片。**
+**<!--n-->45<!--/n--> film styles, each with a short film made entirely in code.**<br>
+**<!--n-->45<!--/n--> 种影片风格，每种都配一支完全用代码做出来的短片。**
 
 Pick a style, bring your own story, and let your coding agent direct the film.<br>
 选一个风格，带上你自己的故事，让你的编程 agent 来当导演。
@@ -178,6 +178,10 @@ Click a frame for its `STYLE.md`.
 <tr>
 <td width="33%" valign="top"><a href="styles/living-screencast/STYLE.md"><img src="docs/frames/living-screencast.jpg" alt="Living Screencast"></a><br><b>Living Screencast</b><br><i>Clawd Moves In</i><br><sub>Clawd, the Claude Code pixel mascot, hops out of the terminal into the Claude app and acts out plan mode, diff comments and self-checks in a one-take screencast.</sub></td>
 <td width="33%" valign="top"><a href="styles/hologram-hud/STYLE.md"><img src="docs/frames/hologram-hud.jpg" alt="Sci-fi Hologram HUD"></a><br><b>Sci-fi Hologram HUD</b><br><i>Volt · Spec Scan</i><br><sub>An e-bike is scanned into a hologram; target boxes lock onto the battery, motor and brakes, and each spec rolls into place.</sub></td>
+<td width="33%" valign="top"><a href="styles/satellite-briefing/STYLE.md"><img src="docs/frames/satellite-briefing.jpg" alt="Satellite Briefing"></a><br><b>Satellite Briefing</b><br><i>The Map Still Says Sea</i><br><sub>A satellite follows the map to the Aral Sea and finds a desert; the only part that came back is the part someone dammed.</sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="styles/briefing-board/STYLE.md"><img src="docs/frames/briefing-board.jpg" alt="Engineering Briefing Board"></a><br><b>Engineering Briefing Board</b><br><i>The Ship Decides</i><br><sub>A river needs a bridge; four bridge types are tested on one briefing wall, and the ship that must pass underneath picks the winner.</sub></td>
 </tr>
 </table>
 

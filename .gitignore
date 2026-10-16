@@ -92,3 +92,11 @@ styles/*/demo/PRODUCTION_LOG*
 # 宣传物料（发帖用海报、预告片、教程片），只留本地，不上传 GitHub
 /docs/social/
 
+
+# Source photos, imagery caches and fonts anywhere in a demo stay local (CREDITS names them; build scripts re-fetch)
+styles/*/demo/**/*.ttf
+styles/*/demo/**/*.otf
+styles/*/demo/**/*.tif
+styles/*/demo/**/*.tiff
+styles/*/demo/**/*.npz
+styles/*/demo/assets/raw/

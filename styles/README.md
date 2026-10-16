@@ -56,6 +56,8 @@ Users may name a style in English, in Chinese, or by its folder. Find it here, t
 | Dark Tech Keynote | 暗色科技发布 | [`dark-keynote`](dark-keynote/STYLE.md) | *Room to Think* |
 | Living Screencast | 活体实机录屏 | [`living-screencast`](living-screencast/STYLE.md) | *Clawd Moves In* |
 | Sci-fi Hologram HUD | 科幻全息界面 | [`hologram-hud`](hologram-hud/STYLE.md) | *Volt · Spec Scan* |
+| Satellite Briefing | 卫星简报 | [`satellite-briefing`](satellite-briefing/STYLE.md) | *The Map Still Says Sea* |
+| Engineering Briefing Board | 工程简报板 | [`briefing-board`](briefing-board/STYLE.md) | *The Ship Decides* |
 
 ## Cartoon & Anime · 卡通与动画
 
