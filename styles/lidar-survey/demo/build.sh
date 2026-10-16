@@ -2,7 +2,8 @@
 # One command: 《林下的田》 The Fields Under the Forest (LiDAR Survey demo)
 #   sh demo/build.sh          voice, checks, events, picture, score + mix, master, subtitles, checks, poster
 #   FETCH=1 sh demo/build.sh  first re-download and rebuild the data: USGS 3DEP points (EPT, ~50 MB), NAIP 2016 photo,
-#                             Noto Sans SC; DTM, wall tracing, wall profile, binaries for the page (~3 min, ~350 MB in assets/raw)
+#                             DTM, wall tracing, wall profile, binaries for the page (~3 min, ~350 MB in assets/raw)
+# Fonts are fetched from Google Fonts by tools/fonts.py whenever they are missing (they are not in git).
 set -e
 HERE=$(cd "$(dirname "$0")" && pwd)                 # .../<slug>/demo
 FILM=$(cd "$HERE/.." && pwd)                         # .../<slug>
@@ -14,18 +15,18 @@ DPY="$HERE/assets/raw/.venv/bin/python"              # data tools need laspy + l
 NAME=lidar-survey
 cd "$LIB"
 
-if [ "${FETCH:-0}" = "1" ] || [ ! -f "$HERE/assets/raw/build/points.bin" ]; then
-  [ -x "$DPY" ] || { python3 -m venv "$HERE/assets/raw/.venv" && "$DPY" -m pip install -q laspy lazrs numpy scipy pillow scikit-image fonttools brotli; }
+# style-specific packages live in a private venv inside the project, not in $LIB/.venv
+[ -x "$DPY" ] || { python3 -m venv "$HERE/assets/raw/.venv" && "$DPY" -m pip install -q laspy lazrs numpy scipy pillow scikit-image fonttools brotli; }
+# data: keyed on a gitignored artefact, so a clean clone always rebuilds it
+if [ "${FETCH:-0}" = "1" ] || [ ! -f "$HERE/assets/raw/build/points.bin" ] || [ ! -f "$HERE/assets/raw/build/naip.jpg" ]; then
   "$DPY" -I "$HERE/tools/fetch_ept.py" "$HERE/assets/raw/ept" 14 USGS_LPC_CT_Statewide_B8_2016 -72.2005,-72.1915,41.8830,41.8920
   "$DPY" -I "$HERE/tools/walls.py" "$HERE/assets/raw/ept" "$HERE/assets/raw/work"        # DTM + local relief (+ a ridge review image)
   "$DPY" -I "$HERE/tools/trace.py" "$HERE/assets/raw/work" "$HERE/data"                  # snap data/walls_traced.json -> data/walls.json
   "$DPY" -I "$HERE/tools/profile.py" "$HERE/assets/raw/ept" "$HERE/data" C 20 80         # data/profile_C.json
   "$DPY" -I "$HERE/tools/build_data.py" "$HERE/assets/raw/ept" "$HERE/assets/raw/work" "$HERE/data" "$HERE/assets/raw/build"
   "$DPY" -I "$HERE/tools/fetch_naip.py" "$HERE/assets/raw/build"
-  mkdir -p "$HERE/assets/raw/fonts"
-  [ -f "$HERE/assets/raw/fonts/NotoSansSC.ttf" ] || curl -sL -o "$HERE/assets/raw/fonts/NotoSansSC.ttf" "https://github.com/google/fonts/raw/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf"
 fi
-"$DPY" -I "$HERE/tools/fonts.py" "$HERE"
+"$DPY" -I "$HERE/tools/fonts.py" "$HERE"           # fetches Barlow Condensed, IBM Plex Mono, Noto Sans SC (Google Fonts, OFL) if missing; CJK subset
 
 # voice: Kokoro (bm_george), speech-to-text check with the small English model, cues from the real durations
 node "$HERE/tools/export.mjs" "$HERE" > /dev/null || true

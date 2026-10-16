@@ -34,6 +34,7 @@ VOICE
 - Kokoro-82M (hexgrad), voice bm_george, Apache License 2.0; run locally via kokoro-onnx (MIT) through core/tts/tts.py.
   Speech check: faster-whisper small.en (MIT; OpenAI Whisper weights, MIT).
 
-FONTS (SIL Open Font License 1.1, licence texts in fonts/; Chinese fonts subset with the Google Fonts API &text=)
+FONTS (SIL Open Font License 1.1; tools/fonts.py fetches every face from Google Fonts and the licence texts from
+github.com/google/fonts into fonts/; Chinese faces subset with the CSS2 API &text=)
 - IBM Plex Mono, IBM Plex Sans — IBM
 - Noto Sans SC, Noto Serif SC — Google / Adobe

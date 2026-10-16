@@ -1,8 +1,8 @@
 #!/bin/sh
 # One command: 《差两秒》 Two Seconds Short (Archive Light Table demo)
 #   sh demo/build.sh            voice, checks, cues, picture, score + mix, master, subtitles, checks, poster
-#   FETCH=1 sh demo/build.sh    first re-download the Library of Congress scans (~100 MB), rebuild the textures
-#                               and the font subsets
+#   FETCH=1 sh demo/build.sh    first re-download the fonts and the Library of Congress scans (~100 MB), rebuild the textures
+#   (a clean clone fetches fonts, scans, the voice model and the sample libraries by itself; needs setup.sh deps voice)
 set -e
 HERE=$(cd "$(dirname "$0")" && pwd)                 # .../<slug>/demo
 FILM=$(cd "$HERE/.." && pwd)                         # .../<slug>
@@ -14,6 +14,15 @@ NAME=archive-lighttable
 RAW="$HERE/assets/raw"
 cd "$LIB"
 
+# fonts (gitignored): every face the page uses, from Google Fonts
+if [ "${FETCH:-0}" = "1" ] || [ ! -f "$HERE/fonts/IBMPlexMono-400.woff2" ] || [ ! -f "$HERE/fonts/NotoSansSC-400.woff2" ]; then
+  mkdir -p "$HERE/fonts"; "$PY" -I "$HERE/tools/fonts.py" "$HERE"
+fi
+# the voice model and the three sample libraries the score uses (skipped when present)
+[ -f core/tts/kokoro-v1.0.onnx ] || sh tools/fetch.sh voice
+for l in salamander vsco2ce vcsl; do [ -d "core/audio/instruments/$l" ] || sh tools/fetch.sh instruments $l; done
+
+# archive scans and textures (gitignored): keyed on a texture the page reads
 if [ "${FETCH:-0}" = "1" ] || [ ! -f "$HERE/assets/tex/p1_fly.png" ]; then
   mkdir -p "$RAW"
   T=https://tile.loc.gov/storage-services/master/pnp
@@ -21,7 +30,6 @@ if [ "${FETCH:-0}" = "1" ] || [ ! -f "$HERE/assets/tex/p1_fly.png" ]; then
   curl -sSL -o "$RAW/loc_cph3b18080u.tif" "$T/cph/3b10000/3b18000/3b18000/3b18080u.tif"
   curl -sSL -A "LemoOpuscar/1.0" -o "$RAW/telegram_mcc061.jpg" "https://upload.wikimedia.org/wikipedia/commons/7/72/Telegram_Orville_Wright_17_dec_1903.jpg"
   "$PY" -I "$HERE/tools/prep.py" "$HERE"             # plates, masks, the Flyer / Wilbur layers and the cleaned background
-  "$PY" -I "$HERE/tools/fonts.py" "$HERE"
 fi
 
 # voice: Kokoro (bm_george), speech-to-text check with the small English model

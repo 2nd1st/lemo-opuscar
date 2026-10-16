@@ -2,18 +2,20 @@
 # One command: 《地图上还写着海》 The Map Still Says Sea (Satellite Briefing demo)
 #   sh demo/build.sh            voice, events, picture, score + mix, master, subtitles, checks, poster
 #   FETCH=1 sh demo/build.sh    first re-download and rebuild the imagery (Landsat via Planetary Computer,
-#                               Blue Marble via NASA GIBS, Natural Earth, font subsets): ~25 min, ~3 GB in assets/raw
+#                               Blue Marble via NASA GIBS, Natural Earth): ~25 min, ~3.5 GB in assets/raw
+# In a fresh clone (plates, raw scenes and fonts are not in git) the imagery and fonts are fetched automatically.
 set -e
 HERE=$(cd "$(dirname "$0")" && pwd)                 # .../<slug>/demo
 FILM=$(cd "$HERE/.." && pwd)                         # .../<slug>
-LIB=${LIB:-$(cd "$HERE/../../.." && pwd)}            # films/<slug>/demo or styles/<slug>/demo -> library root
+LIB=${LIB:-$(cd "$HERE/../../.." && pwd)}            # styles/<slug>/demo -> library root
 export LIB
 [ -f "$LIB/core/render/video.mjs" ] || { echo "set LIB to the library folder"; exit 1; }
 PY="$LIB/.venv/bin/python"
 NAME=satellite-briefing
 cd "$LIB"
 
-if [ "${FETCH:-0}" = "1" ] || [ ! -f "$HERE/assets/vectors.json" ]; then
+# the test keys on gitignored artefacts: a clean clone has the tracked vectors.json/plates.json but no plates
+if [ "${FETCH:-0}" = "1" ] || [ ! -f "$HERE/assets/plates/r2025.jpg" ] || [ ! -f "$HERE/assets/plates/mapfield.png" ]; then
   mkdir -p "$HERE/assets/raw/ne"
   for f in ne_10m_lakes_historic ne_10m_rivers_lake_centerlines; do
     curl -sL -o "$HERE/assets/raw/ne/$f.geojson" "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/$f.geojson"
@@ -27,6 +29,9 @@ if [ "${FETCH:-0}" = "1" ] || [ ! -f "$HERE/assets/vectors.json" ]; then
   "$PY" -I "$HERE/tools/vectors.py" "$HERE"
   "$PY" -I "$HERE/tools/mapfield.py" "$HERE"     # the printed map (distance field, relief) + rivers
   "$PY" -I "$HERE/tools/growth.py" "$HERE"       # North Aral: 2001 -> 2009 growth order
+fi
+# fonts (gitignored): Barlow Condensed + IBM Plex Mono from github.com/google/fonts, Noto SC subsets from the CSS2 API
+if [ ! -f "$HERE/fonts/BarlowCondensed-Light.ttf" ] || [ ! -f "$HERE/fonts/IBMPlexMono-Medium.ttf" ] || [ ! -f "$HERE/fonts/NotoSerifSC-600.woff2" ]; then
   "$PY" -I "$HERE/tools/fonts.py" "$HERE"
 fi
 

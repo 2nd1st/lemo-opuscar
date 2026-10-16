@@ -28,6 +28,7 @@
     "mask_max": null,
     "thin_region": null,
     "thin_color": null,
+    "radial": null,
     "patch": [],
     "poly": null,
     "cut": [],

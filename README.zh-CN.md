@@ -12,7 +12,7 @@
 
 <sub>官方仓库：[github.com/lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) · 作者 Lemomo（[@lemomo_ai](https://x.com/lemomo_ai)）</sub>
 
-**最新：[OPUSCAR 98 的 98 种风格全部公开](https://lemomo-ai.github.io/lemo-opuscar/opuscar98/#styles)**：每部片的风格（标明 2D 还是 3D）、截图、可以直接拿去用的风格提示词、镜头设计和导演编排。
+**最新：新分类[「实证影像」](https://lemomo-ai.github.io/lemo-opuscar/#evidence-films)上线，共 8 种风格**：拍的都是真实素材，包括卫星影像、激光扫描、开放城市数据、开源硬件 CAD、显微切片和档案底片，画面上每个数字都是实测的或有出处。[往下看](#实证影像)。
 
 </div>
 
@@ -73,6 +73,8 @@ claude
 ### 然后直接说
 
 > 用**油画厚涂**风格做一支 30 秒的片子，讲我家那只每天在窗台等我下班的橘猫。
+
+> 用**点云测绘**风格做一支 40 秒的片子，讲我们镇后山那座废弃的采石场，数据用公开的激光扫描。
 
 风格用中文名、英文名或文件夹名都行，全部风格见[风格索引](styles/README.md)。
 

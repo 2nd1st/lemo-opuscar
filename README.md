@@ -16,7 +16,7 @@ Pick a style, bring your own story, and let your coding agent direct the film.<b
 
 <sub>Official repo: [github.com/lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) · by Lemomo ([@lemomo_ai](https://x.com/lemomo_ai))</sub>
 
-**New: [all 98 styles of OPUSCAR 98](https://lemomo-ai.github.io/lemo-opuscar/opuscar98/#styles)**: for every film, its style (2D or 3D), a frame, a style prompt you can reuse, and how its shots were directed.
+**New: [Evidence Films](https://lemomo-ai.github.io/lemo-opuscar/#evidence-films)**, a new category of 8 styles that film real material: satellite imagery, laser scans, open city data, open-hardware CAD, microscope slides, archive plates. Every number on screen is measured or sourced. [See them below](#evidence-films).
 
 </div>
 
@@ -77,6 +77,8 @@ Films go into `films/<name>/` inside the repo.
 ### Then just say what you want
 
 > Make a 45-second film in the **watercolor** style about the coffee farm my family runs. Warm female narrator.
+
+> Make a 40-second **LiDAR Survey** film about the old quarry in the hills behind our town, from public laser-scan data.
 
 Name the style in English or Chinese; the [style index](styles/README.md) lists them all.
 

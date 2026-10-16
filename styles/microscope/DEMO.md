@@ -76,12 +76,12 @@ demo/
   mix.py            score, foley, room, voice, mix -> out/mix.wav + out/stems/
   config.json       circle centres, nucleus guess, the roll the scan direction is computed for
   tools/            plates.py (registration, cleaning, plates, collagen masks and counts, tissue axis), nucleus.py,
-                    fonts.py, export.mjs (voice lines, cues, number check), subcheck.mjs, cuecheck.py, finalasr.py
+                    fonts.py (all fonts), export.mjs (voice lines, cues, number check), subcheck.mjs, cuecheck.py, finalasr.py
   assets/           raw/Ventana-1.bif (227 MB, gitignored), plates/ (plates, ROI overlays, plates.json, nucleus.json)
   FACTS.md, CREDITS, TREATMENT.md, PRODUCTION_LOG.md, stills/styleframe.jpg
 ```
 
-- `sh demo/build.sh` takes about 5 minutes on Apple silicon (the picture renders in ~20–90 s with 4 workers; the final speech check is the slowest step). `FETCH=1` re-downloads the slide and rebuilds every plate and measurement (about a minute after the download). The slide reader runs in its own `demo/.venv` (tifffile, imagecodecs).
+- `sh demo/build.sh` takes about 5 minutes on Apple silicon (the picture renders in ~20–90 s with 4 workers; the final speech check is the slowest step). In a fresh clone it first downloads the slide (227 MB), rebuilds the plates and measurements (about a minute) and fetches the fonts (Barlow Condensed and IBM Plex Mono from github.com/google/fonts, Noto Sans SC / Noto Serif SC subsets from the Google Fonts API); `FETCH=1` forces all of that again. The slide reader runs in its own `demo/.venv` (tifffile, imagecodecs).
 - Checks it runs: `asr_check.py` with `small.en` (decimals are written as Whisper writes them in each line's `asr`), the script's numbers against the measurements (`export.mjs` fails on a mismatch), the cue grid, single-line subtitle widths with the real fonts (widest 642 px against 960), `readcheck.mjs`, speech-to-text on the final mix, black frames.
 - Plates: slide photo 1251 × 3685 (21.2 µm/px), scan levels 5/4/3 whole with a 0.3 mm feather, level 2 whole (6144 × 5376, 1 µm/px), levels 1 and 0 as 5120 × 3584 crops around the nucleus. About 400 MB of decoded images per render worker.
 - Demo-specific pitfalls: the scanner tray's clips at the slide's far end could only be filled roughly, so that end stays out of frame in every shot; the slide photo's resolution tag was trusted only after the tissue's centroid matched the scan through AOI0 (19 µm); with fields between 2.6 and 2.8 mm the level-2 plate flips in and out, so the circles are held at 2.6–2.7 mm to keep the turret quiet during a reading; the scan direction of the counting mask is computed for the roll in `config.json` and must follow the camera if the roll changes.

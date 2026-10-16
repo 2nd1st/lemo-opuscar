@@ -13,9 +13,11 @@ kit/
                   RESCHECK (source px per screen px of every print at time t)
   batch.mjs       scene JSON → PNG/JPG, many at once, any size
   objects/        the object library: <id>.png (cut-out) + <id>.json (size, anchors, credit, how it was cut)
-  fonts/          LXGW Marker Gothic + Noto Sans SC (subsets), Archivo, IBM Plex Mono — all OFL
+  fonts/          LXGW Marker Gothic + Noto Sans SC (subsets), Archivo, IBM Plex Mono — all OFL, fetched by tools/fetch_fonts.py
   tools/
-    prep_object.py  photo → cut-out object (BiRefNet ONNX mask, optional polygon / sky key, clean edge, shared grade)
+    kit_env.sh      the cut-out tools' private venv (demo/.venv: numpy, scipy, Pillow, onnxruntime) and the BiRefNet model
+    fetch_sources.py the source photos listed as used in sources/candidates/candidates.json (Commons URLs, licences)
+    prep_object.py  photo → cut-out object (BiRefNet ONNX mask, or a polygon / mask image without it; sky key, clean edge, shared grade)
     sky_key.py      a mask for thin things shot against a clear sky (cables, stays), to add to BiRefNet's
     redraw_stays.py      stay cables measured from the sky key and redrawn as clean lines (pylon stays in front)
     redraw_suspension.py main cables (fitted parabolas) and hangers (measured) redrawn as clean lines

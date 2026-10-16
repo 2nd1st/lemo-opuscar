@@ -22,7 +22,10 @@ if [ "${FETCH:-0}" = "1" ] || [ ! -f "$HERE/assets/raw/l13_0.json" ]; then
 fi
 mkdir -p "$HERE/data" "$HERE/out"
 "$PY" -I "$HERE/tools/prep.py" "$HERE" > "$HERE/out/prep.log"      # model.json, water.png, zshadow.png, stats.json (every number on screen)
-[ -f "$HERE/fonts/fonts.css" ] || "$PY" -I "$HERE/tools/fonts.py" "$HERE"
+# fonts (gitignored .woff2, subset from Google Fonts): fetch when any is missing
+for f in NotoSansSC-300 NotoSansSC-500 InterTight-200 InterTight-400 IBMPlexMono-400; do
+  [ -f "$HERE/fonts/$f.woff2" ] || { "$PY" -I "$HERE/tools/fonts.py" "$HERE"; break; }
+done
 
 # voice: Kokoro (bm_george), speech-to-text check with the small English model, cues from the real durations
 node "$HERE/tools/export.mjs" "$HERE" > /dev/null || true

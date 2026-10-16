@@ -1,15 +1,19 @@
 #!/bin/sh
 # Rebuild every object in kit/objects/ from its source photo, exactly as used in the film.
-# Sources (licences in demo/CREDITS) live in sources/candidates/; masks are cached in sources/masks/.
-# Needs the library's Python (numpy, scipy, Pillow, onnxruntime) and the BiRefNet-general ONNX model
-# ($BIREFNET_ONNX, default ~/.rembg/models/birefnet-general/birefnet-general.onnx).
+# Sources (licences in demo/CREDITS and sources/candidates/candidates.json) are downloaded into sources/candidates/
+# by kit/tools/fetch_sources.py; BiRefNet masks are cached in sources/masks/.
+# The tools run in a private venv (demo/.venv: numpy, scipy, Pillow, onnxruntime) with the BiRefNet-general ONNX
+# model; kit/tools/kit_env.sh makes both when missing. About 3 minutes after the downloads.
 # Everything is cut at the photo's own resolution (tools/rescheck.mjs proves no frame upsamples a photo).
 set -e
 KIT=$(cd "$(dirname "$0")/.." && pwd); DEMO=$(dirname "$KIT")
 LIB=${LIB:-$(cd "$DEMO/../../.." && pwd)}
-PY=${PY:-"$LIB/.venv/bin/python"}
+cd "$DEMO"
+python3 kit/tools/fetch_sources.py
+. kit/tools/kit_env.sh
+PY="$KPY"
 T="kit/tools"; SRC="sources/candidates"; M="sources/masks"; D="sources/derived"   # relative: the metas record portable paths
-cd "$DEMO"; mkdir -p "$M" "$D"
+mkdir -p "$M" "$D"
 
 # ship, seen from straight above (CC BY 4.0, BAW): rotated so the bow points down, hull polygon keeps its shadow out
 "$PY" "$T/prep_object.py" "$SRC/ship_top/ship_top_1.jpg" ship --rotate 90 --crop 740,190,1230,2820 \

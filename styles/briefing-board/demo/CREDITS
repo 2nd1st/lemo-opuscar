@@ -35,12 +35,13 @@ PHOTOGRAPHS (Wikimedia Commons; cut out at the photo's own resolution with BiRef
   (measured positions) redrawn as clean lines (represents the bridge type, not a real bridge).
 The four "print_*" objects are the same photographs, uncropped, on a white photo-paper border, pinned at the
 top right of the wall. No real bridge, ship, company or place is named or readable in the film. The licence
-trail of every download is in sources/candidates/candidates.json (local).
+trail of every photo looked at is in sources/candidates/candidates.json; kit/tools/fetch_sources.py downloads
+the six used ones from Commons.
 
 The whiteboard, its light and ghosts, the frame and tray, magnets, tags, the steel ruler, the cards and sticky
 notes, the clearance sketch, the rubber stamp and all marker ink are drawn in code.
 
-FONTS (SIL Open Font License 1.1; texts in kit/fonts/)
+FONTS (SIL Open Font License 1.1; texts in kit/fonts/; all from Google Fonts, fetched by kit/tools/fetch_fonts.py)
 - LXGW Marker Gothic, The LXGW Marker Gothic Project Authors (subset)
 - Noto Sans SC, Adobe / Google (subset)
 - Archivo, Omnibus-Type
@@ -58,7 +59,7 @@ MUSIC AND SOUND
   trombone, tuba, horn, tubular bells, glockenspiel, vibraphone)
 
 TOOLS
-- Segmentation: BiRefNet-general (MIT), run through onnxruntime (MIT).
+- Segmentation: BiRefNet-general (MIT; ONNX export from https://github.com/danielgatis/rembg/releases), run through onnxruntime (MIT).
 - Rendering: headless Chromium (Playwright); ffmpeg.
 
 FACTS

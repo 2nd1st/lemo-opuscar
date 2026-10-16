@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Turn one photo into a kit object: kit/objects/<id>.png + <id>.json.
 
-    $LIB/.venv/bin/python kit/tools/prep_object.py <raw image> <id> [options]
+    $KPY kit/tools/prep_object.py <raw image> <id> [options]        ($KPY: the private venv, see kit/tools/kit_env.sh)
 
 Steps: rotate / crop → mask (BiRefNet, a mask file, a polygon, or both combined) → clean the edge
 (tighten, erode, anti-alias, decontaminate the fringe colour) → shared grade (so photos from
@@ -25,8 +25,10 @@ Options
   --anchor name=nx,ny       anchor in output-normalised coordinates (repeatable; kept on re-runs)
   --anchor-px name=x,y      anchor in cropped-image pixels, converted after the trim
   --credit FILE.json        {title, author, licence, source} merged into meta
-Model: BiRefNet-general ONNX (MIT), path from $BIREFNET_ONNX or ~/.rembg/models/birefnet-general/birefnet-general.onnx.
-Requires numpy, scipy, Pillow, onnxruntime (all in the library's .venv).
+Model: BiRefNet-general ONNX (MIT, ~970 MB), from $BIREFNET_ONNX, demo/.models/birefnet-general.onnx or
+~/.rembg/models/birefnet-general/birefnet-general.onnx; download:
+https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-general-epoch_244.onnx (kit/tools/kit_env.sh does it).
+Without the model, --poly alone (or --mask) still cuts. Requires numpy, scipy, Pillow, onnxruntime (private venv).
 """
 import argparse, json, os, sys, hashlib
 import numpy as np
@@ -36,7 +38,8 @@ from scipy import ndimage as ndi
 HERE = os.path.dirname(os.path.abspath(__file__))
 OBJ = os.path.join(os.path.dirname(HERE), 'objects')
 CACHE = os.path.join(os.path.dirname(os.path.dirname(HERE)), 'sources', 'masks')
-MODEL = os.environ.get('BIREFNET_ONNX') or os.path.expanduser('~/.rembg/models/birefnet-general/birefnet-general.onnx')
+MODEL = next((m for m in (os.environ.get('BIREFNET_ONNX'), os.path.join(os.path.dirname(os.path.dirname(HERE)), '.models', 'birefnet-general.onnx'),
+                           os.path.expanduser('~/.rembg/models/birefnet-general/birefnet-general.onnx')) if m and os.path.exists(m)), None)
 
 
 def birefnet(img):
@@ -45,6 +48,8 @@ def birefnet(img):
     key = os.path.join(CACHE, 'birefnet_' + hashlib.md5(img.tobytes()).hexdigest()[:16] + '.png')
     if os.path.exists(key):
         return np.asarray(Image.open(key).convert('L'), np.float32) / 255
+    if MODEL is None:
+        return None
     import onnxruntime as ort
     sess = ort.InferenceSession(MODEL, providers=['CPUExecutionProvider'])
     x = np.asarray(img.resize((1024, 1024), Image.BICUBIC), np.float32) / 255
@@ -128,6 +133,9 @@ def main():
         alpha = load(a.mask)
     else:
         alpha = birefnet(img)
+        if alpha is None:
+            if not a.poly: sys.exit('no BiRefNet model (see kit/tools/kit_env.sh): give --poly or --mask to cut without it')
+            alpha = np.ones((img.height, img.width), np.float32)      # the polygon alone makes the cut
         if a.mask_mul: alpha = alpha * load(a.mask_mul)
         if a.mask_max:   # add thin parts, but only those connected to the main object (no clouds, no birds)
             extra = load(a.mask_max)

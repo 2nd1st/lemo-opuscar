@@ -1,6 +1,6 @@
 #!/bin/sh
 # One command: 《两条螺旋》Two Spirals (Data Physicalization demo)
-#   sh demo/build.sh     fonts (first run) → voice → speech check → events → picture → score + mix → master → .srt → checks → poster
+#   sh demo/build.sh     packs + fonts (when missing) → voice → speech check → events → picture → score + mix → master → .srt → checks → poster
 set -e
 HERE=$(cd "$(dirname "$0")" && pwd)                 # .../<slug>/demo
 FILM=$(cd "$HERE/.." && pwd)                         # .../<slug>
@@ -11,7 +11,15 @@ PY="$LIB/.venv/bin/python"
 NAME=data-physical
 cd "$LIB"
 
-[ -f "$HERE/fonts.css" ] || node "$HERE/tools/fonts.mjs" "$HERE"      # OFL font subsets from Google Fonts
+# packs that are not in git (each fetched only when missing)
+[ -f core/assets/polyhaven/photo_studio_loft_hall_2k.hdr ] || sh tools/fetch.sh hdri      # Poly Haven studio HDRI (CC0, 12 MB)
+[ -f core/tts/kokoro-v1.0.onnx ] || sh tools/fetch.sh voice                               # Kokoro model (setup.sh deps voice installs the Python side)
+for l in vsco2ce vcsl freepats; do [ -d "core/audio/instruments/$l" ] || sh tools/fetch.sh instruments $l; done   # CC0 samples for the score
+# fonts: the .woff2 subsets are gitignored; fetch them (Google Fonts, OFL) whenever one that fonts.css names is missing
+NEED_FONTS=0
+[ -f "$HERE/fonts.css" ] || NEED_FONTS=1
+for f in $(grep -o 'fonts/[^)]*\.woff2' "$HERE/fonts.css" 2>/dev/null); do [ -f "$HERE/$f" ] || NEED_FONTS=1; done
+if [ "$NEED_FONTS" = 1 ]; then node "$HERE/tools/fonts.mjs" "$HERE"; fi
 
 # voice: Kokoro (af_heart), then a speech-to-text check with the small English model
 node "$HERE/tools/export.mjs" "$HERE" > /dev/null || true

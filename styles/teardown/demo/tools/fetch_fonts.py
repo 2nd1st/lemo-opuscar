@@ -1,4 +1,5 @@
-# Subset Noto Sans SC (OFL) to the characters the overlay uses, via the Google Fonts CSS API (text=)
+# Fonts (all SIL OFL 1.1, from Google Fonts): Noto Sans SC subset to the characters the overlay uses (CSS API text=),
+# Inter and JetBrains Mono as variable TTFs from github.com/google/fonts, plus their licence texts
 # usage: python3 -I tools/fetch_fonts.py   (run from the film folder; needs network)
 import re, urllib.parse, urllib.request, pathlib
 here = pathlib.Path(__file__).resolve().parent.parent
@@ -10,5 +11,13 @@ for w in (400, 500):
     url = f'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@{w}&text=' + urllib.parse.quote(chars)
     css = urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': UA}), timeout=30).read().decode()
     furl = re.search(r'url\((https://[^)]+)\)', css).group(1)
+    (here / 'fonts').mkdir(exist_ok=True)
     (here / 'fonts' / f'NotoSansSC-{w}.woff2').write_bytes(urllib.request.urlopen(furl, timeout=30).read())
 print(len(chars), 'chars:', chars)
+
+GF = 'https://github.com/google/fonts/raw/main/ofl/'
+for url, name in [(GF + 'inter/Inter%5Bopsz,wght%5D.ttf', 'Inter.ttf'), (GF + 'inter/OFL.txt', 'OFL-inter.txt'),
+                  (GF + 'jetbrainsmono/JetBrainsMono%5Bwght%5D.ttf', 'JetBrainsMono.ttf'), (GF + 'jetbrainsmono/OFL.txt', 'OFL-jetbrainsmono.txt'),
+                  (GF + 'notosanssc/OFL.txt', 'OFL-notosanssc.txt')]:
+    (here / 'fonts' / name).write_bytes(urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': UA}), timeout=60).read())
+print('fonts ready in', here / 'fonts')

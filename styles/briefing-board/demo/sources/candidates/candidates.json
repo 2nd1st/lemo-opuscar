@@ -15,7 +15,8 @@
   "credit": "Containerschiffe auf der Elbe zwischen Wedel und Hamburg",
   "license_evidence": "{{cc-by-4.0}} {{FlickreviewR|status=passed|author=BAW_Bundesanstalt für Wasserbau|sourceurl=https://flickr.com/photos/64906758@N07/55103130595|archive=|reviewdate=2026-03-09 22:10:22|reviewlicense=cc-by-4.0|reviewer=FlickreviewR 2}}",
   "description": "Blick auf die Ladung des Containerschiffes \"EVER ARM\"",
-  "used": true
+  "used": true,
+  "sha256": "ec8f2bdb4346d839c773b872771c63a171c88af309e660d344d2459af95a7468"
  },
  {
   "file": "ship_top/ship_top_2.jpg",
@@ -87,7 +88,8 @@
   "credit": "Own work",
   "license_evidence": "{{self|Cc-zero}}",
   "description": "The feeder ship Harrison outbound on the Elbe river near the town of Cuxhaven",
-  "used": true
+  "used": true,
+  "sha256": "19c05a7a784391d2c2c653428bc011fc73357dc2914af132829e86fc3d8d8f37"
  },
  {
   "file": "ship_side/ship_side_2.jpg",
@@ -231,7 +233,8 @@
   "credit": "Own work",
   "license_evidence": "{{PD-self}}",
   "description": "Kiiminkijoki Bridge is a road bridge over Kiiminkijoki river in Haukipudas. The concrete box girder bridge was completed in 1954.",
-  "used": true
+  "used": true,
+  "sha256": "2be81a278af5dfa32f01dca1cd3da87b2c9d8cc90642673cc81f3dbe3244aad0"
  },
  {
   "file": "beam/beam_4.jpg",
@@ -321,7 +324,8 @@
   "credit": "Library of Congress\nCatalog: http://lccn.loc.gov/2015632042\nImage download: https://cdn.loc.gov/master/pnp/highsm/31900/31967a.tif\nOriginal url: http://hdl.loc.gov/loc.pnp/highsm.31967",
   "license_evidence": "{{PD-Highsmith}}",
   "description": "Title: Fort Henry Bridge] Wheeling, West Virginia\nPhysical description: 1 photograph : digital, tiff file, color.\nNotes: Purchase; Carol M. Highsmith Photography, Inc.; 2015; (DLC/PP-2015:055).; Credit line: West Virginia Collection within the Carol M. Highsmith Archive, Library of Congress, Prints and Photographs Division.; Forms part of: West Virginia Collection within the Carol M. Highsmith Arc",
-  "used": true
+  "used": true,
+  "sha256": "957e5d433b048d05b91efa456600751adbcdbb013ac95e4f804ae420d5d9231c"
  },
  {
   "file": "arch/arch_2.tif",
@@ -412,7 +416,8 @@
   "credit": "Library of Congress\n\nCatalog: http://lccn.loc.gov/2015631874\nImage download: https://cdn.loc.gov/master/pnp/highsm/31700/31799a.tif\nOriginal url: http://hdl.loc.gov/loc.pnp/highsm.31799",
   "license_evidence": "{{PD-Highsmith}}",
   "description": "Title: East Huntington bridge, Huntington, West Virginia\nPhysical description: 1 photograph : digital, tiff file, color.\n\nNotes: Purchase; Carol M. Highsmith Photography, Inc.; 2015; (DLC/PP-2015:055).; Credit line: West Virginia Collection within the Carol M. Highsmith Archive, Library of Congress, Prints and Photographs Division.; Forms part of: West Virginia Collection within the Carol M. Highs",
-  "used": true
+  "used": true,
+  "sha256": "e714e492d781dfb50bd2427cae1bb7757d65fe573274d6e27f1872ef9e987d66"
  },
  {
   "file": "cable/cable_2.tiff",
@@ -538,7 +543,8 @@
   "credit": "bear mountain bridge west II",
   "license_evidence": "{{cc-by-2.0}} {{User:FlickreviewR/reviewed-pass|russimages|https://flickr.com/photos/81751903@N08/14104379089|2017-10-28 23:56:23|cc-by-2.0|}}",
   "description": "bear mountain bridge west II",
-  "used": true
+  "used": true,
+  "sha256": "fcb038926db9e4acd0ea1861240c25714b13fd52d411fbecf6f6850caf63ef21"
  },
  {
   "file": "suspension/suspension_2.jpg",
