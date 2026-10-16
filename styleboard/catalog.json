@@ -1,5 +1,141 @@
 [
  {
+  "slug": "satellite-briefing",
+  "num": "55",
+  "en": "Satellite Briefing",
+  "cn": "卫星简报",
+  "cat": "实证影像",
+  "cat_en": "Evidence Films",
+  "film": "The Map Still Says Sea",
+  "line": "A satellite follows the map to the Aral Sea and finds a desert; the only part that came back is the part someone dammed.",
+  "line_cn": "卫星照着地图去找咸海，找到的是沙漠；唯一回来的那一小块，是有人筑坝留住的。",
+  "uses": [
+   "Climate & environment",
+   "Investigations & news explainers",
+   "Geography & history"
+  ],
+  "dur": 37.8
+ },
+ {
+  "slug": "briefing-board",
+  "num": "56",
+  "en": "Engineering Briefing Board",
+  "cn": "工程简报板",
+  "cat": "实证影像",
+  "cat_en": "Evidence Films",
+  "film": "The Ship Decides",
+  "line": "A river needs a bridge; four bridge types are tested on one briefing wall, and the ship that must pass underneath picks the winner.",
+  "line_cn": "一条河要架桥，四种桥型在一面简报墙上逐个受检，拍板的是桥下要过的船。",
+  "uses": [
+   "Engineering decisions",
+   "Option comparisons",
+   "Briefings & explainers"
+  ],
+  "dur": 40.0
+ },
+ {
+  "slug": "lidar-survey",
+  "num": "57",
+  "en": "LiDAR Survey",
+  "cn": "点云测绘",
+  "cat": "实证影像",
+  "cat_en": "Evidence Films",
+  "film": "The Fields Under the Forest",
+  "line": "A laser survey strips the canopy off a Connecticut forest, layer by layer, and finds the stone walls of the farms that were there: 3.4 km of them, measured.",
+  "line_cn": "激光点云把康涅狄格州一片森林的树冠一层层剥掉，地面上露出当年农田的石墙：描出 3.4 公里，逐一量过。",
+  "uses": [
+   "Archaeology & heritage",
+   "Forestry & environment",
+   "Infrastructure & site surveys"
+  ],
+  "dur": 40.0
+ },
+ {
+  "slug": "white-model",
+  "num": "58",
+  "en": "Projection on White Model",
+  "cn": "白模投影",
+  "cat": "实证影像",
+  "cat_en": "Evidence Films",
+  "film": "How a Flattened City Grew Back",
+  "line": "A projector lights Rotterdam's white model layer by layer: what stood before 1940, the decades that filled the hole, the towers, and the winter shadow the tallest one casts on the pre-war roofs.",
+  "line_cn": "投影机把数据一层层刷上鹿特丹白模：1940 年前留下的楼、填满空洞的几十年、长起来的塔楼，以及最高那栋在冬至正午投向战前屋顶的影子。",
+  "uses": [
+   "Urban planning & real estate",
+   "Exhibitions & showrooms",
+   "City data & history"
+  ],
+  "dur": 40.0
+ },
+ {
+  "slug": "data-physical",
+  "num": "59",
+  "en": "Data Physicalization",
+  "cn": "数据实物化",
+  "cat": "实证影像",
+  "cat_en": "Evidence Films",
+  "film": "Two Spirals",
+  "line": "Twelve years of wind and solar capacity stacked as real plates on a walnut dial: wind led in 2014, solar passed it in 2021, and by 2025 the ratio has turned the other way round.",
+  "line_cn": "十二年的风电和太阳能装机，按同一个单位叠成实物，绕胡桃木表盘升成两条螺旋：2014 年风电领先，2021 年太阳能超过，2025 年比值整个反了过来。",
+  "uses": [
+   "Annual reports & ESG",
+   "Investor communications",
+   "Energy & climate statistics"
+  ],
+  "dur": 39.4
+ },
+ {
+  "slug": "teardown",
+  "num": "60",
+  "en": "Exploded Teardown",
+  "cn": "产品拆解",
+  "cat": "实证影像",
+  "cat_en": "Evidence Films",
+  "film": "21 Keys, Opened",
+  "line": "One half of an open-source keyboard comes apart in a single orbit, dives under its circuit board to the chip, the lights and the sockets, then closes with its real dimensions drawn on it.",
+  "line_cn": "开源键盘的一半在一次环绕中逐层拆开，镜头钻到电路板背面看主控、灯珠和热插拔座，再合拢，把真实尺寸画在实物上。",
+  "uses": [
+   "Hardware launches",
+   "E-commerce product pages",
+   "Technical marketing & spec explainers"
+  ],
+  "dur": 38.8
+ },
+ {
+  "slug": "microscope",
+  "num": "61",
+  "en": "Microscope Story",
+  "cn": "显微叙事",
+  "cat": "实证影像",
+  "cat_en": "Evidence Films",
+  "film": "Measured Blue",
+  "line": "One continuous camera takes a liver slide from the eye down to a single nucleus; two circles 1.4 mm apart are counted pixel by pixel, and one holds 2.4 times the blue.",
+  "line_cn": "一镜从肉眼看到的肝组织玻片推到单个细胞核；相隔 1.4 毫米的两个圆被逐像素计数，其中一个的蓝色是另一个的 2.4 倍。",
+  "uses": [
+   "Biomedicine & pathology",
+   "Materials & surface science",
+   "Skincare & cosmetic science"
+  ],
+  "dur": 39.5
+ },
+ {
+  "slug": "archive-lighttable",
+  "num": "62",
+  "en": "Archive Light Table",
+  "cn": "档案灯台",
+  "cat": "实证影像",
+  "cat_en": "Evidence Films",
+  "film": "Two Seconds Short",
+  "line": "The telegram said the longest flight lasted 57 seconds and the newspaper printed it; under a loupe, the Wright brothers' glass negatives and the Library of Congress record say 59.",
+  "line_cn": "电报说最长一次飞了 57 秒，第二天报纸照登；放大镜下，莱特兄弟的玻璃底片和国会图书馆的记录说是 59 秒。",
+  "uses": [
+   "Brand history & anniversaries",
+   "Documentary & archive explainers",
+   "Museum & collection stories"
+  ],
+  "dur": 40.0
+ },
+ {
   "slug": "crayon-book",
   "num": "01",
   "en": "Crayon Picture Book",
@@ -474,40 +610,6 @@
    "Trade-show screens"
   ],
   "dur": 39.0
- },
- {
-  "slug": "satellite-briefing",
-  "num": "55",
-  "en": "Satellite Briefing",
-  "cn": "卫星简报",
-  "cat": "信息与发布",
-  "cat_en": "Information & Keynote",
-  "film": "The Map Still Says Sea",
-  "line": "A satellite follows the map to the Aral Sea and finds a desert; the only part that came back is the part someone dammed.",
-  "line_cn": "卫星照着地图去找咸海，找到的是沙漠；唯一回来的那一小块，是有人筑坝留住的。",
-  "uses": [
-   "Climate & environment",
-   "Investigations & news explainers",
-   "Geography & history"
-  ],
-  "dur": 37.8
- },
- {
-  "slug": "briefing-board",
-  "num": "56",
-  "en": "Engineering Briefing Board",
-  "cn": "工程简报板",
-  "cat": "信息与发布",
-  "cat_en": "Information & Keynote",
-  "film": "The Ship Decides",
-  "line": "A river needs a bridge; four bridge types are tested on one briefing wall, and the ship that must pass underneath picks the winner.",
-  "line_cn": "一条河要架桥，四种桥型在一面简报墙上逐个受检，拍板的是桥下要过的船。",
-  "uses": [
-   "Engineering decisions",
-   "Option comparisons",
-   "Briefings & explainers"
-  ],
-  "dur": 40.0
  },
  {
   "slug": "rubber-hose",

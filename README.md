@@ -4,8 +4,8 @@
 
 **English** · [简体中文](README.zh-CN.md)
 
-**<!--n-->45<!--/n--> film styles, each with a short film made entirely in code.**<br>
-**<!--n-->45<!--/n--> 种影片风格，每种都配一支完全用代码做出来的短片。**
+**<!--n-->51<!--/n--> film styles, each with a short film made entirely in code.**<br>
+**<!--n-->51<!--/n--> 种影片风格，每种都配一支完全用代码做出来的短片。**
 
 Pick a style, bring your own story, and let your coding agent direct the film.<br>
 选一个风格，带上你自己的故事，让你的编程 agent 来当导演。
@@ -104,6 +104,25 @@ Click a frame for its `STYLE.md`.
 
 <!-- styles:start -->
 
+### Evidence Films
+
+<table>
+<tr>
+<td width="33%" valign="top"><a href="styles/satellite-briefing/STYLE.md"><img src="docs/frames/satellite-briefing.jpg" alt="Satellite Briefing"></a><br><b>Satellite Briefing</b><br><i>The Map Still Says Sea</i><br><sub>A satellite follows the map to the Aral Sea and finds a desert; the only part that came back is the part someone dammed.</sub></td>
+<td width="33%" valign="top"><a href="styles/briefing-board/STYLE.md"><img src="docs/frames/briefing-board.jpg" alt="Engineering Briefing Board"></a><br><b>Engineering Briefing Board</b><br><i>The Ship Decides</i><br><sub>A river needs a bridge; four bridge types are tested on one briefing wall, and the ship that must pass underneath picks the winner.</sub></td>
+<td width="33%" valign="top"><a href="styles/lidar-survey/STYLE.md"><img src="docs/frames/lidar-survey.jpg" alt="LiDAR Survey"></a><br><b>LiDAR Survey</b><br><i>The Fields Under the Forest</i><br><sub>A laser survey strips the canopy off a Connecticut forest, layer by layer, and finds the stone walls of the farms that were there: 3.4 km of them, measured.</sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="styles/white-model/STYLE.md"><img src="docs/frames/white-model.jpg" alt="Projection on White Model"></a><br><b>Projection on White Model</b><br><i>How a Flattened City Grew Back</i><br><sub>A projector lights Rotterdam&#x27;s white model layer by layer: what stood before 1940, the decades that filled the hole, the towers, and the winter shadow the tallest one casts on the pre-war roofs.</sub></td>
+<td width="33%" valign="top"><a href="styles/data-physical/STYLE.md"><img src="docs/frames/data-physical.jpg" alt="Data Physicalization"></a><br><b>Data Physicalization</b><br><i>Two Spirals</i><br><sub>Twelve years of wind and solar capacity stacked as real plates on a walnut dial: wind led in 2014, solar passed it in 2021, and by 2025 the ratio has turned the other way round.</sub></td>
+<td width="33%" valign="top"><a href="styles/teardown/STYLE.md"><img src="docs/frames/teardown.jpg" alt="Exploded Teardown"></a><br><b>Exploded Teardown</b><br><i>21 Keys, Opened</i><br><sub>One half of an open-source keyboard comes apart in a single orbit, dives under its circuit board to the chip, the lights and the sockets, then closes with its real dimensions drawn on it.</sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="styles/microscope/STYLE.md"><img src="docs/frames/microscope.jpg" alt="Microscope Story"></a><br><b>Microscope Story</b><br><i>Measured Blue</i><br><sub>One continuous camera takes a liver slide from the eye down to a single nucleus; two circles 1.4 mm apart are counted pixel by pixel, and one holds 2.4 times the blue.</sub></td>
+<td width="33%" valign="top"><a href="styles/archive-lighttable/STYLE.md"><img src="docs/frames/archive-lighttable.jpg" alt="Archive Light Table"></a><br><b>Archive Light Table</b><br><i>Two Seconds Short</i><br><sub>The telegram said the longest flight lasted 57 seconds and the newspaper printed it; under a loupe, the Wright brothers&#x27; glass negatives and the Library of Congress record say 59.</sub></td>
+</tr>
+</table>
+
 ### Hand-drawn & Painting
 
 <table>
@@ -178,10 +197,6 @@ Click a frame for its `STYLE.md`.
 <tr>
 <td width="33%" valign="top"><a href="styles/living-screencast/STYLE.md"><img src="docs/frames/living-screencast.jpg" alt="Living Screencast"></a><br><b>Living Screencast</b><br><i>Clawd Moves In</i><br><sub>Clawd, the Claude Code pixel mascot, hops out of the terminal into the Claude app and acts out plan mode, diff comments and self-checks in a one-take screencast.</sub></td>
 <td width="33%" valign="top"><a href="styles/hologram-hud/STYLE.md"><img src="docs/frames/hologram-hud.jpg" alt="Sci-fi Hologram HUD"></a><br><b>Sci-fi Hologram HUD</b><br><i>Volt · Spec Scan</i><br><sub>An e-bike is scanned into a hologram; target boxes lock onto the battery, motor and brakes, and each spec rolls into place.</sub></td>
-<td width="33%" valign="top"><a href="styles/satellite-briefing/STYLE.md"><img src="docs/frames/satellite-briefing.jpg" alt="Satellite Briefing"></a><br><b>Satellite Briefing</b><br><i>The Map Still Says Sea</i><br><sub>A satellite follows the map to the Aral Sea and finds a desert; the only part that came back is the part someone dammed.</sub></td>
-</tr>
-<tr>
-<td width="33%" valign="top"><a href="styles/briefing-board/STYLE.md"><img src="docs/frames/briefing-board.jpg" alt="Engineering Briefing Board"></a><br><b>Engineering Briefing Board</b><br><i>The Ship Decides</i><br><sub>A river needs a bridge; four bridge types are tested on one briefing wall, and the ship that must pass underneath picks the winner.</sub></td>
 </tr>
 </table>
 

@@ -11,8 +11,8 @@ REPO = 'lemomo-ai/lemo-opuscar'
 FILMS_URL = f'https://github.com/{REPO}/releases/download/films'   # full films live on the "films" release as <slug>.mp4
 BLOB_URL = f'https://github.com/{REPO}/blob/main'
 
-# The nine categories, in gallery order. A style.json must name one of them (both languages, exactly).
-CATEGORIES = [('手绘与绘画', 'Hand-drawn & Painting'), ('东方传统', 'East Asian Traditions'), ('印刷与版画', 'Print & Printmaking'),
+# The ten categories, in gallery order. A style.json must name one of them (both languages, exactly).
+CATEGORIES = [('实证影像', 'Evidence Films'), ('手绘与绘画', 'Hand-drawn & Painting'), ('东方传统', 'East Asian Traditions'), ('印刷与版画', 'Print & Printmaking'),
               ('图形与排版', 'Graphic & Type'), ('信息与发布', 'Information & Keynote'), ('卡通与动画', 'Cartoon & Anime'),
               ('游戏', 'Games'), ('电影与时代', 'Cinema & Eras'), ('材质与 3D', 'Materials & 3D')]
 FIELDS = ('slug', 'num', 'en', 'cn', 'category_en', 'category_cn', 'film', 'line', 'line_cn', 'uses', 'frame_sec', 'dur')
