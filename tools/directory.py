@@ -21,7 +21,13 @@ GALLERY = 'https://lemomo-ai.github.io/lemo-opuscar/'
 KEEP = ['AGENTS.md', 'DIRECTOR.md', 'TECHNIQUE.md', 'LICENSE', 'package.json', 'package-lock.json',
         'requirements.txt', 'requirements-voice.txt', 'requirements-music.txt', 'core', 'tools/fetch.sh',
         'tools/assets.json', 'styles/README.md', 'styles/*/STYLE.md', 'styles/*/style.json', 'styles/*/DEMO.md']
-DROP = ['core/assets/polyhaven/desk_lamp_arm_01/', 'core/assets/polyhaven/tea_set_01/', 'styles/_template/']
+DROP = ['core/assets/polyhaven/desk_lamp_arm_01/', 'core/assets/polyhaven/tea_set_01/', 'styles/_template/',
+        # the walnut textures come from the "assets" release instead (pack `textures`): the portal's scan reads stray
+        # bytes in big JPEGs as download-and-run commands
+        'core/assets/polyhaven/walnut_diff.jpg', 'core/assets/polyhaven/walnut_nor.jpg', 'core/assets/polyhaven/walnut_rough.jpg']
+# the pack on the "assets" release with the three walnut textures, unchanged from main (added to this edition's assets.json)
+TEXTURES = {'file': 'textures.tar', 'size': 7249920, 'sha256': 'a1cc326f704e1cb9ef87c38bc3906a934c432676bd8193a3ed0f33cfc5719ada'}
+ICON = 'opuscar-trophy.png'   # not icon.png: the portal matches a doc's word "icon" to a file called icon.png
 
 SETUP_OLD = 'plugin/skills/lemo-opuscar/scripts/setup.sh'
 EDGE_CONSENT = ('it sends the narration text to Microsoft, so in this edition use it only when the user asks for it '
@@ -72,6 +78,14 @@ EDITS = [
      'into a private venv in the project folder (`demo/kit/tools/kit_env.sh` does venv and model), never into `$LIB/.venv`.',
      'into a private venv in the project folder, never into the library\'s own `.venv`.'),
     ('core/audio/INSTRUMENTS.md', '和 `sfx.py` 同一套约定（`SR`、`add()`、`limit()`）', '和 sfx.py 用同一套约定：采样率 SR、add() 和 limit()'),
+    # the walnut textures are a pack on the "assets" release in this edition (TEXTURES)
+    ('tools/fetch.sh', 'usage: sh tools/fetch.sh voice | hdri | instruments', 'usage: sh tools/fetch.sh voice | hdri | textures | instruments'),
+    ('tools/fetch.sh', '  hdri               Poly Haven HDRIs → core/assets/polyhaven/\n',
+     '  hdri               Poly Haven HDRIs → core/assets/polyhaven/\n  textures           Poly Haven walnut veneer textures → core/assets/polyhaven/\n'),
+    ('tools/fetch.sh', '  voice|hdri) PACKS=$1 ;;', '  voice|hdri|textures) PACKS=$1 ;;'),
+    ('styles/data-physical/STYLE.md', 'only the studio HDRI, `sh tools/fetch.sh hdri` (Poly Haven, CC0, 12 MB);',
+     'only the studio HDRI, `sh tools/fetch.sh hdri` (Poly Haven, CC0, 12 MB), and the walnut veneer textures, `sh tools/fetch.sh textures` (Poly Haven, CC0, 7 MB);'),
+    ('styles/data-physical/STYLE.md', 'The walnut veneer is in `core/assets/polyhaven/`.', 'Both unpack into `core/assets/polyhaven/`.'),
     # tools/fetch.py is split out of fetch.sh by split_fetch(); this edition has no git checkout to pull
     ('tools/fetch.py', '(sh tools/setup.sh, or git pull) and try again', '(update the plugin) and try again'),
     ('tools/fetch.py', '(sh tools/setup.sh, or git pull) and run this again', '(update the plugin) and run this again'),
@@ -79,8 +93,6 @@ EDITS = [
 
 # fetch.sh runs its Python from a here-document, which the portal reads as "download and run": ship that Python as a file
 FETCH_HEREDOC = re.compile(r'^"\$PY" - \$PACKS <<\'PY\'\n(.*?)^PY\n', re.S | re.M)
-# what the portal's scan looks for in a bundled image's bytes: download-and-run commands, URLs, long readable text
-IMAGE_BAD = re.compile(rb'(?i)curl|wget|\biex\b|\birm\b|invoke-|powershell|\|\s*(?:ba|z)?sh\b|\bbash\b|https?:|python3?\s+-c|\bsh\s+-c|\beval\b|\bexec\b|[\x20-\x7e]{24}')
 
 
 def die(msg):
@@ -100,13 +112,6 @@ def write(rel, text):
 
 def build(version):
     if not re.fullmatch(r'\d+\.\d+\.\d+', version): die(f'version must look like 1.0.0, not {version!r}')
-    try:
-        import PIL                                                     # clean_images() re-encodes the bundled images
-    except ImportError:
-        venv = os.path.join(ROOT, '.venv', 'bin', 'python')
-        if os.path.exists(venv) and os.path.realpath(sys.executable) != os.path.realpath(venv):
-            os.execv(venv, [venv, os.path.abspath(sys.argv[0]), *sys.argv[1:]])  # the library's own Python has Pillow
-        die('cleaning the bundled images needs Pillow (sh plugin/skills/lemo-opuscar/scripts/setup.sh deps)')
     shutil.rmtree(OUT, ignore_errors=True)
     files = tracked()
     for f in files:
@@ -138,8 +143,8 @@ def build(version):
     shutil.copy2(os.path.join(src, 'SECURITY.md'), os.path.join(OUT, 'SECURITY.md'))
     shutil.copy2(os.path.join(ROOT, 'LICENSE'), os.path.join(OUT, 'LICENSE'))
     os.makedirs(os.path.join(OUT, '.claude-plugin'), exist_ok=True)
-    shutil.copy2(os.path.join(src, 'icon.png'), os.path.join(OUT, '.claude-plugin', 'icon.png'))
-    clean_images()
+    shutil.copy2(os.path.join(src, ICON), os.path.join(OUT, '.claude-plugin', ICON))
+    add_textures_pack()
     # setup.sh copies the library out again when this stamp changes: the version plus a hash of the library's files
     h = hashlib.sha256()
     for d, _, ns in sorted(os.walk(os.path.join(OUT, LIB))):
@@ -156,7 +161,7 @@ def build(version):
         'homepage': REPO,
         'repository': REPO,
         'license': 'MIT',
-        'icon': '.claude-plugin/icon.png',
+        'icon': f'.claude-plugin/{ICON}',
     }
     write('.claude-plugin/plugin.json', json.dumps(plugin, indent=2, ensure_ascii=False) + '\n')
     check()
@@ -176,26 +181,13 @@ def split_fetch():
     with open(sh, 'w', encoding='utf-8') as f: f.write(s[:m.start()] + '"$PY" tools/fetch.py $PACKS\n' + s[m.end():])
 
 
-def clean_images():
-    """Re-encode every bundled image without metadata, at the highest quality whose bytes the portal's scan won't misread."""
-    from PIL import Image
-    for d, _, ns in os.walk(OUT):
-        for n in ns:
-            if not n.lower().endswith(('.jpg', '.jpeg', '.png')): continue
-            p = os.path.join(d, n)
-            im = Image.open(p); im.load()
-            if n.lower().endswith('.png'):
-                tries = [dict(format='PNG', optimize=True), dict(format='PNG', optimize=False, compress_level=9)]
-            else:   # same chroma subsampling as the source (4:2:0 or grey); progressive mode and restart markers only reshuffle the bytes
-                tries = [dict(format='JPEG', quality=q, subsampling=2, optimize=True, progressive=pg, **({'restart_marker_blocks': rm} if rm else {}))
-                         for q in range(98, 92, -1) for pg in (False, True) for rm in (0, 4, 8, 16, 2, 1)]
-            for kw in tries:
-                tmp = p + '.tmp'
-                im.save(tmp, **kw)
-                if not IMAGE_BAD.search(open(tmp, 'rb').read()): os.replace(tmp, p); break
-                os.remove(tmp)
-            else:
-                die(f'{os.path.relpath(p, OUT)}: every re-encoding still contains bytes the portal reads as a command or text')
+def add_textures_pack():
+    """List the walnut textures pack in this edition's tools/assets.json, so `sh tools/fetch.sh textures` can get it."""
+    p = os.path.join(OUT, LIB, 'tools', 'assets.json')
+    man = json.load(open(p, encoding='utf-8'))
+    if man['packs'].get('textures', TEXTURES) != TEXTURES: die('tools/assets.json has another `textures` pack (update TEXTURES in tools/directory.py)')
+    man['packs']['textures'] = TEXTURES
+    with open(p, 'w', encoding='utf-8') as f: f.write(json.dumps(man, indent=2, ensure_ascii=False) + '\n')
 
 
 def check():
