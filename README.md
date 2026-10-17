@@ -45,6 +45,7 @@ The library ships inside the plugin. On first use it is copied to `~/.lemo-opusc
 | numba, for plucked strings | PyPI | only if the score uses them | ~140 MB |
 | Instrument sample libraries (VSCO 2 CE, VCSL, FreePats, Karoryfer, Salamander) | this project's GitHub Releases | only the libraries the score uses | 70–400 MB each |
 | HDRIs for 3D styles (Poly Haven, CC0) | this project's GitHub Releases | only for 3D styles | 12 MB |
+| Walnut veneer textures (Poly Haven, CC0) | this project's GitHub Releases | only for the Data Physicalization style | 7 MB |
 | Fonts named by a style (Google Fonts, OFL) | Google Fonts | when the style needs them | small |
 | Packages a style lists in its `STYLE.md` (e.g. a LiDAR reader) | npm or PyPI, into your project folder | only for that style | varies |
 | Public data for the Evidence Films styles (satellite imagery, laser scans, open city data) | the open-data sources Claude finds for your topic; it tells you each source and licence | only when you ask for such a film | varies |

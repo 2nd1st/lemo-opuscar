@@ -7,16 +7,17 @@ cd "$(dirname "$0")/.."
 LIBS="freepats karoryfer salamander vcsl vsco2ce"
 usage() {
   cat <<USAGE
-usage: sh tools/fetch.sh voice | hdri | instruments <lib> | instruments all
+usage: sh tools/fetch.sh voice | hdri | textures | instruments <lib> | instruments all
   voice              Kokoro TTS model (English, offline) → core/tts/
   hdri               Poly Haven HDRIs → core/assets/polyhaven/
+  textures           Poly Haven walnut veneer textures → core/assets/polyhaven/
   instruments <lib>  one sample library → core/audio/instruments/  (libs: $LIBS)
   instruments all    every sample library (about 1.4 GB)
 USAGE
   exit 1
 }
 case "$1" in
-  voice|hdri) PACKS=$1 ;;
+  voice|hdri|textures) PACKS=$1 ;;
   instruments)
     case " $LIBS all " in *" $2 "*) ;; *) usage ;; esac
     if [ "$2" = all ]; then PACKS=""; for l in $LIBS; do PACKS="$PACKS instruments-$l"; done; else PACKS="instruments-$2"; fi ;;
