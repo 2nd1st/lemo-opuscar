@@ -16,7 +16,7 @@ Pick a style, bring your own story, and let your coding agent direct the film.<b
 
 <sub>Official repo: [github.com/lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) · by Lemomo ([@lemomo_ai](https://x.com/lemomo_ai))</sub>
 
-**New: [Evidence Films](https://lemomo-ai.github.io/lemo-opuscar/#evidence-films)**, a new category of 8 styles that film real material: satellite imagery, laser scans, open city data, open-hardware CAD, microscope slides, archive plates. Every number on screen is measured or sourced. [See them below](#evidence-films).
+**New (2026-10-16): [Evidence Films](https://lemomo-ai.github.io/lemo-opuscar/#evidence-films)**, a new category of 8 styles that film real material: satellite imagery, laser scans, open city data, open-hardware CAD, microscope slides, archive plates. Every number on screen is measured or sourced. [See them below](#evidence-films).
 
 </div>
 
@@ -277,3 +277,13 @@ A thank-you film at each milestone, made in code like everything here. Click a p
 ## Licence
 
 Made by **LemoLab × Claude Opus 5.5**. MIT licensed. Third-party assets in the demos keep their own licences (see each demo's `CREDITS`); you are responsible for the materials you use in your films.
+
+## More from LemoLab
+
+- 📸 **[lemo-wake](https://github.com/lemomo-ai/lemo-wake)**: one picture in, a seamless loop of about five seconds out. ![stars](https://img.shields.io/github/stars/lemomo-ai/lemo-wake?style=social)
+- 🍋 **[lemo-mod](https://github.com/lemomo-ai/lemo-mod)**: re-skin Claude Code with 21 styles, in the terminal and the desktop app. ![stars](https://img.shields.io/github/stars/lemomo-ai/lemo-mod?style=social)
+- 🟥 **[Stampy](https://github.com/lemomo-ai/lemo-stampy)**: a tiny Mac menu bar stamp that marks your copies "For XX use only". ![stars](https://img.shields.io/github/stars/lemomo-ai/lemo-stampy?style=social)
+
+<sub>LemoLab · by Lemomo</sub>
+
+⭐ Star this repo · 👀 Watch → Custom → Releases to hear about new versions · Follow [@lemomo_ai](https://x.com/lemomo_ai)

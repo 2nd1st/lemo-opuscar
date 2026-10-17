@@ -12,7 +12,7 @@
 
 <sub>官方仓库：[github.com/lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) · 作者 Lemomo（[@lemomo_ai](https://x.com/lemomo_ai)）</sub>
 
-**最新：新分类[「实证影像」](https://lemomo-ai.github.io/lemo-opuscar/#evidence-films)上线，共 8 种风格**：拍的都是真实素材，包括卫星影像、激光扫描、开放城市数据、开源硬件 CAD、显微切片和档案底片，画面上每个数字都是实测的或有出处。[往下看](#实证影像)。
+**最新（2026-10-16）：新分类[「实证影像」](https://lemomo-ai.github.io/lemo-opuscar/#evidence-films)上线，共 8 种风格**：拍的都是真实素材，包括卫星影像、激光扫描、开放城市数据、开源硬件 CAD、显微切片和档案底片，画面上每个数字都是实测的或有出处。[往下看](#实证影像)。
 
 </div>
 
@@ -273,3 +273,13 @@ agent 会读三份指南，像一个小工作室一样开工。指南是英文�
 ## 授权
 
 **LemoLab × Claude Opus 5.5** 出品，MIT 协议。样片中的第三方素材沿用各自的授权（见各样片的 `CREDITS`）；你在自己片子里使用的素材由你负责。
+
+## LemoLab 的其他项目
+
+- 📸 **[lemo-wake](https://github.com/lemomo-ai/lemo-wake)**：一张图进去，一段约 5 秒、无缝循环的动图出来。 ![stars](https://img.shields.io/github/stars/lemomo-ai/lemo-wake?style=social)
+- 🍋 **[lemo-mod](https://github.com/lemomo-ai/lemo-mod)**：给 Claude Code 换上 21 套风格，终端和桌面 App 都能用。 ![stars](https://img.shields.io/github/stars/lemomo-ai/lemo-mod?style=social)
+- 🟥 **[小章 Stampy](https://github.com/lemomo-ai/lemo-stampy)**：Mac 菜单栏小工具，在预览里点一下，给复印件盖上「仅供××使用」。 ![stars](https://img.shields.io/github/stars/lemomo-ai/lemo-stampy?style=social)
+
+<sub>LemoLab · by Lemomo</sub>
+
+⭐ 点个星 · 👀 Watch → Custom → Releases，有新版本会通知你 · 关注 [@lemomo_ai](https://x.com/lemomo_ai)

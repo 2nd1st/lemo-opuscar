@@ -169,6 +169,21 @@ main{padding-bottom:40px;background:radial-gradient(1200px 700px at 50% 0, rgba(
 .repo svg{width:18px;height:18px;fill:currentColor;flex:none}
 .repo span{margin-right:-.3em;padding-top:1px}   /* cancel the trailing letter-spacing so the label sits centred */
 .repo:hover,.repo:focus-visible{background:var(--gold);color:#140e06}
+.repo .stars{display:inline-flex;align-items:center;gap:6px;margin-left:2px;padding-left:14px;border-left:1px solid rgba(212,176,100,.45);letter-spacing:.08em}
+.repo .stars[hidden]{display:none}
+.repo .stars i{font-style:normal}
+.more{max-width:1080px;margin:0 auto 56px;text-align:center}
+.more h2{margin:0;font:600 13px/1 var(--caps);letter-spacing:.42em;color:var(--gold);text-transform:uppercase}
+.more h2 small{display:block;margin-top:10px;font:500 13px/1 var(--cn);letter-spacing:.2em;color:var(--dim);text-transform:none}
+.more-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:26px;text-align:left}
+.more-grid a{position:relative;display:flex;flex-direction:column;gap:6px;padding:20px 22px 18px;border:1px solid var(--line);background:linear-gradient(180deg,var(--plate2),var(--plate));
+  text-decoration:none;color:var(--ink);transition:border-color .25s,transform .25s,box-shadow .25s}
+.more-grid a:hover,.more-grid a:focus-visible{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 18px 40px -24px rgba(212,176,100,.45)}
+.more-grid b{font:700 15px/1.2 var(--caps);letter-spacing:.12em;color:var(--gold-hi);text-transform:uppercase}
+.more-grid b::after{content:" ↗";color:var(--gold);font-weight:600}
+.more-grid span{font:italic 500 16px/1.4 var(--serif);color:#dfd3bb}
+.more-grid small{font:400 12.5px/1.6 var(--cn);color:var(--dim)}
+.more .by{margin:22px 0 0;font:600 11px/1 var(--caps);letter-spacing:.36em;color:var(--dim);text-transform:uppercase}
 footer .repo-link{display:inline-block;margin:18px 0 0;font:600 12px/1 var(--caps);letter-spacing:.3em;color:var(--gold);text-transform:uppercase;text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:6px}
 footer .repo-link:hover{color:var(--gold-hi)}
 footer{text-align:center;padding:70px 16px 60px;border-top:1px solid var(--line);margin-top:70px}
@@ -207,6 +222,8 @@ footer .fine-cn{margin:6px 0 0;font:400 13px var(--cn);color:var(--dim)}
   .presents{font-size:10.5px;letter-spacing:.26em}
   .edition{letter-spacing:.22em;gap:10px}
   .repo{gap:9px;padding:12px 14px 11px;font-size:11px;letter-spacing:.16em}.repo span{margin-right:-.16em}
+  .repo .stars{padding-left:9px}
+  .more-grid{grid-template-columns:1fr;gap:12px}
   .stats{gap:10px 18px}.stat{width:104px}
   .carpet{height:52px}
   .grid{grid-template-columns:1fr;gap:24px}
@@ -231,7 +248,7 @@ footer .fine-cn{margin:6px 0 0;font:400 13px var(--cn);color:var(--dim)}
     <p class="edition">The Nominees for Best Style · 2026</p>
     <p class="tagline">Every style is a reusable prompt, and a short film directed, drawn and scored entirely in code.</p>
     <p class="tagline-cn">每个风格是一份可复用的提示词，外加一支完全用代码导演、作画、配乐的短片。</p>
-    <a class="repo" href="{{REPO_URL}}" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span>Get the styles on GitHub</span></a>
+    <a class="repo" href="{{REPO_URL}}" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span>Get the styles on GitHub</span><b class="stars" data-stars hidden>★ <i></i></b></a>
     <div class="stats">
       <div class="stat"><div class="wreath"><svg><use href="#laurel"/></svg><b>{{N_ALL}}</b></div><span>Nominees</span></div>
       <div class="stat"><div class="wreath"><svg><use href="#laurel"/></svg><b>{{N_CAT}}</b></div><span>Categories</span></div>
@@ -267,6 +284,15 @@ footer .fine-cn{margin:6px 0 0;font:400 13px var(--cn);color:var(--dim)}
 </div></main>
 
 <footer>
+  <section class="more" aria-labelledby="more-h">
+    <h2 id="more-h">More from LemoLab<small>LemoLab 的其他项目</small></h2>
+    <div class="more-grid">
+      <a href="https://lemomo-ai.github.io/lemo-wake/" target="_blank" rel="noopener"><b>lemo-wake</b><span>One picture in, a seamless loop of about five seconds out.</span><small>一张图进去，一段约 5 秒、无缝循环的动图出来。</small></a>
+      <a href="https://lemomo-ai.github.io/lemo-mod/" target="_blank" rel="noopener"><b>lemo-mod</b><span>Re-skin Claude Code with 21 styles, in the terminal and the desktop app.</span><small>给 Claude Code 换上 21 套风格，终端和桌面 App 都能用。</small></a>
+      <a href="https://lemomo-ai.github.io/lemo-stampy/" target="_blank" rel="noopener"><b>Stampy · 小章</b><span>A tiny Mac menu bar stamp that marks your copies “For XX use only”.</span><small>Mac 菜单栏小工具，在预览里点一下，给复印件盖上「仅供××使用」。</small></a>
+    </div>
+    <p class="by">LemoLab · by Lemomo</p>
+  </section>
   <p class="sig">LemoLab × Claude Opus 5.5</p>
   <p class="fine">Every frame on this page was rendered by the project's own code.</p>
   <p class="fine-cn">页面上的每一帧，都是本项目的代码自己渲染的。</p>
@@ -301,6 +327,19 @@ document.getElementById('tabs').addEventListener('click',e=>{
 });
 let saved='all'; try{saved=localStorage.getItem('opuscar-cat')||'all'}catch(e){}
 show(document.querySelector(`#tabs button[data-f="${saved}"]`)?saved:'all');
+
+// GitHub star count on the header button; if the API can't be reached the button just has no number
+(function(){
+  const el=document.querySelector('[data-stars]'); if(!el) return;
+  const show=n=>{ el.querySelector('i').textContent=n>=1000?(n/1000).toFixed(1).replace(/\.0$/,'')+'k':String(n); el.hidden=false; };
+  const KEY='opuscar-stars';
+  try{ const c=JSON.parse(sessionStorage.getItem(KEY)||'null'); if(c&&Date.now()-c.t<36e5){ show(c.n); return; } }catch(e){}
+  fetch('https://api.github.com/repos/{{REPO}}').then(r=>r.ok?r.json():null).then(d=>{
+    if(!d||typeof d.stargazers_count!=='number') return;
+    show(d.stargazers_count);
+    try{ sessionStorage.setItem(KEY,JSON.stringify({n:d.stargazers_count,t:Date.now()})); }catch(e){}
+  }).catch(()=>{});
+})();
 
 const room=document.getElementById('room'), vid=room.querySelector('video'), env=room.querySelector('.envelope');
 function screen(card,src,poster){
