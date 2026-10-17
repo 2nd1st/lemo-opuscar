@@ -276,9 +276,9 @@ agent 会读三份指南，像一个小工作室一样开工。指南是英文�
 
 ## LemoLab 的其他项目
 
-- 📸 **[lemo-wake](https://github.com/lemomo-ai/lemo-wake)**：一张图进去，一段约 5 秒、无缝循环的动图出来。 ![stars](https://img.shields.io/github/stars/lemomo-ai/lemo-wake?style=social)
-- 🍋 **[lemo-mod](https://github.com/lemomo-ai/lemo-mod)**：给 Claude Code 换上 21 套风格，终端和桌面 App 都能用。 ![stars](https://img.shields.io/github/stars/lemomo-ai/lemo-mod?style=social)
-- 🟥 **[小章 Stampy](https://github.com/lemomo-ai/lemo-stampy)**：Mac 菜单栏小工具，在预览里点一下，给复印件盖上「仅供××使用」。 ![stars](https://img.shields.io/github/stars/lemomo-ai/lemo-stampy?style=social)
+- 📸 **[lemo-wake](https://github.com/lemomo-ai/lemo-wake)**：一张图进去，一段约 5 秒、无缝循环的动图出来。
+- 🍋 **[lemo-mod](https://github.com/lemomo-ai/lemo-mod)**：给 Claude Code 换上 21 套风格，终端和桌面 App 都能用。
+- 🟥 **[小章 Stampy](https://github.com/lemomo-ai/lemo-stampy)**：Mac 菜单栏小工具，在预览里点一下，给复印件盖上「仅供××使用」。
 
 <sub>LemoLab · by Lemomo</sub>
 

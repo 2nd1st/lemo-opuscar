@@ -280,9 +280,9 @@ Made by **LemoLab × Claude Opus 5.5**. MIT licensed. Third-party assets in the 
 
 ## More from LemoLab
 
-- 📸 **[lemo-wake](https://github.com/lemomo-ai/lemo-wake)**: one picture in, a seamless loop of about five seconds out. ![stars](https://img.shields.io/github/stars/lemomo-ai/lemo-wake?style=social)
-- 🍋 **[lemo-mod](https://github.com/lemomo-ai/lemo-mod)**: re-skin Claude Code with 21 styles, in the terminal and the desktop app. ![stars](https://img.shields.io/github/stars/lemomo-ai/lemo-mod?style=social)
-- 🟥 **[Stampy](https://github.com/lemomo-ai/lemo-stampy)**: a tiny Mac menu bar stamp that marks your copies "For XX use only". ![stars](https://img.shields.io/github/stars/lemomo-ai/lemo-stampy?style=social)
+- 📸 **[lemo-wake](https://github.com/lemomo-ai/lemo-wake)**: one picture in, a seamless loop of about five seconds out.
+- 🍋 **[lemo-mod](https://github.com/lemomo-ai/lemo-mod)**: re-skin Claude Code with 21 styles, in the terminal and the desktop app.
+- 🟥 **[Stampy](https://github.com/lemomo-ai/lemo-stampy)**: a tiny Mac menu bar stamp that marks your copies "For XX use only".
 
 <sub>LemoLab · by Lemomo</sub>
 
