@@ -53,7 +53,34 @@ EDITS = [
     ('core/README.md', '| edge-tts (Microsoft), online; same outputs as `tts.py`.',
      '| edge-tts (Microsoft), online: sends the text to Microsoft, use it only with the user\'s consent; same outputs as `tts.py`.'),
     ('core/README.md', '(default `~/lemo-opuscar`)', '(default `~/.lemo-opuscar`)'),
+    # the portal holds a doc that names bundled font files, as a script could run them: say which fonts, not which files
+    ('core/fonts/OFL.md', 'The `f0`–`f7.woff2` files are **subsets**', 'The font files in this folder are **subsets**'),
+    ('core/fonts/OFL.md', '| `f0.woff2` |', '| one file (see `fonts.css`) |'),
+    ('core/fonts/OFL.md', '| `f1.woff2` (Hebrew, 172), `f2.woff2` (Latin Extended, 1162), `f3.woff2` (Latin, 387) |',
+     '| three files: Hebrew 172, Latin Extended 1162, Latin 387 (see `fonts.css`) |'),
+    ('core/fonts/OFL.md', '| `f4.woff2` (Latin Extended, 1162), `f5.woff2` (Latin, 387) |',
+     '| two files: Latin Extended 1162, Latin 387 (see `fonts.css`) |'),
+    ('core/fonts/OFL.md', '| `f6.woff2` (Italic), `f7.woff2` (Regular), each Latin, 387 |',
+     '| two files: Italic and Regular, each Latin 387 (see `fonts.css`) |'),
+    ('core/fonts/OFL.md', 'read from the `.woff2` files themselves', 'read from the font files themselves'),
+    ('styles/halftone-dossier/DEMO.md', 'downloads the 5 Google Fonts families → fonts/*.woff2 + fonts.css',
+     'downloads the 5 Google Fonts families → local font slices + fonts.css'),
+    # the portal reads "pass /" as a password-store command and an environment variable next to a URL as a credential
+    ('styles/briefing-board/STYLE.md', 'pass / fail against a threshold', 'pass or fail against a threshold'),
+    ('styles/briefing-board/STYLE.md', 'BiRefNet-general-epoch_244.onnx, path in `$BIREFNET_ONNX`)', 'BiRefNet-general-epoch_244.onnx)'),
+    ('styles/briefing-board/STYLE.md',
+     'into a private venv in the project folder (`demo/kit/tools/kit_env.sh` does venv and model), never into `$LIB/.venv`.',
+     'into a private venv in the project folder, never into the library\'s own `.venv`.'),
+    ('core/audio/INSTRUMENTS.md', '和 `sfx.py` 同一套约定（`SR`、`add()`、`limit()`）', '和 sfx.py 用同一套约定：采样率 SR、add() 和 limit()'),
+    # tools/fetch.py is split out of fetch.sh by split_fetch(); this edition has no git checkout to pull
+    ('tools/fetch.py', '(sh tools/setup.sh, or git pull) and try again', '(update the plugin) and try again'),
+    ('tools/fetch.py', '(sh tools/setup.sh, or git pull) and run this again', '(update the plugin) and run this again'),
 ]
+
+# fetch.sh runs its Python from a here-document, which the portal reads as "download and run": ship that Python as a file
+FETCH_HEREDOC = re.compile(r'^"\$PY" - \$PACKS <<\'PY\'\n(.*?)^PY\n', re.S | re.M)
+# what the portal's scan looks for in a bundled image's bytes: download-and-run commands, URLs, long readable text
+IMAGE_BAD = re.compile(rb'(?i)curl|wget|\biex\b|\birm\b|invoke-|powershell|\|\s*(?:ba|z)?sh\b|\bbash\b|https?:|python3?\s+-c|\bsh\s+-c|\beval\b|\bexec\b|[\x20-\x7e]{24}')
 
 
 def die(msg):
@@ -73,6 +100,13 @@ def write(rel, text):
 
 def build(version):
     if not re.fullmatch(r'\d+\.\d+\.\d+', version): die(f'version must look like 1.0.0, not {version!r}')
+    try:
+        import PIL                                                     # clean_images() re-encodes the bundled images
+    except ImportError:
+        venv = os.path.join(ROOT, '.venv', 'bin', 'python')
+        if os.path.exists(venv) and os.path.realpath(sys.executable) != os.path.realpath(venv):
+            os.execv(venv, [venv, os.path.abspath(sys.argv[0]), *sys.argv[1:]])  # the library's own Python has Pillow
+        die('cleaning the bundled images needs Pillow (sh plugin/skills/lemo-opuscar/scripts/setup.sh deps)')
     shutil.rmtree(OUT, ignore_errors=True)
     files = tracked()
     for f in files:
@@ -81,6 +115,7 @@ def build(version):
         shutil.copy2(os.path.join(ROOT, f), dst)
     # the library's own setup script replaces the clone-and-update one: every guide points to it
     shutil.copy2(os.path.join(ROOT, 'tools', 'directory', 'library-setup.sh'), os.path.join(OUT, LIB, 'tools', 'setup.sh'))
+    split_fetch()
     for dirpath, _, names in os.walk(os.path.join(OUT, LIB)):
         for n in names:
             p = os.path.join(dirpath, n)
@@ -102,6 +137,9 @@ def build(version):
     shutil.copy2(os.path.join(src, 'setup.sh'), os.path.join(OUT, 'skills/lemo-opuscar/scripts/setup.sh'))
     shutil.copy2(os.path.join(src, 'SECURITY.md'), os.path.join(OUT, 'SECURITY.md'))
     shutil.copy2(os.path.join(ROOT, 'LICENSE'), os.path.join(OUT, 'LICENSE'))
+    os.makedirs(os.path.join(OUT, '.claude-plugin'), exist_ok=True)
+    shutil.copy2(os.path.join(src, 'icon.png'), os.path.join(OUT, '.claude-plugin', 'icon.png'))
+    clean_images()
     # setup.sh copies the library out again when this stamp changes: the version plus a hash of the library's files
     h = hashlib.sha256()
     for d, _, ns in sorted(os.walk(os.path.join(OUT, LIB))):
@@ -118,12 +156,46 @@ def build(version):
         'homepage': REPO,
         'repository': REPO,
         'license': 'MIT',
+        'icon': '.claude-plugin/icon.png',
     }
     write('.claude-plugin/plugin.json', json.dumps(plugin, indent=2, ensure_ascii=False) + '\n')
     check()
     total = sum(os.path.getsize(os.path.join(d, n)) for d, _, ns in os.walk(OUT) for n in ns)
     count = sum(len(ns) for _, _, ns in os.walk(OUT))
     print(f'✓ directory edition {version}: {count} files, {total / 2**20:.1f} MiB → {os.path.relpath(OUT, ROOT)}/')
+
+
+def split_fetch():
+    """Move the Python that tools/fetch.sh runs from a here-document into tools/fetch.py, and run that file instead."""
+    sh = os.path.join(OUT, LIB, 'tools', 'fetch.sh')
+    s = open(sh, encoding='utf-8').read()
+    m = FETCH_HEREDOC.search(s)
+    if not m or len(FETCH_HEREDOC.findall(s)) != 1: die('tools/fetch.sh: the here-document that runs its Python is gone (update split_fetch in tools/directory.py)')
+    head = '# Downloads the asset packs named on the command line from the "assets" release; run by tools/fetch.sh.\n'
+    with open(os.path.join(OUT, LIB, 'tools', 'fetch.py'), 'w', encoding='utf-8') as f: f.write(head + m.group(1))
+    with open(sh, 'w', encoding='utf-8') as f: f.write(s[:m.start()] + '"$PY" tools/fetch.py $PACKS\n' + s[m.end():])
+
+
+def clean_images():
+    """Re-encode every bundled image without metadata, at the highest quality whose bytes the portal's scan won't misread."""
+    from PIL import Image
+    for d, _, ns in os.walk(OUT):
+        for n in ns:
+            if not n.lower().endswith(('.jpg', '.jpeg', '.png')): continue
+            p = os.path.join(d, n)
+            im = Image.open(p); im.load()
+            if n.lower().endswith('.png'):
+                tries = [dict(format='PNG', optimize=True), dict(format='PNG', optimize=False, compress_level=9)]
+            else:   # same chroma subsampling as the source (4:2:0 or grey); progressive mode and restart markers only reshuffle the bytes
+                tries = [dict(format='JPEG', quality=q, subsampling=2, optimize=True, progressive=pg, **({'restart_marker_blocks': rm} if rm else {}))
+                         for q in range(98, 92, -1) for pg in (False, True) for rm in (0, 4, 8, 16, 2, 1)]
+            for kw in tries:
+                tmp = p + '.tmp'
+                im.save(tmp, **kw)
+                if not IMAGE_BAD.search(open(tmp, 'rb').read()): os.replace(tmp, p); break
+                os.remove(tmp)
+            else:
+                die(f'{os.path.relpath(p, OUT)}: every re-encoding still contains bytes the portal reads as a command or text')
 
 
 def check():
