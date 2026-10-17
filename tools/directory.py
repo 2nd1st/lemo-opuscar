@@ -160,6 +160,9 @@ def build(version):
         'author': {'name': 'Lemomo', 'url': 'https://github.com/lemomo-ai'},
         'homepage': REPO,
         'repository': REPO,
+        'documentationUrl': f'{REPO}#how-to-use',                     # else the portal picks the first link in our README
+        'privacyPolicyUrl': f'{REPO}/blob/directory/README.md#privacy-and-outside-services',
+        'keywords': ['video', 'film', 'animation', 'motion-graphics', 'explainer', 'film-styles', 'code-generated-video'],
         'license': 'MIT',
         'icon': f'.claude-plugin/{ICON}',
     }
