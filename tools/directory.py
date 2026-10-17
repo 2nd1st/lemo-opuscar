@@ -2,7 +2,8 @@
 """Build the Claude plugin directory edition of Lemo-Opuscar from main.
 
     python3 tools/directory.py <version>                 build into .release/directory/
-    python3 tools/directory.py <version> --into <dir>    then sync it into <dir> (a worktree of the `directory` branch)
+    python3 tools/directory.py <version> --into <dir>    then sync it into <dir> (a worktree of the `directory` branch);
+                                                         <version> must be above the branch's, see MAINTAINING.md
 
 The directory edition is a self-contained plugin: the guides, every STYLE.md / style.json / DEMO.md and the core/
 tools travel inside the plugin, so nothing is cloned or fetched to tell the agent what to do. It leaves out the films,
@@ -225,8 +226,15 @@ def sync(into):
 if __name__ == '__main__':
     args = sys.argv[1:]
     if not args or args[0].startswith('-'): die('usage: python3 tools/directory.py <version> [--into <worktree of the directory branch>]')
-    build(args[0])
     if '--into' in args:
         i = args.index('--into')
         if i + 1 >= len(args): die('--into needs a folder')
-        sync(os.path.abspath(args[i + 1]))
+        into = os.path.abspath(args[i + 1])
+        # every release the directory publishes needs a higher version; --same-version only for fixes before the first publish
+        old = os.path.join(into, '.claude-plugin', 'plugin.json')
+        if os.path.exists(old) and '--same-version' not in args:
+            have = json.load(open(old, encoding='utf-8'))['version']
+            if tuple(map(int, args[0].split('.'))) <= tuple(map(int, have.split('.'))):
+                die(f'the directory branch is at {have}: give a higher version (or --same-version for a fix that was never published)')
+    build(args[0])
+    if '--into' in args: sync(into)
