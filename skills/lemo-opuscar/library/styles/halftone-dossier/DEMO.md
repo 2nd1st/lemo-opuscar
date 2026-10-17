@@ -124,7 +124,7 @@ styles/halftone-dossier/demo/
   index.html        the whole film: helpers, halftone, paper, cat rig, 10 scenes, HUD, wipes, render(t)
   render.mjs        Playwright renderer: stills | video [workers] | mux [out.mp4]
   music.py          score + SFX + master → music.wav (seeded, deterministic)
-  fetch_fonts.mjs   downloads the 5 Google Fonts families → fonts/*.woff2 + fonts.css
+  fetch_fonts.mjs   downloads the 5 Google Fonts families → local font slices + fonts.css
   fonts/ fonts.css  local font slices (OFL)       CREDITS   licences
   stills/           review stills + styleframe.jpg   out/     intermediates (gitignored)
   PRODUCTION_LOG.md production log (local, not published)

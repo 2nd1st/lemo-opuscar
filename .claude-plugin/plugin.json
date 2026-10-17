@@ -9,5 +9,6 @@
   },
   "homepage": "https://github.com/lemomo-ai/lemo-opuscar",
   "repository": "https://github.com/lemomo-ai/lemo-opuscar",
-  "license": "MIT"
+  "license": "MIT",
+  "icon": ".claude-plugin/icon.png"
 }

@@ -1,15 +1,15 @@
 # Fonts in `core/fonts/`: licence
 
-`fonts.css` declares four font families, all licensed under the **SIL Open Font License 1.1** (OFL). The `f0`–`f7.woff2` files are **subsets**: Google Fonts-style `unicode-range` slices that hold only the glyphs listed in `fonts.css`, not the full fonts. The full text of the licence follows the table.
+`fonts.css` declares four font families, all licensed under the **SIL Open Font License 1.1** (OFL). The font files in this folder are **subsets**: Google Fonts-style `unicode-range` slices that hold only the glyphs listed in `fonts.css`, not the full fonts. The full text of the licence follows the table.
 
 | Family (style) | Files | Glyph subset (`unicode-range` code points) | Copyright line (from the font's own name table) | Licence URL in the font |
 |---|---|---|---|---|
-| ZCOOL KuaiLe (Regular) | `f0.woff2` | 208 (≈ 200 mostly Chinese characters: **not enough for running Chinese text**) | Copyright 2018 The ZCOOL KuaiLe Project Authors (https://github.com/googlefonts/zcool-kuaile) | https://openfontlicense.org |
-| Fredoka (variable, weights 500, 600 and 700 are used; the file's default instance is named "Fredoka Light") | `f1.woff2` (Hebrew, 172), `f2.woff2` (Latin Extended, 1162), `f3.woff2` (Latin, 387) | see `fonts.css` | Copyright 2016 The Fredoka Project Authors (https://github.com/hafontia/Fredoka-One) | http://scripts.sil.org/OFL |
-| Lilita One (Regular) | `f4.woff2` (Latin Extended, 1162), `f5.woff2` (Latin, 387) | see `fonts.css` | Copyright (c) 2011 Juan Montoreano (juan@remolacha.biz), with Reserved Font Names "Lilita One" | http://scripts.sil.org/OFL |
-| IM Fell English (Italic and Regular) | `f6.woff2` (Italic), `f7.woff2` (Regular), each Latin, 387 | see `fonts.css` | (c) 2007 Igino Marini (www.iginomarini.com) With Reserved Font Name IM FELL English Italic / IM FELL English Roman | http://scripts.sil.org/OFL |
+| ZCOOL KuaiLe (Regular) | one file (see `fonts.css`) | 208 (≈ 200 mostly Chinese characters: **not enough for running Chinese text**) | Copyright 2018 The ZCOOL KuaiLe Project Authors (https://github.com/googlefonts/zcool-kuaile) | https://openfontlicense.org |
+| Fredoka (variable, weights 500, 600 and 700 are used; the file's default instance is named "Fredoka Light") | three files: Hebrew 172, Latin Extended 1162, Latin 387 (see `fonts.css`) | see `fonts.css` | Copyright 2016 The Fredoka Project Authors (https://github.com/hafontia/Fredoka-One) | http://scripts.sil.org/OFL |
+| Lilita One (Regular) | two files: Latin Extended 1162, Latin 387 (see `fonts.css`) | see `fonts.css` | Copyright (c) 2011 Juan Montoreano (juan@remolacha.biz), with Reserved Font Names "Lilita One" | http://scripts.sil.org/OFL |
+| IM Fell English (Italic and Regular) | two files: Italic and Regular, each Latin 387 (see `fonts.css`) | see `fonts.css` | (c) 2007 Igino Marini (www.iginomarini.com) With Reserved Font Name IM FELL English Italic / IM FELL English Roman | http://scripts.sil.org/OFL |
 
-How this table was made: the family-to-file mapping comes from `fonts.css`; the copyright and licence lines are the `name` table records (IDs 0 and 14) read from the `.woff2` files themselves with fontTools 4.66.0 (fontTools is not in the shared `.venv`; it was installed in a throw-away environment just to read the files). The designer field (name ID 9) is empty in these files, so the copyright line above is the attribution. Nothing was fetched from a web page for the table.
+How this table was made: the family-to-file mapping comes from `fonts.css`; the copyright and licence lines are the `name` table records (IDs 0 and 14) read from the font files themselves with fontTools 4.66.0 (fontTools is not in the shared `.venv`; it was installed in a throw-away environment just to read the files). The designer field (name ID 9) is empty in these files, so the copyright line above is the attribution. Nothing was fetched from a web page for the table.
 
 Lilita One and IM FELL English declare **Reserved Font Names** (see their copyright lines). If you modify or rename these files, condition 3 of the licence below applies.
 
