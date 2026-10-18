@@ -272,7 +272,14 @@ agent 会读三份指南，像一个小工作室一样开工。指南是英文�
 
 ## 授权
 
-**LemoLab × Claude Opus 5.5** 出品。代码和文档采用 MIT 协议；样片视频及其静帧（`styles/`、画廊页和 Releases 中的）采用 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.zh-hans)：可以转载、改编和商用，但须署名 **LemoLab** 并附本仓库链接，改动过的须注明。你用本库做出的片子归你自己，无须署名。样片中的第三方素材沿用各自的授权（见各样片的 `CREDITS`）；你在自己片子里使用的素材由你负责。
+**LemoLab × Claude Opus 5.5** 出品。
+
+- **代码和文档**：MIT 协议。
+- **样片视频及其静帧**（`styles/`、画廊页和 Releases 中的）：[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.zh-hans)。可以转载、改编和商用，须署名 **LemoLab** 并附本仓库链接，改动过的须注明。
+- **你用本库做出的片子**：归你自己，无须署名。
+- **样片中的第三方素材**：沿用各自的授权，见各样片的 `CREDITS`。
+
+你在自己片子里使用的素材由你负责。
 
 ## LemoLab 的其他项目
 
