@@ -276,7 +276,7 @@ A thank-you film at each milestone, made in code like everything here. Click a p
 
 ## Licence
 
-Made by **LemoLab × Claude Opus 5.5**. MIT licensed. Third-party assets in the demos keep their own licences (see each demo's `CREDITS`); you are responsible for the materials you use in your films.
+Made by **LemoLab × Claude Opus 5.5**. The code and docs are MIT licensed. The demo films and their stills (in `styles/`, the gallery and the Releases) are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/): you may share, adapt and use them commercially, as long as you credit **LemoLab** with a link to this repository and say if you changed them. Films you make with the library are yours and need no credit. Third-party assets in the demos keep their own licences (see each demo's `CREDITS`); you are responsible for the materials you use in your films.
 
 ## More from LemoLab
 
