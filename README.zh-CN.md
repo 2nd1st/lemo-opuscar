@@ -2,35 +2,30 @@
 
 # Lemo-Opuscar
 
-[English](README.md) · **简体中文**
-
-**<!--n-->51<!--/n--> 种影片风格，每种都配一支完全用代码做出来的短片。**
-
+**<!--n-->51<!--/n--> 种影片风格，每种都配一支完全用代码做出来的短片。**<br>
 选一个风格，带上你自己的故事，让你的编程 agent 来当导演。
 
-[**▶ 看图鉴**](https://lemomo-ai.github.io/lemo-opuscar/)
+<a href="https://lemomo-ai.github.io/lemo-opuscar/"><img alt="看图鉴" src="https://img.shields.io/badge/-%E2%96%B6%20%E7%9C%8B%E5%9B%BE%E9%89%B4-E8553A?style=for-the-badge"></a> <a href="README.md"><img alt="English" src="https://img.shields.io/badge/README-English-555?style=for-the-badge"></a> <a href="https://github.com/lemomo-ai/lemo-opuscar/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/lemomo-ai/lemo-opuscar?style=for-the-badge&color=F5B700&label=stars"></a> <a href="#授权"><img alt="MIT · CC BY 4.0" src="https://img.shields.io/badge/%E6%8E%88%E6%9D%83-MIT%20%C2%B7%20CC%20BY%204.0-2EA44F?style=for-the-badge"></a>
+
+⚠️ **本插件为 Claude 专用。** 风格都是按 Claude Opus 5.5 调出来的，<br>
+其他模型适配度不高，请谨慎使用。
+
+🆕 **2026-10-16 · 新分类[「实证影像」](https://lemomo-ai.github.io/lemo-opuscar/#evidence-films)**：8 种风格，拍的都是真实素材，画面上每个数字都实测或有出处。[往下看 ↓](#实证影像)
 
 <sub>官方仓库：[github.com/lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) · 作者 Lemomo（[@lemomo_ai](https://x.com/lemomo_ai)）</sub>
-
-**最新（2026-10-16）：新分类[「实证影像」](https://lemomo-ai.github.io/lemo-opuscar/#evidence-films)上线，共 8 种风格**：拍的都是真实素材，包括卫星影像、激光扫描、开放城市数据、开源硬件 CAD、显微切片和档案底片，画面上每个数字都是实测的或有出处。[往下看](#实证影像)。
 
 </div>
 
 ## 🎬 特别放映：OPUSCAR 98
 
+<table><tr>
+<td width="50%" valign="top"><a href="https://lemomo-ai.github.io/lemo-opuscar/opuscar98/"><img src="docs/opuscar98.jpg" alt="OPUSCAR 98：98 年最佳影片"></a><br><b>▶ 影片</b> · 1927 – 2025 · 6 分 31 秒<br><sub>一个 Clawd 走过 98 部最佳影片，每一部都换成贴合那部电影的画风。</sub></td>
+<td width="50%" valign="top"><a href="https://lemomo-ai.github.io/lemo-opuscar/opuscar98/#styles"><img src="docs/opuscar98-styles.jpg" alt="OPUSCAR 98：98 种风格全部公开"></a><br><b>98 种风格全部公开</b> · 2D 77 · 2.5D 4 · 3D 17<br><sub>每部片的风格标注、截图、拿去拍你自己题材的风格提示词、镜头与导演编排，也有 <a href="https://lemomo-ai.github.io/lemo-opuscar/opuscar98/styles.json">JSON</a>。</sub></td>
+</tr></table>
+
 <div align="center">
 
-<a href="https://lemomo-ai.github.io/lemo-opuscar/opuscar98/"><img src="docs/opuscar98.jpg" alt="OPUSCAR 98：98 年最佳影片" width="100%"></a>
-
-**98 年最佳影片 · 1927 – 2025 · 6 分 31 秒**
-
-一个 Clawd 走过 98 部最佳影片，每一部都换成贴合那部电影的画风。<br>
-每一帧画面、每一个音符、每一刀剪辑，都是 Claude Opus 5.5 写代码做出来的。
-
-98 种风格现在全部公开：每部片的风格和 2D/3D 标注、截图、拿去拍你自己题材的风格提示词、镜头与导演编排（2D 77 部，2.5D 4 部，3D 17 部）。同一份清单在影片页上，也有 [JSON](https://lemomo-ai.github.io/lemo-opuscar/opuscar98/styles.json)。
-
-<a href="https://lemomo-ai.github.io/lemo-opuscar/opuscar98/#styles"><img src="docs/opuscar98-styles.jpg" alt="OPUSCAR 98：98 种风格全部公开" width="100%"></a>
-
+每一帧画面、每一个音符、每一刀剪辑，都是 Claude Opus 5.5 写代码做出来的。<br>
 [**▶ 观看**](https://lemomo-ai.github.io/lemo-opuscar/opuscar98/) · [**98 种风格**](https://lemomo-ai.github.io/lemo-opuscar/opuscar98/#styles) · [**下载 1080p**](https://github.com/lemomo-ai/lemo-opuscar/releases/download/films/opuscar98.mp4)
 
 </div>
@@ -39,11 +34,18 @@
 
 我是 **Lemomo**，更多信息见我的 [GitHub 主页](https://github.com/lemomo-ai)。
 
-> **这不是一个 awesome 合集。** 这里所有的片子都是我自己用 Claude Opus 5.5 做的。风格是按 Opus 5.5 调出来的，换成其他模型不保证能做出同样的效果。
+> **这不是一个 awesome 合集。** 这里所有的片子都是我自己用 Claude Opus 5.5 做的。<br>
+> 风格是按 Opus 5.5 调出来的，换成其他模型不保证能做出同样的效果。
 
 ![全部风格](docs/cover.jpg)
 
-每一支片子都是 AI agent 写代码导演、作画、配乐、混音的：Canvas 和 WebGL 页面逐帧渲染，用免费采样库写原创配乐，TTS 配音。不用视频生成，也不用素材库画面。
+每一支片子都是 AI agent 写代码导演、作画、配乐、混音的：
+
+- 🎨 **画面**：Canvas 和 WebGL 页面逐帧渲染
+- 🎵 **音乐**：用免费采样库写的原创配乐
+- 🎙️ **配音**：TTS 语音合成
+
+不用视频生成，也不用素材库画面。
 
 ## 怎么用
 
@@ -58,7 +60,11 @@ claude plugin marketplace add lemomo-ai/lemo-opuscar
 claude plugin install lemo-opuscar@lemolab
 ```
 
-之后在任何目录都能用。第一次使用时，它会把指南、工具和风格提示词下载到 `~/lemo-opuscar`，所有片子共用这一份；每支片子的工程，从源码到成片，都放在你发起时所在的文件夹里。其他 agent 可以把 [`plugin/skills/lemo-opuscar/`](plugin/skills/lemo-opuscar/) 复制到它们的 skills 目录。
+之后在任何目录都能用。
+
+- 第一次使用时，它会把指南、工具和风格提示词下载到 `~/lemo-opuscar`，所有片子共用这一份。
+- 每支片子的工程，从源码到成片，都放在你发起时所在的文件夹里。
+- 其他 agent 可以把 [`plugin/skills/lemo-opuscar/`](plugin/skills/lemo-opuscar/) 复制到它们的 skills 目录。
 
 ### 方式二：clone 仓库
 
@@ -78,9 +84,14 @@ claude
 
 风格用中文名、英文名或文件夹名都行，全部风格见[风格索引](styles/README.md)。
 
-它开工前只问你一次：主题里它定不了的事、你有没有自己的**配音、音乐或其他素材**、要不要先看**分镜故事板**。要看的话，它会停一次，给你看用真实风格画出来的关键镜头；不看就直接做完成片。
+它开工前只问你一次：
 
-agent 会读三份指南，像一个小工作室一样开工。指南是英文写给 agent 看的，你用中文跟它说就行，片子的配音和字幕默认跟你用的语言一致。
+- 主题里它定不了的事；
+- 你有没有自己的**配音、音乐或其他素材**；
+- 要不要先看**分镜故事板**。要看的话，它会停一次，给你看用真实风格画出来的关键镜头；不看就直接做完成片。
+
+agent 会读三份指南，像一个小工作室一样开工。<br>
+指南是英文写给 agent 看的，你用中文跟它说就行，片子的配音和字幕默认跟你用的语言一致。
 
 | 文件 | 给 agent 的东西 |
 |---|---|
@@ -94,7 +105,21 @@ agent 会读三份指南，像一个小工作室一样开工。指南是英文�
 - 需要 Node 20+、ffmpeg 和 Python 3.11+（或 [uv](https://docs.astral.sh/uv/)），其余由 agent 安装。
 - 默认输出 1920×1080、24 fps，其他尺寸可以指定。
 
-更新：`claude plugin marketplace update lemolab && claude plugin update lemo-opuscar@lemolab`，然后重启 Claude Code（`~/lemo-opuscar` 里的库会在下一次做片时自动更新）；卸载：`claude plugin uninstall lemo-opuscar@lemolab` 并删除 `~/lemo-opuscar`。一直卡住就[提个 issue](https://github.com/lemomo-ai/lemo-opuscar/issues)。
+### 更新和卸载
+
+更新，然后重启 Claude Code（`~/lemo-opuscar` 里的库会在下一次做片时自动更新）：
+
+```sh
+claude plugin marketplace update lemolab && claude plugin update lemo-opuscar@lemolab
+```
+
+卸载，然后删除 `~/lemo-opuscar`：
+
+```sh
+claude plugin uninstall lemo-opuscar@lemolab
+```
+
+一直卡住就[提个 issue](https://github.com/lemomo-ai/lemo-opuscar/issues)。
 
 ## 风格
 
@@ -260,14 +285,13 @@ agent 会读三份指南，像一个小工作室一样开工。指南是英文�
 
 ### 谢谢每一颗星
 
-每到一个里程碑做一支感谢片，和库里所有片子一样全部用代码做成。点海报到<a href="https://lemomo-ai.github.io/lemo-opuscar/thanks/">感谢片页面</a>在线观看。
-
-<a href="https://lemomo-ai.github.io/lemo-opuscar/thanks/#stars2000"><img src="docs/thanks/thanks-2000.jpg" alt="2000 星 · 刷新（50 秒）" width="100%"></a>
-<sub>2000 星 · 刷新（50 秒）</sub>
+每到一个里程碑做一支感谢片，和库里所有片子一样全部用代码做成。<br>
+点海报到<a href="https://lemomo-ai.github.io/lemo-opuscar/thanks/">感谢片页面</a>在线观看。
 
 <table><tr>
-<td width="50%" valign="top"><a href="https://lemomo-ai.github.io/lemo-opuscar/thanks/#stars800"><img src="docs/thanks/thanks-800.jpg" alt="800 星 · 反打（39 秒）"></a><br><sub>800 星 · 反打（39 秒）</sub></td>
-<td width="50%" valign="top"><a href="https://lemomo-ai.github.io/lemo-opuscar/thanks/#stars300"><img src="docs/thanks/thanks-300.jpg" alt="300 星 · 点灯人（18 秒）"></a><br><sub>300 星 · 点灯人（18 秒）</sub></td>
+<td width="33%" valign="top"><a href="https://lemomo-ai.github.io/lemo-opuscar/thanks/#stars2000"><img src="docs/thanks/thanks-2000.jpg" alt="2000 星 · 刷新（50 秒）"></a><br><sub>2000 星 · 刷新（50 秒）</sub></td>
+<td width="33%" valign="top"><a href="https://lemomo-ai.github.io/lemo-opuscar/thanks/#stars800"><img src="docs/thanks/thanks-800.jpg" alt="800 星 · 反打（39 秒）"></a><br><sub>800 星 · 反打（39 秒）</sub></td>
+<td width="33%" valign="top"><a href="https://lemomo-ai.github.io/lemo-opuscar/thanks/#stars300"><img src="docs/thanks/thanks-300.jpg" alt="300 星 · 点灯人（18 秒）"></a><br><sub>300 星 · 点灯人（18 秒）</sub></td>
 </tr></table>
 
 ## 授权
@@ -287,6 +311,14 @@ agent 会读三份指南，像一个小工作室一样开工。指南是英文�
 - 🍋 **[lemo-mod](https://github.com/lemomo-ai/lemo-mod)**：给 Claude Code 换上 21 套风格，终端和桌面 App 都能用。
 - 🟥 **[小章 Stampy](https://github.com/lemomo-ai/lemo-stampy)**：Mac 菜单栏小工具，在预览里点一下，给复印件盖上「仅供××使用」。
 
+---
+
+<div align="center">
+
+⭐ **点个星**<br>
+👀 **Watch → Custom → Releases**，有新版本会通知你<br>
+𝕏 关注 [@lemomo_ai](https://x.com/lemomo_ai)
+
 <sub>LemoLab · by Lemomo</sub>
 
-⭐ 点个星 · 👀 Watch → Custom → Releases，有新版本会通知你 · 关注 [@lemomo_ai](https://x.com/lemomo_ai)
+</div>
