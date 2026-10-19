@@ -11,6 +11,7 @@ Pick a style, bring your own story, and let your coding agent direct the film.<b
 ⚠️ **Built for Claude.** The styles are tuned for Claude Opus 5.5;<br>
 other models may not reproduce them well, so use them with care.
 
+🆕 **2026-10-19 · [Make a style your own](#make-a-style-your-own)**: change a style, give it your own name, get a 15–30 s test film.<br>
 🆕 **2026-10-16 · [Evidence Films](https://lemomo-ai.github.io/lemo-opuscar/#evidence-films)**: 8 new styles that film real material, every number measured or sourced. [See them ↓](#evidence-films)
 
 <sub>Official repo: [github.com/lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) · by Lemomo ([@lemomo_ai](https://x.com/lemomo_ai))</sub>
@@ -99,6 +100,19 @@ The agent reads three guides and works like a small studio:
 | [`TECHNIQUE.md`](TECHNIQUE.md) | how to build: frame-by-frame rendering, voice, music, mixing |
 | `styles/<style>/STYLE.md` | what the style looks and sounds like; the story is yours |
 
+### Make a style your own
+
+Like a style but want it a little different? Pick one and say so:
+
+> I want to change the **Ukiyo-e** style into my own version.
+
+1. It tells you what can change in that style: what's safe to change, what changes its character, and what can't change without becoming a different style.
+2. You say what to change and give it a name.
+3. It writes your style to `~/lemo-my-styles/<name>/`, outside the library, and shows you a style frame next to the original.
+4. Once you approve, it makes a **15–30 second test film** that shows every change.
+
+After that, name your style like any other: *"Make a 30-second film in my **Night Ukiyo-e** style about…"*. Library updates never touch it. The steps the agent follows are in [`MY-STYLES.md`](MY-STYLES.md).
+
 ### Before you start
 
 - A film takes an agent about 30–60 minutes and a fair amount of tokens.
@@ -113,11 +127,15 @@ Update, then restart Claude Code (the library in `~/lemo-opuscar` updates itself
 claude plugin marketplace update lemolab && claude plugin update lemo-opuscar@lemolab
 ```
 
+After an update, ask for a film as usual; to make a style your own, see [above](#make-a-style-your-own).
+
 Uninstall, then delete `~/lemo-opuscar`:
 
 ```sh
 claude plugin uninstall lemo-opuscar@lemolab
 ```
+
+Your own styles in `~/lemo-my-styles/` stay through updates and uninstalls; delete that folder yourself if you don't want them.
 
 If a step stays stuck, [open an issue](https://github.com/lemomo-ai/lemo-opuscar/issues).
 

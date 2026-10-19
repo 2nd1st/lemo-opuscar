@@ -21,7 +21,11 @@ Open Claude Code in a folder for your film, and ask:
 
 > Which film styles are there? I want something for a product launch.
 
+> I want to change the Ukiyo-e style into my own version.
+
 Name a style in English or Chinese, or describe your topic and let Claude suggest two or three. Claude asks you once, up front: anything about your topic it can't decide, whether you have your own voice, music or photos, and whether you want to see a storyboard first. Then it makes the film in a project folder where you started.
+
+To make a style your own, pick one and say what you'd change: Claude tells you what can change in it, writes your version to `~/lemo-my-styles/<name>/` (outside the plugin, so updates never touch it), shows you a style frame, then makes a 15–30 second test film. After that, name your style like any other.
 
 ## Before you start
 

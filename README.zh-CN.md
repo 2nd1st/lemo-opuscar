@@ -10,6 +10,7 @@
 ⚠️ **本插件为 Claude 专用。** 风格都是按 Claude Opus 5.5 调出来的，<br>
 其他模型适配度不高，请谨慎使用。
 
+🆕 **2026-10-19 · [改成你自己的风格](#改成你自己的风格)**：改一个风格、起你自己的名字，先出一支 15–30 秒的测试片。<br>
 🆕 **2026-10-16 · 新分类[「实证影像」](https://lemomo-ai.github.io/lemo-opuscar/#evidence-films)**：8 种风格，拍的都是真实素材，画面上每个数字都实测或有出处。[往下看 ↓](#实证影像)
 
 <sub>官方仓库：[github.com/lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) · 作者 Lemomo（[@lemomo_ai](https://x.com/lemomo_ai)）</sub>
@@ -99,6 +100,19 @@ agent 会读三份指南，像一个小工作室一样开工。<br>
 | [`TECHNIQUE.md`](TECHNIQUE.md) | 怎么做：逐帧渲染、配音、配乐、混音 |
 | `styles/<风格>/STYLE.md` | 这个风格长什么样、听起来什么样；故事由你定 |
 
+### 改成你自己的风格
+
+喜欢某个风格，但想改一点？选好风格直接说：
+
+> 我想把**浮世绘**风格改成我自己的版本。
+
+1. 它先告诉你这个风格哪些能改：哪些放心改，哪些一改就变味，哪些不能改（改了就是另一个风格了）。
+2. 你说要改什么，再起个名字。
+3. 它把你的风格存到 `~/lemo-my-styles/<名字>/`，放在库外面，再出一张风格图，和原风格放在一起给你看。
+4. 你点头后，它做一支 **15–30 秒的测试片**，每一处改动都在片子里看得到。
+
+之后像用库里的风格一样叫它的名字就行：“用我的**夜浮世绘**风格做一支 30 秒的片子，讲……”。库怎么更新都不会动它。agent 照着 [`MY-STYLES.md`](MY-STYLES.md) 一步步做。
+
 ### 开始之前
 
 - 一支片子 agent 大约要做 30–60 分钟，token 用量不小。
@@ -113,11 +127,15 @@ agent 会读三份指南，像一个小工作室一样开工。<br>
 claude plugin marketplace update lemolab && claude plugin update lemo-opuscar@lemolab
 ```
 
+更新后照常说要做什么片；想把风格改成自己的，看[上面](#改成你自己的风格)。
+
 卸载，然后删除 `~/lemo-opuscar`：
 
 ```sh
 claude plugin uninstall lemo-opuscar@lemolab
 ```
+
+你自己的风格存在 `~/lemo-my-styles/`，更新和卸载都不会删；不要了就自己删掉这个文件夹。
 
 一直卡住就[提个 issue](https://github.com/lemomo-ai/lemo-opuscar/issues)。
 
