@@ -2,15 +2,16 @@
 
 # Lemo-Opuscar
 
-**<!--n-->51<!--/n--> film styles, each with a short film made entirely in code.**<br>
+**<!--n-->59<!--/n--> film styles, each with a short film made entirely in code.**<br>
 Pick a style, bring your own story, and let your coding agent direct the film.<br>
-<sub><!--n-->51<!--/n--> 种影片风格，每种都配一支完全用代码做出来的短片 · 🇨🇳 中文用户请看 <a href="README.zh-CN.md">简体中文说明</a></sub>
+<sub><!--n-->59<!--/n--> 种影片风格，每种都配一支完全用代码做出来的短片 · 🇨🇳 中文用户请看 <a href="README.zh-CN.md">简体中文说明</a></sub>
 
 <a href="https://lemomo-ai.github.io/lemo-opuscar/"><img alt="Watch the gallery" src="https://img.shields.io/badge/-%E2%96%B6%20Watch%20the%20gallery-E8553A?style=for-the-badge"></a> <a href="README.zh-CN.md"><img alt="简体中文" src="https://img.shields.io/badge/README-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-555?style=for-the-badge"></a> <a href="https://github.com/lemomo-ai/lemo-opuscar/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/lemomo-ai/lemo-opuscar?style=for-the-badge&color=F5B700&label=stars"></a> <a href="#licence"><img alt="MIT · CC BY 4.0" src="https://img.shields.io/badge/licence-MIT%20%C2%B7%20CC%20BY%204.0-2EA44F?style=for-the-badge"></a>
 
 ⚠️ **Built for Claude.** The styles are tuned for Claude Opus 5.5;<br>
 other models may not reproduce them well, so use them with care.
 
+🆕 **2026-10-22 · [Edit & Documentary](https://lemomo-ai.github.io/lemo-opuscar/#edit-documentary)**: 8 new styles cut from real archive footage, documents and data, every fact sourced. [See them ↓](#edit--documentary)<br>
 🆕 **2026-10-19 · [Make a style your own](#make-a-style-your-own)**: change a style, give it your own name, get a 15–30 s test film.<br>
 🆕 **2026-10-16 · [Evidence Films](https://lemomo-ai.github.io/lemo-opuscar/#evidence-films)**: 8 new styles that film real material, every number measured or sourced. [See them ↓](#evidence-films)
 
@@ -144,6 +145,25 @@ If a step stays stuck, [open an issue](https://github.com/lemomo-ai/lemo-opuscar
 Click a frame for its `STYLE.md`.
 
 <!-- styles:start -->
+
+### Edit & Documentary
+
+<table>
+<tr>
+<td width="33%" valign="top"><a href="styles/caption-news/STYLE.md"><img src="docs/frames/caption-news.jpg" alt="Caption News"></a><br><b>Caption News</b><br><i>The Bee Ledger</i><br><sub>America lost 1.3 million bee colonies in a year, yet the count went up 6 %: a sound-off news short that reads the official report on screen.</sub></td>
+<td width="33%" valign="top"><a href="styles/newsreel/STYLE.md"><img src="docs/frames/newsreel.jpg" alt="1920s Newsreel"></a><br><b>1920s Newsreel</b><br><i>Knock-Knee Alert</i><br><sub>A 1926 headline says the Charleston will ruin America&#x27;s knees and Henry Ford wants the old dances back; the newsreel visits Ford&#x27;s own workers&#x27; picnic, where the kids are doing the Charleston.</sub></td>
+<td width="33%" valign="top"><a href="styles/countdown/STYLE.md"><img src="docs/frames/countdown.jpg" alt="Live Countdown Split-screen"></a><br><b>Live Countdown Split-screen</b><br><i>Counting Itself Down</i><br><sub>The last minute of the Artemis II launch in real time: one cell opens to nine as the rocket counts itself down, the nine merge into one at ignition, and Houston takes the flight back.</sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="styles/city-symphony/STYLE.md"><img src="docs/frames/city-symphony.jpg" alt="Time-lapse Symphony"></a><br><b>Time-lapse Symphony</b><br><i>One Day in New York</i><br><sub>A city falls out of orbit into one day: time-lapse light rivers, a sixteen-cell grid on the score&#x27;s sixteenths, a soap bubble that stops time, 1899 beside today, and a hard stop on the downbeat.</sub></td>
+<td width="33%" valign="top"><a href="styles/visual-investigation/STYLE.md"><img src="docs/frames/visual-investigation.jpg" alt="Visual Investigation"></a><br><b>Visual Investigation</b><br><i>The Hindenburg: Four Minutes, 32 Seconds</i><br><sub>Newsreel, photos, testimony, radiograms, a survey map and the 1937 inquiry are laid on one clock; five sources point to the same place, and what was never proven stays marked.</sub></td>
+<td width="33%" valign="top"><a href="styles/kino-montage/STYLE.md"><img src="docs/frames/kino-montage.jpg" alt="Constructivist Montage"></a><br><b>Constructivist Montage</b><br><i>410 Days</i><br><sub>The Empire State Building&#x27;s own 1931 brochure names the men who did the job; the construction film and Hine&#x27;s photographs answer with 2,500 workers a day, cut on a machine beat into a photomontage tower.</sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="styles/telestrator/STYLE.md"><img src="docs/frames/telestrator.jpg" alt="Sports Telestrator"></a><br><b>Sports Telestrator</b><br><i>Freeze Frame</i><br><sub>Down 3–0 at half-time, Fenerbahçe scored three in twelve minutes: a TV analysis segment freezes the broadcast, draws on it, splits the angles and flattens the pitch into a shot map.</sub></td>
+<td width="33%" valign="top"><a href="styles/news-package/STYLE.md"><img src="docs/frames/news-package.jpg" alt="Broadcast News Package"></a><br><b>Broadcast News Package</b><br><i>The Week in AI</i><br><sub>A model opens to every developer, Seoul&#x27;s market breaks its September high by 20 %, Brussels sends questions to two AI labs: a newsroom bulletin with a virtual studio, numbered bumpers and a strap that never leaves.</sub></td>
+</tr>
+</table>
 
 ### Evidence Films
 

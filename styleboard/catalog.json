@@ -1,5 +1,141 @@
 [
  {
+  "slug": "caption-news",
+  "num": "63",
+  "en": "Caption News",
+  "cn": "字幕新闻",
+  "cat": "剪辑与纪实",
+  "cat_en": "Edit & Documentary",
+  "film": "The Bee Ledger",
+  "line": "America lost 1.3 million bee colonies in a year, yet the count went up 6 %: a sound-off news short that reads the official report on screen.",
+  "line_cn": "美国一年死掉 130 万箱蜜蜂，总数却涨了 6%：一支静音也能看懂的字幕新闻，把官方报告摊在画面上读。",
+  "uses": [
+   "Social news",
+   "Report explainers",
+   "Data-led shorts"
+  ],
+  "dur": 59.5
+ },
+ {
+  "slug": "newsreel",
+  "num": "64",
+  "en": "1920s Newsreel",
+  "cn": "1920s 新闻影片",
+  "cat": "剪辑与纪实",
+  "cat_en": "Edit & Documentary",
+  "film": "Knock-Knee Alert",
+  "line": "A 1926 headline says the Charleston will ruin America's knees and Henry Ford wants the old dances back; the newsreel visits Ford's own workers' picnic, where the kids are doing the Charleston.",
+  "line_cn": "1926 年报纸说查尔斯顿会把美国人跳成 X 型腿，福特要把老式舞请回来；新闻片去福特自家工人的野餐会一看，小孩都在跳查尔斯顿。",
+  "uses": [
+   "History & archive stories",
+   "Fads & crazes of an era",
+   "Anniversaries & institutional retrospectives"
+  ],
+  "dur": 54.6
+ },
+ {
+  "slug": "countdown",
+  "num": "65",
+  "en": "Live Countdown Split-screen",
+  "cn": "实时倒计时分屏",
+  "cat": "剪辑与纪实",
+  "cat_en": "Edit & Documentary",
+  "film": "Counting Itself Down",
+  "line": "The last minute of the Artemis II launch in real time: one cell opens to nine as the rocket counts itself down, the nine merge into one at ignition, and Houston takes the flight back.",
+  "line_cn": "阿尔忒弥斯二号发射的最后一分钟，一秒不剪：火箭自己倒数，格子从 1 开到 9，点火那一拍合成 1，最后休斯敦接过飞行。",
+  "uses": [
+   "Launches & live events",
+   "Deadlines & countdowns",
+   "Multi-camera event recaps"
+  ],
+  "dur": 59.5
+ },
+ {
+  "slug": "city-symphony",
+  "num": "66",
+  "en": "Time-lapse Symphony",
+  "cn": "延时交响",
+  "cat": "剪辑与纪实",
+  "cat_en": "Edit & Documentary",
+  "film": "One Day in New York",
+  "line": "A city falls out of orbit into one day: time-lapse light rivers, a sixteen-cell grid on the score's sixteenths, a soap bubble that stops time, 1899 beside today, and a hard stop on the downbeat.",
+  "line_cn": "从轨道落进一座城市的一天：延时把车流拉成光河，网格跟着十六分音符长满，一个肥皂泡让时间停住，1899 年和今天并排，最后在小节线上硬停。",
+  "uses": [
+   "City & place films",
+   "Music-led montages",
+   "Brand and event openers"
+  ],
+  "dur": 52.0
+ },
+ {
+  "slug": "visual-investigation",
+  "num": "67",
+  "en": "Visual Investigation",
+  "cn": "视觉调查",
+  "cat": "剪辑与纪实",
+  "cat_en": "Edit & Documentary",
+  "film": "The Hindenburg: Four Minutes, 32 Seconds",
+  "line": "Newsreel, photos, testimony, radiograms, a survey map and the 1937 inquiry are laid on one clock; five sources point to the same place, and what was never proven stays marked.",
+  "line_cn": "新闻片、照片、证词、电报、地图和 1937 年的调查报告排在同一条时间轴上，五路来源指向同一处，没查清的照样标出来。",
+  "uses": [
+   "Event reconstructions",
+   "Fact-checks",
+   "Incident & accident reports"
+  ],
+  "dur": 60.0
+ },
+ {
+  "slug": "kino-montage",
+  "num": "68",
+  "en": "Constructivist Montage",
+  "cn": "构成主义蒙太奇",
+  "cat": "剪辑与纪实",
+  "cat_en": "Edit & Documentary",
+  "film": "410 Days",
+  "line": "The Empire State Building's own 1931 brochure names the men who did the job; the construction film and Hine's photographs answer with 2,500 workers a day, cut on a machine beat into a photomontage tower.",
+  "line_cn": "帝国大厦 1931 年的官方小册子写着“干活的人”；工地实拍和 Hine 的照片给出另一份名单：每天 2,500 人，按机器节拍剪成一座照片拼贴的楼。",
+  "uses": [
+   "Construction & industry histories",
+   "Anniversaries & milestones",
+   "Labour & collective effort"
+  ],
+  "dur": 60.0
+ },
+ {
+  "slug": "telestrator",
+  "num": "69",
+  "en": "Sports Telestrator",
+  "cn": "体育战术板",
+  "cat": "剪辑与纪实",
+  "cat_en": "Edit & Documentary",
+  "film": "Freeze Frame",
+  "line": "Down 3–0 at half-time, Fenerbahçe scored three in twelve minutes: a TV analysis segment freezes the broadcast, draws on it, splits the angles and flattens the pitch into a shot map.",
+  "line_cn": "半场 0–3，费内巴切 12 分钟连进三球：一段电视战术分析，把转播画面冻住、在上面画线、双机位分屏，再把球场展平成俯视射门图。",
+  "uses": [
+   "Sports breakdowns",
+   "Play-by-play analysis",
+   "Coaching and replay explainers"
+  ],
+  "dur": 54.4
+ },
+ {
+  "slug": "news-package",
+  "num": "70",
+  "en": "Broadcast News Package",
+  "cn": "电视新闻包装",
+  "cat": "剪辑与纪实",
+  "cat_en": "Edit & Documentary",
+  "film": "The Week in AI",
+  "line": "A model opens to every developer, Seoul's market breaks its September high by 20 %, Brussels sends questions to two AI labs: a newsroom bulletin with a virtual studio, numbered bumpers and a strap that never leaves.",
+  "line_cn": "一个模型全面开放，首尔股市较 9 月高点跌破两成，布鲁塞尔向两家 AI 实验室发出问询：虚拟演播室、条目 bumper、一直在底部的条带，一档电视新闻的包装系统。",
+  "uses": [
+   "Weekly news round-ups",
+   "Company or channel bulletins",
+   "Market and policy updates"
+  ],
+  "dur": 54.0
+ },
+ {
   "slug": "satellite-briefing",
   "num": "55",
   "en": "Satellite Briefing",

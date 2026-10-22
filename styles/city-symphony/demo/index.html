@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>City Symphony · text manifest</title>
+<style>html,body{margin:0;background:#000;color:#b0aaa0;font:14px/1.5 sans-serif}</style>
+</head>
+<body>
+<!-- 这支片由 tools/render.py（Python 逐帧合成）出画面，不在浏览器里渲染。
+     本页只把 render.py 写出的 texts.json（每段画面字的出现帧和屏幕框）按库的页面约定暴露给 core/render/readcheck.mjs：
+     window.DUR、window.render(t)、window.TEXTS(t)、window.READY。 -->
+<script>
+(async () => {
+  const m = await (await fetch('texts.json')).json();
+  window.DUR = m.dur;
+  let F = 0;
+  window.render = t => { F = Math.round(t * m.fps); };
+  window.TEXTS = t => {
+    const f = Math.round(t * m.fps);
+    return m.spans.filter(s => s.f0 <= f && f <= s.f1)
+      .map(s => ({ id: s.id, text: s.text, x0: s.box[0], y0: s.box[1], x1: s.box[2], y1: s.box[3] }));
+  };
+  document.body.textContent = m.spans.length + ' text spans';
+  window.READY = true;
+})();
+</script>
+</body>
+</html>

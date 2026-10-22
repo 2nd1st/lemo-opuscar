@@ -1,0 +1,64 @@
+1
+00:00:01,600 --> 00:00:05,200
+这里是 Lemo AI 新闻，本周 AI 三件事。
+This is Lemo AI News. Three stories from the week in AI.
+
+2
+00:00:07,600 --> 00:00:10,550
+谷歌向全部开发者开放了 Gemini 4 Argon，
+Google has opened Gemini 4 Argon to every developer,
+
+3
+00:00:10,550 --> 00:00:13,600
+价格是每百万输入 token 2 美元。
+at $2 per million input tokens.
+
+4
+00:00:16,400 --> 00:00:19,350
+在首尔，Kospi 指数单日跌幅超过 7.5%，
+In Seoul, the Kospi fell more than 7.5% in a day,
+
+5
+00:00:19,350 --> 00:00:21,400
+跌入熊市。
+and slid into a bear market.
+
+6
+00:00:24,600 --> 00:00:28,300
+三星和 SK 海力士单日都跌了 9% 以上。
+Samsung and SK hynix each lost more than 9%.
+
+7
+00:00:29,600 --> 00:00:31,400
+欧盟 AI 办公室已经发出问询，
+The EU's AI Office has sent questions
+
+8
+00:00:31,400 --> 00:00:34,100
+对象是 OpenAI 和 Anthropic，
+to OpenAI and Anthropic,
+
+9
+00:00:34,200 --> 00:00:36,900
+起因是今年夏天两起 AI 智能体事件，
+after two incidents with AI agents this summer,
+
+10
+00:00:36,900 --> 00:00:38,400
+据 Euronews 报道。
+Euronews reports.
+
+11
+00:00:38,700 --> 00:00:40,400
+在都柏林，欧盟委员会科技主管表示，
+In Dublin, the Commission's tech chief said
+
+12
+00:00:40,400 --> 00:00:42,400
+执法已经开始。
+enforcement has started.
+
+13
+00:00:44,100 --> 00:00:46,400
+本周就到这里。Lemo AI 新闻。
+That's the week. Lemo AI News.

@@ -1,0 +1,56 @@
+[
+ {
+  "id": "v1",
+  "text": "This is Lemmo AI News. Three stories from the week in AI.",
+  "voice": "af_heart",
+  "speed": 1.1,
+  "asr": "This is Lemo AI News. Three stories from the week in AI."
+ },
+ {
+  "id": "v2",
+  "text": "Google has opened Gemini Four Argon to every developer, at two dollars per million input tokens.",
+  "voice": "af_heart",
+  "speed": 1.12,
+  "asr": "Google has opened Gemini for Argonne to every developer at $2 per million input tokens."
+ },
+ {
+  "id": "v3",
+  "text": "In Seoul, the Kospi fell more than seven and a half percent in a day, and slid into a bear market.",
+  "voice": "af_heart",
+  "speed": 1.12,
+  "asr": "In Seoul, the cost be fell more than 7.5% in a day and slid into a bear market."
+ },
+ {
+  "id": "v4",
+  "text": "Samsung and S.K. Hynix each lost more than nine percent.",
+  "voice": "af_heart",
+  "speed": 1.12,
+  "asr": "Samsung and SK, Hynix each lost more than 9%."
+ },
+ {
+  "id": "v5",
+  "text": "The EU's AI Office has sent questions to OpenAI and Anthropic,",
+  "voice": "af_heart",
+  "speed": 1.12,
+  "asr": "The EU's AI office has sent questions to open AI and anthropic."
+ },
+ {
+  "id": "v6",
+  "text": "after two incidents with AI agents this summer, Euronews reports.",
+  "voice": "af_heart",
+  "speed": 1.12
+ },
+ {
+  "id": "v7",
+  "text": "In Dublin, the Commission's tech chief said enforcement has started.",
+  "voice": "af_heart",
+  "speed": 1.1
+ },
+ {
+  "id": "v8",
+  "text": "That's the week. Lemmo AI News.",
+  "voice": "af_heart",
+  "speed": 1.0,
+  "asr": "That's the week. Lemo AI News."
+ }
+]

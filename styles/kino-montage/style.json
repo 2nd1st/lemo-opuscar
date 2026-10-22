@@ -1,0 +1,18 @@
+{
+ "slug": "kino-montage",
+ "num": "68",
+ "en": "Constructivist Montage",
+ "cn": "构成主义蒙太奇",
+ "category_en": "Edit & Documentary",
+ "category_cn": "剪辑与纪实",
+ "film": "410 Days",
+ "line": "The Empire State Building's own 1931 brochure names the men who did the job; the construction film and Hine's photographs answer with 2,500 workers a day, cut on a machine beat into a photomontage tower.",
+ "line_cn": "帝国大厦 1931 年的官方小册子写着“干活的人”；工地实拍和 Hine 的照片给出另一份名单：每天 2,500 人，按机器节拍剪成一座照片拼贴的楼。",
+ "uses": [
+  "Construction & industry histories",
+  "Anniversaries & milestones",
+  "Labour & collective effort"
+ ],
+ "frame_sec": 2.5,
+ "dur": 60.0
+}

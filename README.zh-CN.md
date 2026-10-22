@@ -2,7 +2,7 @@
 
 # Lemo-Opuscar
 
-**<!--n-->51<!--/n--> 种影片风格，每种都配一支完全用代码做出来的短片。**<br>
+**<!--n-->59<!--/n--> 种影片风格，每种都配一支完全用代码做出来的短片。**<br>
 选一个风格，带上你自己的故事，让你的编程 agent 来当导演。
 
 <a href="https://lemomo-ai.github.io/lemo-opuscar/"><img alt="看图鉴" src="https://img.shields.io/badge/-%E2%96%B6%20%E7%9C%8B%E5%9B%BE%E9%89%B4-E8553A?style=for-the-badge"></a> <a href="README.md"><img alt="English" src="https://img.shields.io/badge/README-English-555?style=for-the-badge"></a> <a href="https://github.com/lemomo-ai/lemo-opuscar/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/lemomo-ai/lemo-opuscar?style=for-the-badge&color=F5B700&label=stars"></a> <a href="#授权"><img alt="MIT · CC BY 4.0" src="https://img.shields.io/badge/%E6%8E%88%E6%9D%83-MIT%20%C2%B7%20CC%20BY%204.0-2EA44F?style=for-the-badge"></a>
@@ -10,6 +10,7 @@
 ⚠️ **本插件为 Claude 专用。** 风格都是按 Claude Opus 5.5 调出来的，<br>
 其他模型适配度不高，请谨慎使用。
 
+🆕 **2026-10-22 · 新分类[「剪辑与纪实」](https://lemomo-ai.github.io/lemo-opuscar/#edit-documentary)**：8 种风格，用真实的档案影像、文件和数据剪出来，每个事实都有出处。[往下看 ↓](#剪辑与纪实)<br>
 🆕 **2026-10-19 · [改成你自己的风格](#改成你自己的风格)**：改一个风格、起你自己的名字，先出一支 15–30 秒的测试片。<br>
 🆕 **2026-10-16 · 新分类[「实证影像」](https://lemomo-ai.github.io/lemo-opuscar/#evidence-films)**：8 种风格，拍的都是真实素材，画面上每个数字都实测或有出处。[往下看 ↓](#实证影像)
 
@@ -144,6 +145,25 @@ claude plugin uninstall lemo-opuscar@lemolab
 点图片看它的 `STYLE.md`。
 
 <!-- styles:start -->
+
+### 剪辑与纪实
+
+<table>
+<tr>
+<td width="33%" valign="top"><a href="styles/caption-news/STYLE.md"><img src="docs/frames/caption-news.jpg" alt="字幕新闻"></a><br><b>字幕新闻</b><br>Caption News<br><i>The Bee Ledger</i><br><sub>美国一年死掉 130 万箱蜜蜂，总数却涨了 6%：一支静音也能看懂的字幕新闻，把官方报告摊在画面上读。</sub></td>
+<td width="33%" valign="top"><a href="styles/newsreel/STYLE.md"><img src="docs/frames/newsreel.jpg" alt="1920s 新闻影片"></a><br><b>1920s 新闻影片</b><br>1920s Newsreel<br><i>Knock-Knee Alert</i><br><sub>1926 年报纸说查尔斯顿会把美国人跳成 X 型腿，福特要把老式舞请回来；新闻片去福特自家工人的野餐会一看，小孩都在跳查尔斯顿。</sub></td>
+<td width="33%" valign="top"><a href="styles/countdown/STYLE.md"><img src="docs/frames/countdown.jpg" alt="实时倒计时分屏"></a><br><b>实时倒计时分屏</b><br>Live Countdown Split-screen<br><i>Counting Itself Down</i><br><sub>阿尔忒弥斯二号发射的最后一分钟，一秒不剪：火箭自己倒数，格子从 1 开到 9，点火那一拍合成 1，最后休斯敦接过飞行。</sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="styles/city-symphony/STYLE.md"><img src="docs/frames/city-symphony.jpg" alt="延时交响"></a><br><b>延时交响</b><br>Time-lapse Symphony<br><i>One Day in New York</i><br><sub>从轨道落进一座城市的一天：延时把车流拉成光河，网格跟着十六分音符长满，一个肥皂泡让时间停住，1899 年和今天并排，最后在小节线上硬停。</sub></td>
+<td width="33%" valign="top"><a href="styles/visual-investigation/STYLE.md"><img src="docs/frames/visual-investigation.jpg" alt="视觉调查"></a><br><b>视觉调查</b><br>Visual Investigation<br><i>The Hindenburg: Four Minutes, 32 Seconds</i><br><sub>新闻片、照片、证词、电报、地图和 1937 年的调查报告排在同一条时间轴上，五路来源指向同一处，没查清的照样标出来。</sub></td>
+<td width="33%" valign="top"><a href="styles/kino-montage/STYLE.md"><img src="docs/frames/kino-montage.jpg" alt="构成主义蒙太奇"></a><br><b>构成主义蒙太奇</b><br>Constructivist Montage<br><i>410 Days</i><br><sub>帝国大厦 1931 年的官方小册子写着“干活的人”；工地实拍和 Hine 的照片给出另一份名单：每天 2,500 人，按机器节拍剪成一座照片拼贴的楼。</sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="styles/telestrator/STYLE.md"><img src="docs/frames/telestrator.jpg" alt="体育战术板"></a><br><b>体育战术板</b><br>Sports Telestrator<br><i>Freeze Frame</i><br><sub>半场 0–3，费内巴切 12 分钟连进三球：一段电视战术分析，把转播画面冻住、在上面画线、双机位分屏，再把球场展平成俯视射门图。</sub></td>
+<td width="33%" valign="top"><a href="styles/news-package/STYLE.md"><img src="docs/frames/news-package.jpg" alt="电视新闻包装"></a><br><b>电视新闻包装</b><br>Broadcast News Package<br><i>The Week in AI</i><br><sub>一个模型全面开放，首尔股市较 9 月高点跌破两成，布鲁塞尔向两家 AI 实验室发出问询：虚拟演播室、条目 bumper、一直在底部的条带，一档电视新闻的包装系统。</sub></td>
+</tr>
+</table>
 
 ### 实证影像
 
