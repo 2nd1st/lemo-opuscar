@@ -1,7 +1,7 @@
 """Broadcast News Package demo · score + foley + voice → out/mix.wav (48 kHz stereo; mux.sh brings it to −14 LUFS)
 Score: E-minor news theme, 120 BPM, beat 0 = 1.5 s (the sting stands before the grid).
-Sections: studio + rundown + story 1 full → bumper hits (6.5 / 15.0 / 28.5) → story 2 darker, one bar of silence at 20.5, the break at 21.0
-→ story 3 sparse pizzicato → after the ENFORCING stamp only a drone → recap theme → 48.0 E-major tutti on the end card.
+Sections: rundown + story 1 full → story 2 darker, one beat of silence at 16.0, the break at 16.5 → story 3 sparse pizzicato,
+after the ENFORCING stamp only a drone → story 4 lifts to G major → recap theme → 47.5 E-major tutti on the end card.
 Run: $LIB/.venv/bin/python mix.py"""
 import json, os, sys
 import numpy as np
@@ -27,25 +27,24 @@ def bt(k): return T0 + k * B
 
 NOTE = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11, 'F#': 6, 'D#': 3, 'G#': 8}
 # one bar = 2 s; bar k starts at 1.5 + 2k
-CH = ['Em', 'C', 'G', 'D', 'Em', 'C', 'Am', 'B',   # 1.5–17.5 studio, rundown, story 1, bumper 2, locator
-      'Em', 'C', 'Am', 'B', 'Em', 'C',             # 17.5–29.5 story 2
-      'Em', 'C', 'Am', 'B', 'Em', 'C',             # 29.5–41.5 story 3
-      'Am', 'B', 'Em', 'C', 'G', 'D']              # 41.5–53.5 drone, recap
+CH = ['Em', 'C', 'G', 'D', 'Em', 'C',              # 1.5–13.5 rundown, story 1
+      'Am', 'B', 'Em', 'C', 'B',                   # 13.5–23.5 story 2
+      'Em', 'C', 'Am', 'B', 'Em', 'C',             # 23.5–35.5 story 3 (+ quote card)
+      'G', 'D', 'Em', 'C', 'G',                    # 35.5–45.5 story 4 (lift)
+      'B', 'B']                                    # 45.5–49.5 recap → end
 def triad(ch, octv):
     q = 'm' if ch.endswith('m') else ''; root = ch.rstrip('m')
     r = 12 * (octv + 1) + NOTE[root]; return [r, r + (3 if q == 'm' else 4), r + 7]
 
-SIL = (20.5, 21.0)          # silence 1: the beat before the bear-market break
-DRONE = (42.1, 44.0)       # silence 2: after the ENFORCING stamp, only a held low E
-BUMPS = (6.5, 15.0, 28.5)
+SIL = (16.0, 16.5)          # silence 1: the beat before the bear-market break
+DRONE = (33.9, 35.5)        # silence 2: after the ENFORCING stamp, only a held low E
 def state(t):
     if SIL[0] <= t < SIL[1] or DRONE[0] <= t < DRONE[1]: return 'off'
-    if any(b <= t < b + .5 for b in BUMPS): return 'off'
-    if t < 15.0: return 'full'
-    if t < 24.5: return 'tense'
-    if t < 28.5: return 'mid'
-    if t < 42.1: return 'sparse'
-    if t < 48.0: return 'full'
+    if t < 13.0: return 'full'
+    if t < 20.0: return 'tense'
+    if t < 24.0: return 'mid'
+    if t < 33.9: return 'sparse'
+    if t < 47.5: return 'full'
     return 'off'
 
 M = []
@@ -58,7 +57,7 @@ stab(.4, [64, 67, 71], .95, .5)
 ev(.4, 'timpani', 'E3', 1, .95, 0, 1.3); ev(.4, 'bass_drum', None, None, .9, 0, 1.1); ev(.4, 'crash', None, None, .7, .1, .7)
 for i, p in enumerate([76, 83, 79, 88]): ev(.82 + i * .1, 'glockenspiel', p, .6, .55, .3 - i * .2, .7)
 
-END = 47.95
+END = 47.45
 for bar, ch in enumerate(CH):
     tb = bt(bar * 4)
     if tb >= END: break
@@ -89,39 +88,34 @@ for bar, ch in enumerate(CH):
             if k in (1, 3) and t > 3.4: ev(t, 'snare2', None, None, .35, .1, .35)
         elif k == 0: ev(t, 'bass_drum', None, None, .4, 0, .55)
 
-# studio lights + push into the video wall
-ev(1.5, 'timpani', 'E3', 1, .6, 0, .8); ev(2.4, 'cymbal_roll' if False else 'timpani', 'B2', .4, .3, 0, .5)
-for i, n in enumerate([64, 71, 76]): ev(2.75 + i * .08, 'glockenspiel', n + 12, .5, .45, -.2 + i * .2, .5)
 # rundown rows
-for t, n in ((3.1, 76), (3.6, 79), (4.1, 83)): ev(t, 'glockenspiel', n, .5, .5, .2, .55)
-# bumpers: timpani + brass stab + a two-note glockenspiel "item" signal (pitch rises with the item number)
-for i, tb in enumerate(BUMPS):
-    ev(tb, 'timpani', 'E3', 1, .85, 0, 1.1); ev(tb, 'bass_drum', None, None, .8, 0, .9)
-    stab(tb + .22, [64, 67, 71] if i != 1 else [59, 62, 66], .8, .3)
-    for j, n in enumerate([76 + i * 2, 83 + i * 2]): ev(tb + .3 + j * .14, 'glockenspiel', n, .6, .55, .2, .6)
-# hard cuts inside stories
-for t in (7.5, 10.5, 16.0, 17.5, 24.5, 29.5, 39.0, 44.0): ev(t, 'timpani', 'E3', 1, .65, 0, .85)
-stab(7.55, [64, 67, 71], .75, .3)
+for t, n in ((2.3, 76), (2.7, 79), (3.1, 83), (3.5, 88)): ev(t, 'glockenspiel', n, .5, .5, .2, .55)
+# cuts: timpani on every story change and hard cut
+for t in (6.0, 9.0, 13.0, 20.0, 24.0, 30.5, 35.5, 45.0): ev(t, 'timpani', 'E3', 1, .7, 0, .9)
+stab(6.0, [64, 67, 71], .75, .3)
 # the break
-stab(21.0, [52, 55, 59], 1.0, .7); ev(21.0, 'timpani', 'E2', 1.2, 1.0, 0, 1.4); ev(21.0, 'crash', None, None, .8, -.1, .8); ev(21.0, 'bass_drum', None, None, 1.0, 0, 1.2)
-for i in range(16): ev(22.1 + i * .06, 'timpani', 'B2', .3, .25 + i * .03, 0, .55)
-ev(21.85, 'tubular_bells', 'E4', 2, .5, .2, .4)
-# silence 2: cellos + contrabass + horn hold E (no brass on the stamp: keep "fines" clear)
-ev(42.15, 'cellos', 40, 1.6, .4, -.1, .55, attack=.3, release=.4); ev(42.15, 'contrabass', 28, 1.6, .4, .1, .5, attack=.3, release=.4)
-ev(42.15, 'horn', 52, 1.5, .25, 0, .35, attack=.5)
+stab(16.5, [52, 55, 59], 1.0, .7); ev(16.5, 'timpani', 'E2', 1.2, 1.0, 0, 1.4); ev(16.5, 'crash', None, None, .8, -.1, .8); ev(16.5, 'bass_drum', None, None, 1.0, 0, 1.2)
+for i in range(16): ev(17.6 + i * .06, 'timpani', 'B2', .3, .25 + i * .03, 0, .55)
+ev(17.35, 'tubular_bells', 'E4', 2, .5, .2, .4)
+# silence 2: cellos + contrabass + horn hold E (no brass on the stamp: keep the voice clear)
+ev(33.95, 'cellos', 40, 1.5, .4, -.1, .55, attack=.3, release=.4); ev(33.95, 'contrabass', 28, 1.5, .4, .1, .5, attack=.3, release=.4)
+ev(33.95, 'horn', 52, 1.4, .25, 0, .35, attack=.5)
+# story 4 enters in G major: brass stab + glockenspiel
+stab(35.6, [67, 71, 74], .8, .35)
+for i, n in enumerate([79, 83, 86]): ev(35.75 + i * .1, 'glockenspiel', n, .6, .5, -.2 + i * .2, .55)
 # recap ticks
-for i, n in enumerate([76, 79, 83]): ev(44.8 + i * .5, 'glockenspiel', n, .6, .55, -.2 + i * .2, .6)
+for i, n in enumerate([76, 79, 83, 88]): ev(45.8 + i * .4, 'glockenspiel', n, .6, .55, -.3 + i * .2, .6)
 # end card: roll → E-major tutti (Picardy third)
-for i in range(10): ev(47.5 + i * .05, 'timpani', 'B2', .3, .35 + i * .05, 0, .6)
+for i in range(10): ev(47.0 + i * .05, 'timpani', 'B2', .3, .35 + i * .05, 0, .6)
 for ins, ns, g in [('trumpet', [76, 80, 83], .7), ('horn', [64, 68, 71], .8), ('trombone', [52, 59], .8), ('violins', [76, 80, 83, 88], .5), ('cellos', [40, 52], .7)]:
-    for n in ns: ev(48.0, ins, n, 2.6, .78, 0, g, attack=.02, release=1.0)
-ev(48.0, 'timpani', 'E3', 1, 1.0, 0, 1.3); ev(48.0, 'crash', None, None, .8, 0, .8); ev(48.0, 'tubular_bells', 'E5', 3, .7, .2, .6)
-ev(48.0, 'bass_drum', None, None, 1.0, 0, 1.1)
-for i, p in enumerate([76, 80, 83, 88]): ev(48.35 + i * .09, 'glockenspiel', p, .8, .5, -.3 + i * .2, .55)
+    for n in ns: ev(47.5, ins, n, 2.6, .78, 0, g, attack=.02, release=1.0)
+ev(47.5, 'timpani', 'E3', 1, 1.0, 0, 1.3); ev(47.5, 'crash', None, None, .8, 0, .8); ev(47.5, 'tubular_bells', 'E5', 3, .7, .2, .6)
+ev(47.5, 'bass_drum', None, None, 1.0, 0, 1.1)
+for i, p in enumerate([76, 80, 83, 88]): ev(47.85 + i * .09, 'glockenspiel', p, .8, .5, -.3 + i * .2, .55)
 
 music += S.render(M, DUR + 1, master=False)[:N]
 
-# 合成脉冲（16 分锯齿，低通）：全编制与紧张段
+# Synth pulse (16th-note sawtooth, low-passed): for the full-ensemble and tense sections
 def saw(f, d): t = X.t_(d); return 2 * ((t * f) % 1) - 1
 pulse = np.zeros((N, 2), np.float32)
 for bar, ch in enumerate(CH):
@@ -134,20 +128,18 @@ for bar, ch in enumerate(CH):
 music += pulse
 music = S.room(music, .35, .14)
 
-# —— 环境底 ——
+# —— Ambience bed ——
 amb = np.zeros((N, 2), np.float32)
 def bed(a, b, x, g):
     n0, n1 = int(a * SR), min(N, int(b * SR)); seg = x[:n1 - n0] * g
     fade = np.minimum(1, np.minimum(np.arange(len(seg)) / (.3 * SR), (len(seg) - np.arange(len(seg))) / (.3 * SR)))
     amb[n0:n1] += (seg * fade)[:, None]
-amb_dc = X.lp(X.brown(7.8), 400) + np.sin(2 * np.pi * 120 * X.t_(7.8)) * .05   # 机房风扇 + 电源嗡声
-bed(7.3, 15.0, X.norm(amb_dc, .5), .12)
-amb_st = X.lp(X.brown(6.5), 300); bed(1.4, 7.0, X.norm(amb_st, .5), .07)          # studio room tone
-amb_st2 = X.lp(X.brown(4.2), 300); bed(43.9, 48.1, X.norm(amb_st2, .5), .07)
-amb_air = X.lp(X.noise(9.7), 900); bed(29.4, 39.1, X.norm(amb_air, .5), .05)   # soft air under the map
+amb_dc = X.lp(X.brown(7.8), 400) + np.sin(2 * np.pi * 120 * X.t_(7.8)) * .05   # server-room fans + mains hum
+bed(5.8, 13.6, X.norm(amb_dc, .5), .12)
+amb_air = X.lp(X.noise(6.8), 900); bed(23.9, 30.7, X.norm(amb_air, .5), .05)   # soft air under the map
 
-# —— 音效 ——
-def market(d):  # 交易屏滴答：随机短 click，带通
+# —— Sound effects ——
+def market(d):  # trading-screen ticks: random short clicks, band-passed
     out = np.zeros(int(d * SR), np.float32); rng = np.random.default_rng(7); t = 0
     while t < d - .05:
         c = X.bp(X.click(1.6 + rng.random() * .6, .4), 1500, 6000); s = int(t * SR); out[s:s + len(c)] += c[:len(out) - s] * (.4 + rng.random() * .4); t += .08 + rng.random() * .14
@@ -189,6 +181,11 @@ for e in EV:
     elif ty == 'check': X.add(fx, X.click(1.2, .8), t, .35, .3); X.add(fx, S.note('glockenspiel', 84, .3, .3), t + .02, .25, .3)
     elif ty == 'tick_ok': X.add(fx, X.pop(.6), t, .3)
     elif ty == 'mark': X.add(fx, (X.bp(X.noise(.4), 2500, 7000) * np.sin(np.pi * X.t_(.4) / .4)).astype(np.float32), t, .12, .3)
+    elif ty == 'type':
+        for i in range(8): X.add(fx, X.clack(1.4 + X._rng.random() * .3, .5), t + i * .1, .12, .3)
+    elif ty == 'quote': X.add(fx, X.thump(.6, 95), t, .4); X.add(fx, X.whoosh(.25, .5), t - .05, .25, -.2)
+    elif ty == 'type':
+        for i in range(8): X.add(fx, X.clack(1.4 + X._rng.random() * .3, .5), t + i * .1, .12, .3)
     elif ty == 'quote': X.add(fx, X.thump(.6, 95), t, .4); X.add(fx, X.whoosh(.25, .5), t - .05, .25, -.2)
     elif ty == 'lights':
         for i in range(4): X.add(fx, X.thump(.45, 140 - i * 15), t + i * .09, .3, -.4 + i * .27)
@@ -199,7 +196,7 @@ for e in EV:
         for i in range(6): X.add(fx, X.click(1.0 + i * .08, .5), t + .03 * i, .15, .5 - i * .2)
 fx = S.room(fx, .2, .08)
 
-# —— 旁白：24 kHz → 48 kHz，广播 EQ + 压缩 ——
+# —— Narration: 24 kHz → 48 kHz, broadcast EQ + compression ——
 spans = []
 for e in EV:
     if e['type'] != 'vo': continue

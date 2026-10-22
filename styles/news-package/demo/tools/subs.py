@@ -9,7 +9,8 @@ for m in re.finditer(r"\[([\d.]+), ([\d.]+), '((?:[^'\\]|\\.)*)', (['\"])(.*?)\4
     cues.append({'t0': float(m[1]), 't1': float(m[2]), 'text': m[3] + '\n' + m[5].replace("\\'", "'")})
 for c in cues:
     zh, en = c['text'].split('\n')
-    assert len(zh) <= 30 and len(en) <= 62, ('line too long for one line', c)
+    width = sum(1 if ord(ch) > 0x2e80 else .5 for ch in zh)        # CJK = 1, Latin/space = 0.5
+    assert width <= 24 and len(en) <= 62, ('line too long for one line', c)
 os.makedirs(os.path.join(HERE, 'out'), exist_ok=True)
 p = os.path.join(HERE, 'out', 'cues.json'); json.dump(cues, open(p, 'w'), ensure_ascii=False, indent=1)
 subprocess.run([sys.executable, os.path.join(LIB, 'core/render/srt.py'), p, os.path.join(HERE, '..', 'news-package.srt')], check=True)

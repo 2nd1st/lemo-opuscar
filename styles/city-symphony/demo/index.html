@@ -6,8 +6,8 @@
 <style>html,body{margin:0;background:#000;color:#b0aaa0;font:14px/1.5 sans-serif}</style>
 </head>
 <body>
-<!-- 这支片由 tools/render.py（Python 逐帧合成）出画面，不在浏览器里渲染。
-     本页只把 render.py 写出的 texts.json（每段画面字的出现帧和屏幕框）按库的页面约定暴露给 core/render/readcheck.mjs：
+<!-- The picture of this film comes from tools/render.py (frame-by-frame compositing in Python), not from rendering in the browser.
+     This page only exposes texts.json written by render.py (the frames each on-screen text appears and its screen box) to core/render/readcheck.mjs, following the library's page contract:
      window.DUR、window.render(t)、window.TEXTS(t)、window.READY。 -->
 <script>
 (async () => {

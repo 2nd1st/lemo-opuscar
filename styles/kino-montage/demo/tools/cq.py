@@ -4,7 +4,7 @@ usage: python3 cq.py search "<query>" [video|image|any] [n]
        python3 cq.py info "File:X.jpg"
 """
 import json, sys, time, urllib.request, urllib.parse, re
-UA = "LemoOpuscarTrial/1.0 (lemomo.studio research; footage sourcing)"
+UA = "lemo-opuscar/1.0 (https://github.com/lemomo-ai/lemo-opuscar)"
 def get(params):
     q = "https://commons.wikimedia.org/w/api.php?" + urllib.parse.urlencode({**params, "format": "json"})
     for k in range(8):

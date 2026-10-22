@@ -1,5 +1,5 @@
-// 从页面导出字幕（audio/cues.json：中文一行 + 英文一行）并检查每条在转写框里不换行。
-// 用法（库根目录）：node films/<name>/demo/tools/subs.mjs films/<name>/demo
+// Export subtitles from the page (audio/cues.json: one Chinese line + one English line) and check that none of them wraps in the transcript box.
+// Usage (library root): node films/<name>/demo/tools/subs.mjs films/<name>/demo
 import fs from 'fs'; import path from 'path';
 import { openDemo, closeServer } from '../../../../core/render/page.mjs';
 const dir = path.resolve(process.argv[2] || path.dirname(path.dirname(new URL(import.meta.url).pathname)));

@@ -1,5 +1,5 @@
-"""从镜头表算出每个素材用了源里哪几秒、放在片中哪几秒，写回 SOURCES.jsonl 的 used 字段，再生成 SOURCES.md。
-用法：python tools/used.py"""
+"""From the shot list, work out which seconds of each source are used and where they sit in the film, write that back into the `used` field of SOURCES.jsonl, then generate SOURCES.md.
+Usage: python tools/used.py"""
 import os, sys, json, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 os.chdir(os.path.join(HERE, '..'))
@@ -7,7 +7,8 @@ from shots import SHOTS, CLIPS, GRID_STAGES
 from prep import speed_curve
 from timeline import GRID, BRAKE
 
-RAW = {'sky': 'sky23', 'nyim': 'nyim', 'aer': 'aerial', 'tsq': 'tsq_night', 'top': 'tsq_top', 'b99': 'br1899'}
+RAW = {'sky': 'sky23', 'nyim': 'nyim', 'b99': 'br1899', 'empty': 'empty', 'pcm': 'pcm', 'cav': 'cav', 'mbn': 'mbn', 'fw': 'fw16',
+       'kel': 'kel', 'sun': 'sunfox', 'earth': 'earth'}
 use = {}
 
 
@@ -43,6 +44,8 @@ recs = [json.loads(l) for l in open('SOURCES.jsonl') if l.strip()]
 for r in recs:
     r['used'] = use.get(r['name'], [])
     if r['name'] in ('nyim',): r['used'].append('全部镜头居中放大 1.18 倍，把作者左上角台标推出画外')
+    if r['name'] == 'fw16' and r['used']: r['used'].append('以上秒数从截取段（原片 100–200 s）起算，原片时间 = +100 s')
+    if r['name'] == 'empty' and r['used']: r['used'].append('裁成 1804×1014（左 58 px 起、顶端对齐）再放大，把右下角水印裁出画外')
 open('SOURCES.jsonl', 'w').write(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in recs))
 unused = [r['name'] for r in recs if not r['used']]
 if unused: print('⚠ 没用到：', unused)

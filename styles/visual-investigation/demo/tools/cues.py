@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""film.json 的字幕 → audio/cues.json（core/render/srt.py 的输入）：每条中文一行、英文一行。"""
+"""Subtitles from film.json → audio/cues.json (the input for core/render/srt.py): one Chinese line and one English line per cue."""
 import json, os
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 F = json.load(open(os.path.join(D, 'film.json'), encoding='utf-8'))

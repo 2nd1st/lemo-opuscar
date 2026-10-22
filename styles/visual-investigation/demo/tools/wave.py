@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""原声片段的波形峰值（每 1/60 s 一个），写成 JSON 给页面画波形条。"""
+"""Waveform peaks of the source-audio clips (one per 1/60 s), written as JSON for the page to draw waveform bars."""
 import json, sys, os
 import numpy as np, soundfile as sf
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

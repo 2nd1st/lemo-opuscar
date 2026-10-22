@@ -1,7 +1,7 @@
-"""配乐（原创，Glass 式极简反复的写法，不用任何现成旋律）：VSCO 2 CE / VCSL 真实采样（CC0）。
-发展：极简反复（八分琶音）→ 加速（三连音对八分、木管断奏）→ 网格段十六分全奏 → 刹车（琶音全停，长和弦）
-      → 再起（八分 → 三连音 → 十六分）→ 高潮闪回 → 硬停（干声一刀切，只剩混响）→ 尾声长和弦。
-所有剪辑点都落在这里的拍点上（timeline.py 是唯一时间来源）。用法：python tools/music.py audio/music.wav"""
+"""Score (original, written in Glass-style minimalist repetition, no existing melody used): VSCO 2 CE / VCSL real samples (CC0).
+Development: minimalist repetition (eighth-note arpeggios) → acceleration (triplets against eighths, staccato woodwinds) → grid section, sixteenth-note tutti → brake (arpeggios all stop, long chords)
+      → restart (eighths → triplets → sixteenths) → climax flashback → hard stop (dry signal cut in one stroke, only the reverb left) → coda long chord.
+Every cut lands on a beat from here (timeline.py is the single source of timing). Usage: python tools/music.py audio/music.wav"""
 import sys, os
 HERE = os.path.dirname(os.path.abspath(__file__))
 LIB = os.path.abspath(os.path.join(HERE, '..', '..', '..', '..'))
@@ -12,7 +12,7 @@ from core.audio.sfx import SR
 from timeline import bar, BEAT, DUR, NOON, GRID, BRAKE, DUSK, FLASH, STOP, PAGE, CARD, SLATE
 
 S.seed(11)
-CH = {   # 琶音三音（低→高）+ 踏板低音
+CH = {   # three arpeggio notes (low → high) + pedal bass
     'Cm': (['C4', 'Eb4', 'G4'], 'C2'), 'Ab': (['C4', 'Eb4', 'Ab4'], 'Ab1'), 'Fm': (['C4', 'F4', 'Ab4'], 'F1'),
     'G': (['B3', 'D4', 'G4'], 'G1'), 'Eb': (['Bb3', 'Eb4', 'G4'], 'Eb2'), 'Bb': (['Bb3', 'D4', 'F4'], 'Bb1'),
     'Db': (['Db4', 'F4', 'Ab4'], 'Db2'),
@@ -52,13 +52,13 @@ for n, c in PLAN.items():
     end = min(bar(n + 1), BRAKE if n < 12 else STOP)
     ev(bar(n), 'organ_pedal', ped, end - bar(n), .74, 0, .9, release=.2)
 
-# ── A 夜→晨（0–3）：八分琶音，极简反复 ──
+# ── A night → morning (bars 0–3): eighth-note arpeggios, minimalist repetition ──
 slam(0)
 for n in range(4):
     arp(n, 2, [0, 1, 2, 1], .7, -.25, .95)
     if n >= 2: pulse(n)
     if n == 3: arp(n, 2, [2, 1, 0, 1], .45, .4, .26, oct_=1, inst='flute_stac')
-# ── B 上午（4–7）：三连音对八分，木管断奏 ──
+# ── B morning (bars 4–7): triplets against eighths, staccato woodwinds ──
 ev(bar(4), 'organ', 'C3', .9, .75, 0, .35)
 for n in range(4, 8):
     arp(n, 3, [0, 1, 2], .74, -.25, .9)
@@ -66,7 +66,7 @@ for n in range(4, 8):
     pulse(n, vel=.7)
     if n >= 6: arp(n, 3, [0, 2, 1], .6, .45, .5, oct_=1, inst='violins_spic')
     if n == 7: arp(n, 4, [0, 1, 2, 3], .5, -.45, .35, oct_=1, inst='flute_stac')
-# ── C 正午（8–9）：再砸入；一个长镜头下面铺开；数字逐位锁定 = 钟琴 ──
+# ── C noon (bars 8–9): slams back in; spreads out under one long take; digits locking one by one = glockenspiel ──
 slam(8)
 for n in (8, 9):
     arp(n, 3, [0, 1, 2], .76, -.25, .9)
@@ -74,9 +74,9 @@ for n in (8, 9):
     pulse(n, vel=.72)
 ev(NOON, 'violins', 'Eb5', 3.9, .45, -.3, .4, attack=.4, release=.4)
 ev(NOON, 'cellos', 'Ab2', 3.9, .5, .25, .5, attack=.3, release=.4)
-for k in range(7):        # render.py 的 lock_digits：NOON+0.3 起每个十六分锁一位
+for k in range(7):        # render.py's lock_digits: from NOON+0.3, one digit locks per sixteenth
     ev(NOON + .3 + (k + 1) * BEAT / 4, 'glockenspiel', ['C6', 'Eb6', 'F6', 'Ab6', 'G6', 'Eb6', 'C7'][k], .3, .5, .3, .45)
-# ── 网格（10–11）：十六分全奏，格子跟着长满 ──
+# ── grid (bars 10–11): sixteenth-note tutti, the cells fill up with it ──
 for n in (10, 11):
     arp(n, 4, [0, 1, 2, 3, 2, 1], .82, -.25, .95)
     arp(n, 3, [0, 1, 2], .66, .3, .6, oct_=1, inst='clarinet_stac')
@@ -86,7 +86,7 @@ for n in (10, 11):
 ev(bar(10), 'organ', 'Db3', 1.0, .8, 0, .4)
 ev(bar(11), 'organ', 'G2', 1.0, .85, 0, .45)
 ev(bar(11), 'sus_cymbal', 'cresc', None, .6, .1, .36)
-# ── D 刹车（12–15）：琶音全停 ──
+# ── D brake (bars 12–15): arpeggios all stop ──
 t = BRAKE
 for p, g in [('Ab3', .6), ('C4', .5), ('Eb4', .45), ('G4', .4)]:
     ev(t, 'organ_soft', p, 3.0, .6, 0, g, attack=.12, release=.5)
@@ -94,20 +94,20 @@ ev(t, 'organ_pedal', 'Ab1', 3.0, .6, 0, .8, release=.4)
 ev(t, 'cellos', 'Ab2', 3.0, .5, .25, .55, attack=.3, release=.5)
 ev(t + .3, 'violins', 'G5', 2.6, .35, -.3, .35, attack=.8, release=.5)
 ev(t + .1, 'vibraphone_bowed', 'Eb5', 2.8, .45, .35, .4)
-t = bar(13, 2)            # 1899 | 今天：Fm9，长笛一句很短的下行
+t = bar(13, 2)            # 1899 | today: Fm9, one very short descending flute phrase
 for p, g in [('F3', .55), ('Ab3', .45), ('C4', .45), ('G4', .38)]:
     ev(t, 'organ_soft', p, 4.0, .58, 0, g, attack=.15, release=.5)
 ev(t, 'organ_pedal', 'F1', 4.0, .58, 0, .8, release=.4)
 ev(t, 'contrabass', 'F2', 4.0, .5, .2, .45, attack=.3, release=.5)
 for tt, p, d in [(t + .25, 'C5', 1.4), (t + 1.75, 'Bb4', .95), (t + 2.75, 'Ab4', 1.2)]:
     ev(tt, 'flute', p, d, .45, -.25, .5, attack=.08, release=.3)
-for k in range(3):        # 三个计数到位
+for k in range(3):        # the three counters land
     ev(bar(13, 2) + .25 + k * BEAT / 3 + .55, 'glockenspiel', ['C6', 'Ab5', 'F5'][k], .3, .38, .3, .38)
-t = bar(15, 2)            # 长曝光：脉冲悄悄回来，渐强进黄昏
+t = bar(15, 2)            # long exposure: the pulse quietly returns, crescendo into dusk
 for k in range(8):
     ev(t + k * BEAT / 4, 'organ_soft', ['C4', 'Eb4', 'G4', 'Eb4'][k % 4], BEAT / 4, .4 + .05 * k, -.25, .45 + .06 * k)
 ev(bar(15), 'sus_cymbal', 'cresc', None, .6, -.1, .5)
-# ── E 黄昏→夜（16–20）：八分 → 三连音 → 十六分 → 闪回 ──
+# ── E dusk → night (bars 16–20): eighths → triplets → sixteenths → flashback ──
 slam(16)
 arp(16, 2, [0, 1, 2, 1], .8, -.25, .95); pulse(16, vel=.74)
 arp(16, 3, [0, 1, 2], .55, .35, .5, oct_=1, inst='clarinet_stac')
@@ -121,7 +121,7 @@ for n in (18, 19, 20):
     pulse(n, per_beat=2, vel=.82, gain=.95)
     if n >= 19: arp(n, 4, [0, 1, 2, 3], .6, -.45, .45, oct_=1, inst='flute_stac')
     ev(bar(n), 'gran_cassa', 'hit', None, .6, 0, .7)
-ev(bar(18) + .75, 'glockenspiel', 'G6', .4, .45, .3, .4)        # 220,000 计数到位
+ev(bar(18) + .75, 'glockenspiel', 'G6', .4, .45, .3, .4)        # the 220,000 count lands
 ev(bar(20), 'organ', 'C3', 2.0, .9, 0, .5)
 for p in ['G3', 'C4', 'Eb4', 'G4']: ev(bar(20), 'organ', p, 2.0, .9, 0, .34)
 ev(bar(19, 2), 'sus_cymbal', 'cresc', None, .75, .1, .6)
@@ -129,20 +129,20 @@ for p, q in (('G3', 'D4'), ):
     ev(bar(19), 'horn', p, 2.0, .62, -.2, .42, attack=.25, release=.2); ev(bar(19), 'horn', q, 2.0, .6, .2, .36, attack=.25, release=.2)
 ev(bar(20), 'horn', 'C4', 2.0, .7, -.2, .48, attack=.15, release=.1); ev(bar(20), 'horn', 'G4', 2.0, .68, .2, .4, attack=.15, release=.1)
 ev(bar(20), 'gran_cassa', 'roll', None, .62, 0, .55)
-# ── F 尾声 ──
+# ── F coda ──
 ev(PAGE - .05, 'organ_pedal', 'C2', 1.5, .5, 0, .6, attack=.35, release=.6)
 for p, g in [('C3', .4), ('Ab3', .4), ('Bb3', .3), ('Eb4', .35), ('C5', .22)]:
     ev(CARD, 'organ_soft', p, SLATE - CARD - .2, .5, 0, g, attack=.6, release=.9)
 ev(CARD, 'organ_pedal', 'Ab1', SLATE - CARD - .2, .45, 0, .55, attack=.6, release=.9)
 ev(CARD + .5, 'violins', 'Eb5', SLATE - CARD - .8, .32, -.3, .3, attack=1.0, release=.8)
-# 落版：开头的琶音以四分音符慢慢回来（城市还在转），停在不解决的 Fm9/Ab
+# end slate: the opening arpeggio slowly returns in quarter notes (the city keeps turning), stopping on an unresolved Fm9/Ab
 for p, g in [('Ab2', .38), ('C4', .32), ('Eb4', .3), ('G4', .26), ('Bb4', .2)]:
     ev(SLATE, 'organ_soft', p, DUR - SLATE - .4, .48, 0, g, attack=.7, release=1.2)
 for k in range(int((DUR - SLATE - 1.5) / BEAT)):
     ev(SLATE + .5 + k * BEAT, 'organ_soft', ['C5', 'Eb5', 'G5', 'Eb5'][k % 4], BEAT, .38, -.3, .28 * (1 - k / 22))
 ev(SLATE + .4, 'flute', 'G5', 4.0, .32, .3, .3, attack=.8, release=1.0)
 
-# 动态弧线：开头留余地，刹车段下沉，黄昏最响
+# dynamic arc: leave headroom at the start, sink in the brake section, loudest at dusk
 for e in EV:
     if e['t'] < bar(4) and e['inst'] not in ('organ', 'gran_cassa'): e['gain'] *= (.7 if e['t'] >= bar(3) else .82)
     elif bar(4) <= e['t'] < bar(8): e['gain'] *= 1.12
@@ -157,7 +157,7 @@ def cut_at(x, t):
     return y
 
 
-# 两次"一刀切"：网格 → 刹车（24.0）、闪回 → 黑（42.0）。干声切断，混响尾巴留着
+# two hard cuts: grid → brake (24.0), flashback → black (42.0). The dry signal is cut, the reverb tail stays
 A = S.render([e for e in EV if e['t'] < BRAKE - .01], dur=DUR + 1.5, master=False)
 B = S.render([e for e in EV if BRAKE - .01 <= e['t'] < STOP - .01], dur=DUR + 1.5, master=False)
 C = S.render([e for e in EV if e['t'] >= STOP - .01], dur=DUR + 1.5, master=False)

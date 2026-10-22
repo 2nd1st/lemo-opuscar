@@ -1,4 +1,4 @@
-"""联系表：python3 tools/sheet.py <视频> <输出.jpg> [间隔s=2] [起点s=0] [终点s]"""
+"""Contact sheet: python3 tools/sheet.py <video> <out.jpg> [interval_s=2] [start_s=0] [end_s]"""
 import sys, subprocess, tempfile, os, glob
 from PIL import Image, ImageDraw
 src, out = sys.argv[1], sys.argv[2]

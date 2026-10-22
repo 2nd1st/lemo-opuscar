@@ -1,5 +1,5 @@
 #!/bin/sh
-# 字体子集（OFL，Google Fonts CSS API）：字符表自动取自 main.js；改了文案就删掉 fonts/*.woff2 重跑
+# Font subsets (OFL, Google Fonts CSS API): the character set is taken automatically from main.js; after changing any on-screen text, delete fonts/*.woff2 and rerun
 set -e
 H=$(cd "$(dirname "$0")/.." && pwd); D=$H/fonts; mkdir -p "$D"
 UA="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"

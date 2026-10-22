@@ -1,4 +1,4 @@
-// 字幕新闻 Caption News ·《蜜蜂账本 The Bee Ledger》— 1920×1080, 30 fps, 59.5 s
+// Caption News (字幕新闻) ·《蜜蜂账本 The Bee Ledger》— 1920×1080, 30 fps, 59.5 s
 // One timeline (SHOTS, CAPS, VO, EV) drives the picture, the captions, the .srt and the mix.
 // Footage frames are prepared at their final size by tools/prep.sh; the page only pans/pushes within the allowed scale.
 const W = 1920, H = 1080, FPS = 30, DUR = 59.5;

@@ -78,7 +78,7 @@ EDITS = [
     ('styles/briefing-board/STYLE.md',
      'into a private venv in the project folder (`demo/kit/tools/kit_env.sh` does venv and model), never into `$LIB/.venv`.',
      'into a private venv in the project folder, never into the library\'s own `.venv`.'),
-    ('core/audio/INSTRUMENTS.md', '和 `sfx.py` 同一套约定（`SR`、`add()`、`limit()`）', '和 sfx.py 用同一套约定：采样率 SR、add() 和 limit()'),
+    ('core/audio/INSTRUMENTS.md', 'the same conventions as `sfx.py` (`SR`, `add()`, `limit()`)', 'the same conventions as sfx.py: sample rate SR, add() and limit()'),
     # the walnut textures are a pack on the "assets" release in this edition (TEXTURES)
     ('tools/fetch.sh', 'usage: sh tools/fetch.sh voice | hdri | instruments', 'usage: sh tools/fetch.sh voice | hdri | textures | instruments'),
     ('tools/fetch.sh', '  hdri               Poly Haven HDRIs → core/assets/polyhaven/\n',

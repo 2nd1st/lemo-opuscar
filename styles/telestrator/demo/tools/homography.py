@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""球场线 → 透视矩阵。pitch.json 里每个镜头给 ≥4 个已知球场点（米，原点 = 球门中心，x = 离开球门线的距离，
-y = 横向，远端为负）和它们在 1920×1080 画面里的位置；输出 assets/pitch.json：每个镜头的 H（球场→画面）、
-残差，以及要换算的点（起脚点）在球场上的坐标。页面用 H 做"画面展平成俯视图"。"""
+"""Pitch lines → perspective matrix. In pitch.json each shot gives ≥4 known pitch points (metres, origin = centre of the goal, x = distance out from the goal line,
+y = across the pitch, negative on the far side) and their positions in the 1920×1080 frame; writes assets/pitch.json: each shot's H (pitch → frame),
+the residuals, and the pitch coordinates of the points to convert (the shot's strike point). The page uses H to "flatten the frame into a top-down view"."""
 import json, os, sys
 import numpy as np
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

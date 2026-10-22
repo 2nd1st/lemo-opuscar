@@ -1,6 +1,6 @@
-"""列 Commons 分类成员（带 429 退避）：python3 -I tools/cat.py "Category:X" [file|subcat] """
+"""List Commons category members (with 429 back-off): python3 -I tools/cat.py "Category:X" [file|subcat] """
 import json, sys, time, urllib.request, urllib.parse
-UA = "LemoOpuscarTrial/1.0 (lemomo.studio research; footage sourcing)"
+UA = "lemo-opuscar/1.0 (https://github.com/lemomo-ai/lemo-opuscar)"
 def get(params):
     q = urllib.parse.urlencode({**params, "format": "json"})
     for k in range(6):

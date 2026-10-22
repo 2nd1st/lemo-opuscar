@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""字幕条目 → audio/cues.json（给 core/render/srt.py 出 .srt）。规则与 index.html 的 cueSpan() 相同：
-从旁白开口起，到念完 + 0.45 s 或下一条开口前 0.08 s 为止；每条两行：中文在上、英文在下（各一行，不换行）。"""
+"""Subtitle cues → audio/cues.json (for core/render/srt.py to write the .srt). Same rule as cueSpan() in index.html:
+a cue starts when the voice-over line starts and ends at the end of the line + 0.45 s, or 0.08 s before the next line starts; each cue has two lines: Chinese on top, English below (one line each, no wrapping)."""
 import json, os
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 tl = json.load(open(f'{D}/timeline.json', encoding='utf-8')); vd = json.load(open(f'{D}/audio/vo/dur.json'))

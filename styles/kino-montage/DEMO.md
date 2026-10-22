@@ -71,7 +71,7 @@ demo/
   tools/footage.py    search / fetch / record archive material   tools/cq.py      Commons queries
   tools/final_asr.py  speech check on the final mix              tools/rhythm_report.py  flat windows, cuts, hit alignment
   audio/lines.json    narration (Kokoro)                         audio/mix.py     score, foley, voice, ambience, master
-  FACTS.md · CREDITS · SOURCES.md / SOURCES.jsonl · TREATMENT.md · PRODUCTION_LOG.md · stills/styleframe.jpg
+  FACTS.md · CREDITS · SOURCES.md / SOURCES.jsonl · stills/styleframe.jpg
 ```
 
 1. `sh demo/build.sh` (library set up with `setup.sh deps voice music`): downloads the sources (~95 MB) and fonts, makes a python with onnxruntime and the u2net_human_seg model if needed, prepares the footage (~2 min), voices and checks every line, runs the reading check, exports events and cues, renders 1,440 frames, mixes, writes the subtitles, masters to −14 LUFS (grain 4), writes the poster (51.0 s), the styleframe (2.5 s) and a 1280-wide small copy, then runs the rhythm report and the speech check on the final mix.

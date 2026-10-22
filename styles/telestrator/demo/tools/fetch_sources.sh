@@ -1,8 +1,8 @@
 #!/bin/sh
-# 下载 raw/（约 55 MB）。来源与许可见 SOURCES.md / SOURCES.jsonl。
-#   kald.webm   Wikimedia Commons，beIN SPORTS Türkiye，CC BY 3.0（第三球 14 s 片段）
-#   yt/summary.mp4  beIN SPORTS Türkiye 官方认证频道 2019-07-24 发布的整场集锦，YouTube 标 CC BY（前两球）；
-#                   720p 原生档（format 232+140），不用 YouTube 的 AI 放大档。需要 uv（uvx yt-dlp）。
+# Downloads raw/ (about 55 MB). Sources and licences: see SOURCES.md / SOURCES.jsonl.
+#   kald.webm   Wikimedia Commons, beIN SPORTS Türkiye, CC BY 3.0 (14 s clip of the third goal)
+#   yt/summary.mp4  full-match highlights published 2019-07-24 by the verified official beIN SPORTS Türkiye channel, marked CC BY on YouTube (first two goals);
+#                   native 720p rendition (format 232+140), not YouTube's AI-upscaled rendition. Needs uv (uvx yt-dlp).
 #   stadium.jpg Commons，Olos88，CC0      hak.jpg  Commons，Thomas Rodenbücher，CC BY 2.0
 set -e
 D=$(cd "$(dirname "$0")/.." && pwd); cd "$D"; mkdir -p raw/yt

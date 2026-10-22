@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""下载本片用到的字体（全部 OFL，来自 Google Fonts）到 fonts/。
+"""Download the fonts used in this film (all OFL, from Google Fonts) to fonts/.
 Latin：Barlow / Barlow Condensed / IBM Plex Mono（github.com/google/fonts）。
-中文：Noto Sans SC 500 / 700，按 index.html 和 audio/cues.json 里出现的汉字子集化（Google Fonts CSS API 的 &text=）。
-改了画面字或字幕后重跑：python3 tools/fetch_fonts.py"""
+Chinese: Noto Sans SC 500 / 700, subset to the characters that appear in index.html and audio/cues.json (the Google Fonts CSS API's &text=).
+Rerun after changing on-screen text or subtitles: python3 tools/fetch_fonts.py"""
 import re, json, urllib.request, urllib.parse
 from pathlib import Path
 HERE = Path(__file__).resolve().parent.parent

@@ -1,5 +1,5 @@
-"""成片回听：用 faster-whisper 把成片音轨转写一遍，逐段打印（片中秒），确认原声和旁白在混音里都听得清。
-用法：$LIB/.venv/bin/python -I tools/final_asr.py <film.mp4> [model=small.en]"""
+"""Listen-back on the finished film: transcribe the film's soundtrack with faster-whisper and print it segment by segment (film seconds), to confirm both the source audio and the narration are intelligible in the mix.
+Usage: $LIB/.venv/bin/python -I tools/final_asr.py <film.mp4> [model=small.en]"""
 import subprocess, sys, tempfile, os
 from faster_whisper import WhisperModel
 mp4 = sys.argv[1]; model = sys.argv[2] if len(sys.argv) > 2 else "small.en"

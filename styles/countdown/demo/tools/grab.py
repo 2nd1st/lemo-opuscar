@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""从 NASA 原片 URL 只截一段（HTTP 范围读取，不下整条），并把来源追加进 SOURCES.jsonl。
-用法：python3 tools/grab.py <nasa_id> <版本 orig|large|mobile> <起点秒> <时长秒> <name> [--copy]
---copy：流复制（起点落在前一个关键帧）；默认精确起点、x264 crf 14 重编码。"""
+"""Cut just one segment from a NASA source video URL (HTTP range reads, without downloading the whole file), and append the source to SOURCES.jsonl.
+Usage: python3 tools/grab.py <nasa_id> <version orig|large|mobile> <start seconds> <duration seconds> <name> [--copy]
+--copy: stream copy (the start snaps to the previous keyframe); by default, exact start with an x264 crf 14 re-encode."""
 import json, subprocess, sys, time, urllib.parse, urllib.request
 from pathlib import Path
 nid, ver, ss, dur, name = sys.argv[1:6]; copy = "--copy" in sys.argv

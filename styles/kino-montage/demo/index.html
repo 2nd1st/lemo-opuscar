@@ -152,7 +152,7 @@ function S1(t) {
   const bo = slam(t, 0, .22) * 2600;
   band(BAR.x - bo * Math.cos(TH), BAR.y - bo * Math.sin(TH), 3400, BAR.T, TH, RED);
   band(BAR.x + 220, BAR.y + 150, 3400, 30, TH, INK);
-  // 4 · 1 · 0, then 天
+  // 4 · 1 · 0, then 天 ("days")
   const DIG = [['4', .5], ['1', .625], ['0', .75]]; let x = 64; const boxes = [];
   for (const [d, t0] of DIG) {
     const w = measure(d, 'Osw', 400, 700);
@@ -224,7 +224,7 @@ function S2(t) {
   withClip(win, () => { cover(clipImg('grillage', lt, 1), 0, 0, 1340, 1080, .5, .55, 1.0 + lt * .02); flicker(t, 0, 0, 1340, H); });
   flash(t, T.steel, 0, 0, 1340, H);
   tag(FILM, 70, 72);
-  // 第一根钢, top to bottom
+  // 第一根钢 ("first steel"), top to bottom
   const boxes = [];
   if (t >= T.steel) '第一根钢'.split('').forEach((ch, i) => {
     const o = slam(t, T.steel + i * .0625, .1) * 700;

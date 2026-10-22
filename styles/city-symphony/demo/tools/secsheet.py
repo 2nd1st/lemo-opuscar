@@ -1,4 +1,4 @@
-"""素材逐秒联系表：python tools/secsheet.py raw/x.mp4 out.jpg [起点 终点 步长]"""
+"""Per-second contact sheet of a source: python tools/secsheet.py raw/x.mp4 out.jpg [start end step]"""
 import sys, subprocess
 from PIL import Image, ImageDraw
 src, out = sys.argv[1], sys.argv[2]

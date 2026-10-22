@@ -1,11 +1,10 @@
-// LEMO AI NEWS · 本周 AI 三件事（2026-10-12 至 10-18）—— 电视新闻包装（Broadcast News Package）库 demo
-// Canvas 2D，确定性 render(t)。切点落在 120 BPM、第 0 拍 = 1.5 s 的拍格上（镜头表见 DEMO.md）。
-// 无烧字幕、无滚动条：条带从第一条新闻到回顾一直在底部；字幕只出外挂 .srt（CUES → tools/subs.py）。
-const W = 1920, H = 1080, DUR = 54.0;
+// LEMO AI NEWS · 本周 AI 四件事 ("four AI stories this week", 2026-10-12 to 10-18) — Broadcast News Package library demo
+// Canvas 2D, deterministic render(t). Cuts land on a 120 BPM beat grid with beat 0 = 1.5 s (shot list in DEMO.md).
+// No burned-in subtitles, no ticker: the strap stays at the bottom from the first story to the recap; subtitles only as a sidecar .srt (CUES → tools/subs.py).
+const W = 1920, H = 1080, DUR = 53.5;
 const cv = document.getElementById('out'); let ctx = cv.getContext('2d');
-const OFF = document.createElement('canvas'); OFF.width = W; OFF.height = H; const octx = OFF.getContext('2d');
 
-// —— 色板（品牌色取自 lemomo-ai/assets/header.svg）——
+// —— Palette (LemoLab's own brand colours) ——
 const C = {
   ink: '#121417', ink2: '#1B1E23', ink3: '#22262C', line: '#454B55',
   lemon: '#F2CF1D', lemonL: '#F8DE4A', lemonD: '#D8B30C', gold: '#D4B064',
@@ -16,7 +15,7 @@ const F = {
   b8: s => `800 ${s}px Barlow`, b6: s => `600 ${s}px Barlow`, b6i: s => `italic 600 ${s}px Barlow`, mono: s => `500 ${s}px Plex`,
 };
 
-// —— 工具 ——
+// —— Helpers ——
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const seg = (t, a, b) => clamp((t - a) / (b - a));
 const lerp = (a, b, k) => a + (b - a) * k;
@@ -30,7 +29,7 @@ const IM = {};
 let EU = null;
 function loadImg(src) { return new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => no(src); i.src = src; }); }
 
-// —— 文本登记（TEXTS 用于 readcheck） ——
+// —— Text registry (TEXTS is used by readcheck) ——
 let TX = [];
 function text(s, x, y, font, color, align = 'left', ls = 0, id = null) {
   ctx.font = font; ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = 'alphabetic';
@@ -43,7 +42,7 @@ function text(s, x, y, font, color, align = 'left', ls = 0, id = null) {
 }
 function tw(s, font, ls = 0) { ctx.font = font; ctx.letterSpacing = ls + 'px'; const w = ctx.measureText(s).width; ctx.letterSpacing = '0px'; return w; }
 
-// 图片铺满矩形：源坐标 (fx,fy) 落在矩形中心
+// Cover-fit an image into a rectangle: source point (fx,fy) lands at the rectangle's centre
 function photo(img, fx, fy, s, rx = 0, ry = 0, rw = W, rh = H, filter = null) {
   s = Math.max(s, rw / img.width, rh / img.height);
   let ox = rx + rw / 2 - fx * s, oy = ry + rh / 2 - fy * s;
@@ -59,7 +58,7 @@ function vignette(a = .5) {
   g.addColorStop(0, 'rgba(8,9,11,0)'); g.addColorStop(1, `rgba(8,9,11,${a})`);
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 }
-// 画面层颗粒（只压在示意空镜上，包装层与数据图不加）
+// Picture-layer grain (only over the illustrative plates; not on the wrapper layers or data graphics)
 const GR = [];
 function makeGrain() {
   for (let k = 0; k < 6; k++) {
@@ -77,7 +76,7 @@ function grain(t, a = .07) {
   ctx.restore();
 }
 
-// —— 台标：柠檬黄平行四边形 + 左侧黑/金竖条 + "LEMO" ——
+// —— Station logo: lemon-yellow parallelogram + black/gold vertical bars on the left + "LEMO" ——
 function plate(cx, cy, s, glint = -1, drop = 1) {
   const w = 520 * s, h = 180 * s, k = h * .28;
   ctx.save(); ctx.translate(cx, cy);
@@ -110,105 +109,94 @@ function wordmark(x, y, size, align = 'center', id = null) {
   if (id) TX.push({ id, text: 'LEMO AI NEWS', x0: cx - tot, y0: y - size, x1: cx, y1: y + 8 });
 }
 
-// ============ 包装件 ============
-// 下三分之一条带：从第一条新闻（7.5）到回顾（43.5）一直在底部，换内容时竖翻；bumper 期间也不收
+// ============ Wrapper elements ============
+// Lower-third strap: stays at the bottom from the first story (7.5) to the recap (43.5), flips vertically when its content changes; does not retract during bumpers either
 const STRAP = [
-  { out: 44.05, items: [
-    { a: 7.5, tab: ['模型', 'MODELS'], cn: '谷歌向全部开发者开放 Gemini 4 Argon', en: 'GOOGLE OPENS GEMINI 4 ARGON TO EVERY DEVELOPER' },
-    { a: 12.12, tab: ['模型', 'MODELS'], cn: '入门价之后，价格翻倍', en: 'PRICES DOUBLE AFTER THE INTRO' },
-    { a: 15.75, tab: ['市场', 'MARKETS'], cn: '韩国 Kospi 单日跌 7.57%，跌入熊市', en: 'KOSPI PLUNGES 7.57% IN A DAY AND ENTERS A BEAR MARKET' },
-    { a: 24.55, tab: ['市场', 'MARKETS'], cn: '利率与 AI 担忧，芯片股重挫', en: 'CHIP STOCKS SINK ON AI AND RATE FEARS' },
-    { a: 29.0, tab: ['监管', 'POLICY'], cn: '欧盟 AI 办公室向 OpenAI、Anthropic 发出问询', en: 'EU AI OFFICE SENDS QUESTIONS TO OPENAI AND ANTHROPIC' },
-    { a: 34.2, tab: ['监管', 'POLICY'], cn: '起因：今夏两起 AI 智能体事件', en: 'AFTER TWO AI-AGENT INCIDENTS THIS SUMMER' },
-    { a: 38.55, tab: ['人物', 'PROFILE'], cn: 'Henna Virkkunen · 欧盟委员会执行副主席', en: 'EXECUTIVE VICE-PRESIDENT, EUROPEAN COMMISSION · IN DUBLIN' }] },
-];
-// 内容层下移量：没有字幕和滚动条，内容整体往下放，和底部条带之间不留空带
+  { out: 45.0, items: [
+    { a: 6.0, tab: ['模型', 'MODELS'], cn: '谷歌向全部开发者开放 Gemini 4 Argon', en: 'GOOGLE OPENS GEMINI 4 ARGON TO EVERY DEVELOPER' },
+    { a: 13.0, tab: ['市场', 'MARKETS'], cn: '韩国 Kospi 单日跌 7.57%，跌入熊市', en: 'KOSPI PLUNGES 7.57% IN A DAY AND ENTERS A BEAR MARKET' },
+    { a: 20.0, tab: ['市场', 'MARKETS'], cn: '利率与 AI 担忧，芯片重挫', en: 'CHIP STOCKS SINK ON AI AND RATE FEARS' },
+    { a: 24.0, tab: ['监管', 'POLICY'], cn: '欧盟 AI 办公室向 OpenAI、Anthropic 发出问询', en: 'EU AI OFFICE SENDS QUESTIONS TO OPENAI AND ANTHROPIC' },
+    { a: 30.5, tab: ['人物', 'PROFILE'], cn: 'Henna Virkkunen · 欧盟委员会执行副主席', en: 'EXECUTIVE VICE-PRESIDENT, EUROPEAN COMMISSION' },
+    { a: 35.5, tab: ['开放权重', 'OPEN WEIGHTS'], cn: 'Meta 开放 Muse Spark Open 模型权重', en: 'META RELEASES THE WEIGHTS OF MUSE SPARK OPEN' }] },
+]
+// Content-layer downward offset: with no subtitles or ticker, the content sits lower as a whole, leaving no empty band above the bottom strap
 const DY = { rundown: 110, type: 60, price: 60, kospi: 60, chips: 70, eu: 60 };
+// The strap is always there; its content switches as a block at transitions (vertical-band wipe: old and new sides each draw their own strap, so the band sweeping past is the text change; hard cut: swaps on the same frame), no flip cards, no overlapping text
 function strap(t) {
-  const G = STRAP.find(g => t >= g.items[0].a && t <= g.out + .3); if (!G) return;
-  const L = G.items, a0 = L[0].a;
-  let i = 0; for (let k = 0; k < L.length; k++) if (t >= L[k].a) i = k;
-  const S = L[i], P = i > 0 ? L[i - 1] : null, sw = seg(t, S.a, S.a + .32);
+  const G = STRAP.find(g => t >= g.items[0].a && t < g.out); if (!G) return;
+  let S = G.items[0]; for (const it of G.items) if (t >= it.a) S = it;
   const x0 = 96, ty = 856, by = 904, bh = 104, bw = 1250;
-  const inA = eo(seg(t, a0, a0 + .22)), inB = eo(seg(t, a0 + .08, a0 + .4));
-  const out = eio(seg(t, G.out, G.out + .25));
-  ctx.save(); ctx.translate(-out * 1600, 0);
-  const bwNow = bw * inB;
-  ctx.fillStyle = 'rgba(0,0,0,.3)'; ctx.fillRect(x0 + 8, by + 8, bwNow, bh);
-  ctx.fillStyle = C.paper; ctx.fillRect(x0, by, bwNow, bh);
-  ctx.fillStyle = C.lemon; ctx.fillRect(x0, by, 14, bh * inB);
-  if (inB > .95) { ctx.fillStyle = C.ink; ctx.fillRect(x0 + bw, by, 120, bh); ctx.fillStyle = C.lemon; ctx.fillRect(x0 + bw, by, 120, 6); text('LEMO', x0 + bw + 60, by + 68, F.b8(40), C.lemon, 'center', 1); }
-  ctx.save(); ctx.beginPath(); ctx.rect(x0 + 14, by, bwNow - 14, bh); ctx.clip();
-  const put = (D, dy, al, id) => { ctx.globalAlpha = al; text(D.cn, x0 + 44, by + 58 + dy, F.sc9(50), C.ink, 'left', 0, id); text(D.en, x0 + 46, by + 92 + dy, F.b6(27), '#6E5A1E', 'left', 1.5, id ? id + 'e' : null); ctx.globalAlpha = 1; };
-  if (P && sw < 1) { put(P, -eio(sw) * bh, 1 - sw); put(S, (1 - eio(sw)) * bh, sw, 'strap'); }
-  else put(S, (1 - inB) * 40, inB, 'strap');
+  ctx.save();
+  ctx.fillStyle = 'rgba(0,0,0,.3)'; ctx.fillRect(x0 + 8, by + 8, bw, bh);
+  ctx.fillStyle = C.paper; ctx.fillRect(x0, by, bw, bh);
+  ctx.fillStyle = C.lemon; ctx.fillRect(x0, by, 14, bh);
+  ctx.fillStyle = C.ink; ctx.fillRect(x0 + bw, by, 120, bh); ctx.fillStyle = C.lemon; ctx.fillRect(x0 + bw, by, 120, 6); text('LEMO', x0 + bw + 60, by + 68, F.b8(40), C.lemon, 'center', 1);
+  ctx.save(); ctx.beginPath(); ctx.rect(x0 + 14, by, bw - 14, bh); ctx.clip();
+  text(S.cn, x0 + 44, by + 58, F.sc9(50), C.ink, 'left', 0, 'strap'); text(S.en, x0 + 46, by + 92, F.b6(27), '#6E5A1E', 'left', 1.5, 'strape');
   ctx.restore();
-  const T = P && sw < .5 ? P : S;
-  const tabW = 40 + tw(T.tab[0], F.sc9(30)) + 14 + tw(T.tab[1], F.b8(30), 2);
-  ctx.fillStyle = C.lemon; ctx.fillRect(x0, ty, tabW * inA, by - ty);
-  if (P && sw > 0 && sw < 1 && P.tab[0] !== S.tab[0]) { ctx.fillStyle = `rgba(255,255,255,${.5 * Math.sin(sw * Math.PI)})`; ctx.fillRect(x0, ty, tabW, by - ty); }
-  if (inA > .9) { const w1 = text(T.tab[0], x0 + 20, ty + 37, F.sc9(30), C.ink); text(T.tab[1], x0 + 20 + w1 + 14, ty + 37, F.b8(30), C.ink, 'left', 2); }
+  const tabW = 40 + tw(S.tab[0], F.sc9(30)) + 14 + tw(S.tab[1], F.b8(30), 2);
+  ctx.fillStyle = C.lemon; ctx.fillRect(x0, ty, tabW, by - ty);
+  const w1 = text(S.tab[0], x0 + 20, ty + 37, F.sc9(30), C.ink); text(S.tab[1], x0 + 20 + w1 + 14, ty + 37, F.b8(30), C.ink, 'left', 2);
   ctx.restore();
 }
 
-// 角标：示意画面 / 示意图（左上）。TAGS 在 Kospi 数据确定后由 kospiTag() 补齐
-const TAGS = [[7.6, 14.95, 'ILLUSTRATION', '示意 · AI 生成画面'], [24.6, 28.3, 'ILLUSTRATION', '示意 · AI 生成画面']];
+// Corner tag: illustration / diagram (top left). TAGS is completed by kospiTag() once the Kospi data is fixed
+const TAGS = [[6.0, 13.0, 'ILLUSTRATION', '示意 · AI 生成画面'], [20.0, 24.0, 'ILLUSTRATION', '示意 · AI 生成画面']];
 function cornerTag(t) {
   const A = TAGS.find(r => t >= r[0] && t < r[1]); if (!A) return;
-  const sy = eo(seg(t, A[0], A[0] + .2)) * (1 - eo(seg(t, A[1] - .15, A[1])));
   const x = 96, y = 56, h = 64, w = 330;
-  ctx.save(); ctx.translate(0, y + h / 2); ctx.scale(1, Math.max(.02, sy)); ctx.translate(0, -(y + h / 2));
   ctx.fillStyle = 'rgba(18,20,23,.82)'; ctx.fillRect(x, y, w, h);
   ctx.fillStyle = C.gold; ctx.fillRect(x, y, 8, h);
   text(A[2], x + 26, y + 28, F.mono(18), C.gold, 'left', 2, 'tag');
   text(A[3], x + 26, y + 54, F.sc7(20), C.white, 'left', 0, 'tagc');
-  ctx.restore();
 }
 
 function bug(t) {
-  if (t < 1.45 || t > 47.8) return;
-  if (BUMPS.some(B => t > B.a + .2 && t < B.a + .78)) return;   // 百叶全黄时让开
+  if (t < 1.45 || t > 47.4) return;
   ctx.globalAlpha = .95; plate(1739, 86, .327, -1, 1);
   text('AI NEWS', 1650, 96, F.b8(26), C.white, 'right', 3); ctx.globalAlpha = 1;
 }
 
-// 外挂字幕（.srt）：中文一行 / 英文一行；画面上不烧字幕。时间按英文旁白（vo/words.json）切
+// Sidecar subtitles (.srt): one Chinese line / one English line; nothing burned into the picture. Timings cut to the English narration (vo/words.json)
 const CUES = [
-  [1.6, 5.2, '这里是 Lemo AI 新闻，本周 AI 三件事。', 'This is Lemo AI News. Three stories from the week in AI.'],
-  [7.6, 10.55, '谷歌向全部开发者开放了 Gemini 4 Argon，', 'Google has opened Gemini 4 Argon to every developer,'],
-  [10.55, 13.6, '价格是每百万输入 token 2 美元。', 'at $2 per million input tokens.'],
-  [16.4, 19.35, '在首尔，Kospi 指数单日跌幅超过 7.5%，', 'In Seoul, the Kospi fell more than 7.5% in a day,'],
-  [19.35, 21.4, '跌入熊市。', 'and slid into a bear market.'],
-  [24.6, 28.3, '三星和 SK 海力士单日都跌了 9% 以上。', 'Samsung and SK hynix each lost more than 9%.'],
-  [29.6, 31.4, '欧盟 AI 办公室已经发出问询，', "The EU's AI Office has sent questions"],
-  [31.4, 34.1, '对象是 OpenAI 和 Anthropic，', 'to OpenAI and Anthropic,'],
-  [34.2, 36.9, '起因是今年夏天两起 AI 智能体事件，', 'after two incidents with AI agents this summer,'],
-  [36.9, 38.4, '据 Euronews 报道。', 'Euronews reports.'],
-  [38.7, 40.4, '在都柏林，欧盟委员会科技主管表示，', "In Dublin, the Commission's tech chief said"],
-  [40.4, 42.4, '执法已经开始。', 'enforcement has started.'],
-  [44.1, 46.4, '本周就到这里。Lemo AI 新闻。', "That's the week. Lemo AI News."],
-];
+  [1.6, 4.8, '这里是 Lemo AI 新闻，本周 AI 四件事。', 'This is Lemo AI News: four stories from the week in AI.'],
+  [6.1, 9.3, '谷歌向全部开发者开放了 Gemini 4 Argon，', 'Google has opened Gemini 4 Argon to every developer,'],
+  [9.3, 12.8, '入门价每百万输入 token 2 美元，12 月起翻倍。', 'at $2 per million input tokens, doubling from December.'],
+  [13.1, 17.0, '在首尔，韩国综合股价指数单日跌超 7.5%，', 'In Seoul, the Kospi fell more than 7.5% in a day,'],
+  [17.0, 19.8, '较 9 月高点跌去两成多，跌入熊市。', 'over 20% below its September high: a bear market.'],
+  [20.1, 23.4, '三星和 SK 海力士单日都跌了 9% 以上。', 'Samsung and SK hynix each lost more than 9%.'],
+  [24.1, 27.6, '欧盟 AI 办公室向 OpenAI 和 Anthropic 发出问询，', "The EU's AI Office has sent questions to OpenAI and Anthropic,"],
+  [27.6, 29.4, '据欧洲新闻台报道。', 'Euronews reports.'],
+  [30.6, 31.9, '维尔库宁在都柏林说：', 'In Dublin, Virkkunen said:'],
+  [31.9, 34.8, 'AI 办公室已开始执行这些规则。', '"Our AI Office has started enforcing these rules."'],
+  [35.6, 38.2, 'Meta 开放了 Muse Spark Open 的权重，', 'Meta has released the weights of Muse Spark Open:'],
+  [38.2, 40.2, '总参数 8160 亿，', '816B parameters in total,'],
+  [40.2, 42.3, '每个 token 只激活 420 亿，', 'only 42B active per token,'],
+  [42.3, 43.9, '两台 Mac Studio 就能跑。', 'and it runs on two Mac Studios.'],
+  [45.1, 48.0, '本周就到这里。这里是 Lemo AI 新闻。', "That's the week. This is Lemo AI News."],
+]
 let t_ = 0;
-// 出处小字：右下，和条带同一行
+// Small source credit: bottom right, on the same line as the strap
 const CREDITS_ON = [
-  [7.6, 15.0, 'SOURCE: GOOGLE GEMINI API CHANGELOG', '来源：Google · Gemini API 更新日志'],
-  [16.0, 24.5, 'KRX DATA VIA NAVER · KOREA HERALD', '韩国交易所数据 · Korea Herald'],
-  [24.5, 28.5, 'SOURCE: KOREA HERALD · BLOOMBERG', '来源：Korea Herald · Bloomberg'],
-  [29.6, 38.5, 'REPORTED BY EURONEWS · NATURAL EARTH', '据 Euronews 报道 · 地图 Natural Earth'],
-  [38.5, 43.7, 'SOURCE: EUROPEAN COMMISSION SPEECH', '来源：欧盟委员会 讲话全文'],
-];
+  [6.0, 13.0, 'SOURCE: GOOGLE GEMINI API CHANGELOG', '来源：Google · Gemini API 更新日志'],
+  [13.0, 20.0, 'KRX DATA VIA NAVER · KOREA HERALD', '韩国交易所数据 · Korea Herald'],
+  [20.0, 24.0, 'SOURCE: KOREA HERALD · BLOOMBERG', '来源：Korea Herald · Bloomberg'],
+  [24.0, 30.5, 'REPORTED BY EURONEWS · NATURAL EARTH', '据 Euronews 报道 · 地图 Natural Earth'],
+  [30.5, 35.5, 'SOURCE: EUROPEAN COMMISSION SPEECH', '来源：欧盟委员会 讲话全文'],
+  [35.5, 45.0, 'SOURCE: META AI RESEARCH BLOG', '来源：Meta AI 研究博客'],
+]
 function credit(t) {
   const R = CREDITS_ON.find(r => t >= r[0] && t < r[1]); if (!R) return;
-  const a = Math.min(seg(t, R[0], R[0] + .25), 1 - seg(t, R[1] - .2, R[1]));
-  ctx.save(); ctx.globalAlpha = .75 * a; text(R[2], 1836, 950, F.mono(13), C.paper, 'right', .5); text(R[3], 1836, 978, F.sc7(16), C.paper, 'right', .5); ctx.restore();
+  ctx.save(); ctx.globalAlpha = .75; text(R[2], 1836, 950, F.mono(13), C.paper, 'right', .5); text(R[3], 1836, 978, F.sc7(16), C.paper, 'right', .5); ctx.restore();
 }
 
-// ============ 镜头 ============
+// ============ Shots ============
 function studioBg(t) {
   ctx.fillStyle = C.ink; ctx.fillRect(0, 0, W, H);
   const rg = ctx.createRadialGradient(1300, 380, 60, 1300, 380, 1100); rg.addColorStop(0, 'rgba(242,207,29,.16)'); rg.addColorStop(1, 'rgba(242,207,29,0)');
   ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
-  // 斜向光带（视差慢移）
+  // Diagonal light bands (slow parallax drift)
   ctx.save();
   for (let i = 0; i < 7; i++) {
     const x = ((i * 380 + t * (30 + i * 6)) % 2600) - 400, w = 40 + hash(i) * 120;
@@ -248,11 +236,12 @@ function stingLogo(t) {
   }
 }
 
-// 串联单（开场 / 收尾同一个物件）
+// Rundown (the same object opens and closes the film)
 const ROWS = [
   ['01', '谷歌 Gemini 4 Argon 全面开放', 'GOOGLE OPENS GEMINI 4 ARGON TO ALL DEVELOPERS', 'TUE 13 OCT'],
   ['02', '韩国 Kospi 跌入熊市', 'KOSPI SLIDES INTO A BEAR MARKET', 'THU 15 OCT'],
   ['03', '欧盟 AI 办公室问询两家实验室', 'EU AI OFFICE QUESTIONS OPENAI AND ANTHROPIC', 'WED 14 OCT'],
+  ['04', 'Meta 开放 Muse Spark Open 权重', 'META RELEASES MUSE SPARK OPEN WEIGHTS', 'THU 15 OCT'],
 ];
 function rundown(t, close) {
   studioBg(t);
@@ -261,7 +250,7 @@ function rundown(t, close) {
   ctx.save(); ctx.translate(960, 420); ctx.scale(zs, zs); ctx.translate(-960, -420);
   const A0 = close ? 36.2 : 1.6;
   const m = (a, b) => close ? 1 : eo(seg(t, a, b));
-  // 左栏
+  // Left column
   const x = 120, ta = m(A0, A0 + .25);
   const tabTxt = close ? ['本周回顾', 'RECAP'] : ['本周头条', 'TOP STORIES'];
   const tabW = 40 + tw(tabTxt[0], F.sc9(30)) + 14 + tw(tabTxt[1], F.b8(30), 2);
@@ -271,30 +260,30 @@ function rundown(t, close) {
   r(390, 170, m(2.0, 2.3), () => text('12–18', x - 6, 390, F.b8(180), C.white, 'left', 2, 'rdate'));
   r(480, 90, m(2.2, 2.5), () => text('OCT 2026', x, 480, F.b8(84), C.lemon, 'left', 4, 'rmon'));
   ctx.globalAlpha = m(2.5, 2.8); text('WEEK 42 · 第 42 周', x, 532, F.mono(22), C.gold, 'left', 3, 'rwk'); ctx.globalAlpha = 1;
-  r(626, 64, m(2.6, 2.9), () => text('本周 AI 三件事', x, 626, F.sc9(56), C.white, 'left', 2, 'rtt'));
-  ctx.globalAlpha = m(2.75, 3.0); text('THE WEEK IN AI · 3 STORIES', x + 2, 668, F.b6(28), C.grey, 'left', 3); ctx.globalAlpha = 1;
-  // 右栏：三行
-  const X0 = 800, RW = 1024, RH = 140;
+  r(626, 64, m(2.6, 2.9), () => text('本周 AI 四件事', x, 626, F.sc9(56), C.white, 'left', 2, 'rtt'));
+  ctx.globalAlpha = m(2.75, 3.0); text('THE WEEK IN AI · 4 STORIES', x + 2, 668, F.b6(28), C.grey, 'left', 3); ctx.globalAlpha = 1;
+  // Right column: three rows
+  const X0 = 800, RW = 1024, RH = 120;
   ROWS.forEach(([n, cn, en, d], i) => {
-    const a = close ? 0 : 3.0 + i * .5, y = 170 + i * 165;
+    const a = close ? 0 : 3.0 + i * .4, y = 150 + i * 140;
     const k = close ? 1 : seg(t, a, a + .3); if (k <= 0) return;
     const sy = close ? 1 : back(k, 2.0);
     ctx.save(); ctx.translate(0, y); ctx.scale(1, Math.max(.02, sy)); ctx.translate(0, -y);
     ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.fillRect(X0 + 10, y + 10, RW, RH);
     ctx.fillStyle = C.ink2; ctx.fillRect(X0, y, RW, RH);
     ctx.fillStyle = C.lemon; ctx.fillRect(X0, y, 140, RH);
-    text(n, X0 + 70, y + 102, F.b8(96), C.ink, 'center', 0);
-    text(cn, X0 + 176, y + 66, F.sc9(44), C.white, 'left', 0, 'row' + i);
-    text(en, X0 + 178, y + 108, F.b6(25), C.gold, 'left', 1.5, 'rowe' + i);
-    text(d, X0 + RW - 26, y + 108, F.mono(18), C.grey2, 'right', 2);
-    // 到达时的扫光
+    text(n, X0 + 70, y + 90, F.b8(84), C.ink, 'center', 0);
+    text(cn, X0 + 176, y + 58, F.sc9(40), C.white, 'left', 0, 'row' + i);
+    text(en, X0 + 178, y + 96, F.b6(23), C.gold, 'left', 1.5, 'rowe' + i);
+    text(d, X0 + RW - 26, y + 96, F.mono(18), C.grey2, 'right', 2);
+    // Light sweep on arrival
     const sw = close ? 0 : seg(t, a + .05, a + .45);
     if (sw > 0 && sw < 1) { const gx = X0 + 140 + (RW - 140) * eio(sw); const g = ctx.createLinearGradient(gx - 160, 0, gx, 0); g.addColorStop(0, 'rgba(242,207,29,0)'); g.addColorStop(1, 'rgba(242,207,29,.28)'); ctx.fillStyle = g; ctx.fillRect(Math.max(X0 + 140, gx - 160), y, Math.min(160, gx - X0 - 140), RH); }
-    // 收尾：逐行打勾
+    // Close: tick off row by row
     if (close) {
-      const ck = seg(t, 37.0 + i * .5, 37.0 + i * .5 + .22);
+      const ck = seg(t, 37.0 + i * .4, 37.0 + i * .4 + .22);
       if (ck > 0) {
-        const s = back(ck, 2.6), cx = X0 + RW - 64, cy = y + 52;
+        const s = back(ck, 2.6), cx = X0 + RW - 64, cy = y + 44;
         ctx.save(); ctx.translate(cx, cy); ctx.scale(s, s);
         ctx.fillStyle = C.lemon; ctx.beginPath(); ctx.arc(0, 0, 30, 0, Math.PI * 2); ctx.fill();
         ctx.strokeStyle = C.ink; ctx.lineWidth = 7; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -303,16 +292,16 @@ function rundown(t, close) {
     }
     ctx.restore();
   });
-  // 开场：第一条亮框，提示"先报这条"
+  // Open: the first row gets a highlight frame, signalling "this one first"
   if (!close) {
     const hl = seg(t, 5.1, 5.35);
-    if (hl > 0) { ctx.strokeStyle = C.lemon; ctx.lineWidth = 5; ctx.globalAlpha = .6 + .4 * Math.cos((t - 5.1) * Math.PI * 4); ctx.strokeRect(X0 - 4, 166, RW * eo(hl) + 8, RH + 8); ctx.globalAlpha = 1; }
+    if (hl > 0) { ctx.strokeStyle = C.lemon; ctx.lineWidth = 5; ctx.globalAlpha = .6 + .4 * Math.cos((t - 5.1) * Math.PI * 4); ctx.strokeRect(X0 - 4, 146, RW * eo(hl) + 8, RH + 8); ctx.globalAlpha = 1; }
   }
   ctx.restore();
   ctx.restore();
 }
 
-// ① Gemini 4 Argon：大字排版
+// ① Gemini 4 Argon: big-type layout
 function shotType(t) {
   photo(IM.datacenter, 836, 470, lerp(1.17, 1.26, seg(t, 5.7, 9.0)));
   const g = ctx.createLinearGradient(0, 0, 1500, 0); g.addColorStop(0, 'rgba(14,16,19,.92)'); g.addColorStop(.55, 'rgba(14,16,19,.62)'); g.addColorStop(1, 'rgba(14,16,19,.25)');
@@ -320,8 +309,8 @@ function shotType(t) {
   vignette(.55); grain(t);
   ctx.save(); ctx.translate(0, DY.type);
   const x = 150;
-  ctx.globalAlpha = eo(seg(t, 6.2, 6.4)); text('GOOGLE · GEMINI API · 13 OCT 2026', x + 4, 214, F.mono(24), C.gold, 'left', 4, 'k1'); ctx.globalAlpha = 1;
-  // Gemini：从右滑入，带速度线
+  ctx.globalAlpha = eo(seg(t, 6.2, 6.4)); text('GEMINI API · 13 OCT 2026', x + 4, 214, F.mono(24), C.gold, 'left', 4, 'k1'); ctx.globalAlpha = 1;
+  // Gemini: slides in from the right, with speed lines
   const k1 = eo(seg(t, 6.2, 6.45)), dx = (1 - k1) * 520;
   if (k1 > 0) {
     if (k1 < 1) { ctx.fillStyle = 'rgba(242,207,29,.5)'; for (let i = 0; i < 5; i++) ctx.fillRect(x + 300 + dx, 280 + i * 26, 500 * (1 - k1), 4); }
@@ -332,7 +321,7 @@ function shotType(t) {
   if (k2 > 0) { const s = back(k2, 2.6); ctx.save(); ctx.translate(x + gw + 30 + 55, 340); ctx.scale(s, s); text('4', -55, 70, F.b8(210), C.lemon, 'left', 0, 'g4'); ctx.restore(); }
   const k3 = eo(seg(t, 7.0, 7.3));
   if (k3 > 0) { ctx.save(); ctx.beginPath(); ctx.rect(0, 430, 1400, 180); ctx.clip(); text('Argon', x, 600 + (1 - k3) * 180, F.b8(210), C.white, 'left', 2, 'ga'); ctx.restore(); }
-  // 正式开放 GA 章
+  // "正式开放 GA" (general availability) stamp
   const aw = tw('Argon', F.b8(210), 2);
   const k4 = seg(t, 7.5, 7.68);
   if (k4 > 0) {
@@ -342,7 +331,7 @@ function shotType(t) {
     text('正式开放', st, 16, F.sc9(40), C.ink, 'left', 0); text('GA', st + w1 + 18, 17, F.b8(46), C.ink, 'left', 2);
     ctx.restore();
   }
-  // 模型 ID 打字
+  // Model ID typed out
   if (t >= 8.0) {
     const full = 'model = "gemini-4-argon"', n = Math.floor(seg(t, 8.0, 8.6) * full.length);
     ctx.fillStyle = 'rgba(27,30,35,.92)'; ctx.fillRect(x, 628, 660, 60); ctx.fillStyle = C.lemon; ctx.fillRect(x, 628, 6, 60);
@@ -352,7 +341,7 @@ function shotType(t) {
   ctx.restore();
 }
 
-// 翻牌数字
+// Flip-card digits
 function flipTile(x, y, w, h, from, to, t0, t, font, col) {
   const p = from === null ? 1 : seg(t, t0, t0 + .26);
   ctx.save();
@@ -399,36 +388,36 @@ function shotPrice(t) {
   flipTile(-120, 90, 220, 130, '$2', '$4', 9.9, t, F.b8(104), C.white);
   flipTile(160, 90, 220, 130, '$10', '$20', 10.1, t, F.b8(104), C.white);
   ctx.restore(); ctx.globalAlpha = 1;
-  // 价格翻倍
-  const bk = seg(t, 10.45, 10.7);
+  // Price doubles
+  const bk = seg(t, 10.3, 10.55);
   if (bk > 0) {
     const s = back(bk, 2.2); ctx.save(); ctx.translate(1520, 400); ctx.scale(s, s);
     text('×2', 0, 40, F.b8(220), C.lemon, 'center', 0, 'x2');
     text('价格翻倍', 0, 120, F.sc9(48), C.white, 'center', 0, 'x2c');
     text('PRICE DOUBLES', 0, 162, F.b6(28), C.gold, 'center', 3);
     ctx.restore();
-    const ak = eio(seg(t, 10.45, 10.8));
+    const ak = eio(seg(t, 10.3, 10.65));
     ctx.strokeStyle = C.lemon; ctx.lineWidth = 5; ctx.setLineDash([14, 10]); ctx.beginPath(); ctx.moveTo(1190, 470); ctx.lineTo(1190 + 150 * ak, 470); ctx.stroke(); ctx.setLineDash([]);
   }
   ctx.restore();
 }
 
-// ② Kospi：真实日收盘（韩国交易所数据，经 Naver 金融接口取得，data/kospi_daily.csv），按距 9 月 23 日高点的跌幅画
+// ② Kospi: real daily closes (Korea Exchange data, fetched through the Naver Finance API, data/kospi_daily.csv), plotted as the drop from the 23 September high
 const KDATA = [['15 SEP', 6627.26], ['16 SEP', 6717.97], ['17 SEP', 6715.41], ['18 SEP', 6894.23], ['21 SEP', 7007.72], ['22 SEP', 7017.91], ['23 SEP', 7080.92],
   ['28 SEP', 6889.74], ['29 SEP', 6870.81], ['30 SEP', 6838.04], ['1 OCT', 6971.35], ['2 OCT', 7003.74],
   ['6 OCT', 6941.39], ['7 OCT', 6803.90], ['8 OCT', 6625.93], ['12 OCT', 6384.24], ['13 OCT', 6035.35], ['14 OCT', 6008.81], ['15 OCT', 5554.22]];
-const PK = 6, ST = 11, KPEAK = KDATA[PK][1];   // 高点下标；KPTS[ST + d] = 连跌第 d 天
+const PK = 6, ST = 11, KPEAK = KDATA[PK][1];   // peak index; KPTS[ST + d] = day d of the losing streak
 const KX0 = 210, KX1 = 1180, KY = v => 190 + (-v) / 25 * 430;
 const KPTS = KDATA.map(([d, c], i) => { const v = (c / KPEAK - 1) * 100; return [lerp(KX0, KX1, i / (KDATA.length - 1)), KY(v), v]; });
-const KT = (() => { const T = []; for (let i = 0; i <= ST; i++) T.push(13.05 + i * .07); for (let d = 1; d <= 6; d++) T.push(14.15 + (d - 1) * .3); T.push(16.5); return T; })();
+const KT = (() => { const T = []; for (let i = 0; i <= ST; i++) T.push(12.75 + i * .07); for (let d = 1; d <= 6; d++) T.push(14.15 + (d - 1) * .3); T.push(16.5); return T; })();
 function shotKospi(t) {
   ctx.fillStyle = C.ink; ctx.fillRect(0, 0, W, H);
   ctx.save(); ctx.translate(0, DY.kospi);
   const sh = t > 16.5 && t < 16.9 ? (1 - seg(t, 16.5, 16.9)) : 0;
   ctx.save(); ctx.translate(Math.sin(t * 83) * 14 * sh, Math.cos(t * 71) * 10 * sh);
   const zs = lerp(1.0, 1.05, eio(seg(t, 13.0, 16.4))); ctx.translate(700, 400); ctx.scale(zs, zs); ctx.translate(-700, -400);
-  // 网格与坐标
-  const ga = eo(seg(t, 12.95, 13.15));
+  // Grid and axes
+  const ga = eo(seg(t, 12.6, 12.8));
   ctx.globalAlpha = ga;
   ctx.strokeStyle = 'rgba(244,241,232,.08)'; ctx.lineWidth = 1;
   for (let v = 0; v >= -25; v -= 5) { ctx.beginPath(); ctx.moveTo(KX0, KY(v)); ctx.lineTo(KX1 + 40, KY(v)); ctx.stroke(); }
@@ -438,12 +427,12 @@ function shotKospi(t) {
   [[0, 680], [PK, 680], [ST + 1, 680], [KDATA.length - 1, 680]].forEach(([i, y]) => text(KDATA[i][0], KPTS[i][0], y, F.mono(16), C.grey2, 'center', 1, 'kd' + i));
   text('连跌 DAY', KPTS[ST + 1][0] - 34, 650, F.mono(16), C.grey2, 'right', 1);
   ctx.globalAlpha = 1;
-  // 熊市线
-  const bl = eio(seg(t, 13.1, 13.6)), bf = t > 16.5 && t < 17.1 ? .5 + .5 * Math.cos((t - 16.5) * 30) : 0;
+  // Bear-market line
+  const bl = eio(seg(t, 12.8, 13.3)), bf = t > 16.5 && t < 17.1 ? .5 + .5 * Math.cos((t - 16.5) * 30) : 0;
   ctx.strokeStyle = bf > 0 ? mixc('D4B064', 'FFFFFF', bf) : C.gold; ctx.lineWidth = 3; ctx.setLineDash([16, 12]);
   ctx.beginPath(); ctx.moveTo(KX0, KY(-20)); ctx.lineTo(lerp(KX0, KX1 + 40, bl), KY(-20)); ctx.stroke(); ctx.setLineDash([]);
-  if (bl > .9) { ctx.globalAlpha = eo(seg(t, 13.5, 13.7)); const w1 = text('熊市线 −20%', KX0 + 8, KY(-20) + 36, F.sc7(24), C.gold, 'left', 0, 'kbl'); text('BEAR MARKET LINE', KX0 + 8 + w1 + 12, KY(-20) + 35, F.b6(22), C.gold, 'left', 2); ctx.globalAlpha = 1; }
-  // 走势线
+  if (bl > .9) { ctx.globalAlpha = eo(seg(t, 13.2, 13.4)); const w1 = text('熊市线 −20%', KX0 + 8, KY(-20) + 36, F.sc7(24), C.gold, 'left', 0, 'kbl'); text('BEAR MARKET LINE', KX0 + 8 + w1 + 12, KY(-20) + 35, F.b6(22), C.gold, 'left', 2); ctx.globalAlpha = 1; }
+  // Price line
   let last = null; const pts = [];
   for (let i = 0; i < KPTS.length; i++) {
     const ta = KT[i], dur = i === KPTS.length - 1 ? .14 : (i <= ST ? .06 : .18);
@@ -457,18 +446,18 @@ function shotKospi(t) {
     ctx.fillStyle = ag; ctx.beginPath(); ctx.moveTo(pts[0][0], KY(-25)); pts.forEach(p => ctx.lineTo(p[0], p[1])); ctx.lineTo(pts[pts.length - 1][0], KY(-25)); ctx.fill();
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     ctx.strokeStyle = C.paper; ctx.lineWidth = 5; ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.stroke();
-    // 击穿段：柠檬黄
+    // Segment below the line: lemon yellow
     if (t >= 16.5) { const a = KPTS[KPTS.length - 2], p = pts[pts.length - 1]; ctx.strokeStyle = C.lemon; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(p[0], p[1]); ctx.stroke(); }
     last = pts[pts.length - 1];
     const blink = t > 15.8 && t < 16.5 ? (Math.floor(t * 8) % 2 ? 1 : .3) : 1;
     ctx.globalAlpha = blink; ctx.fillStyle = t >= 16.5 ? C.lemon : C.paper; ctx.beginPath(); ctx.arc(last[0], last[1], 10, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1;
   }
-  // 高点
-  const pk = eo(seg(t, 13.5, 13.7));
+  // Peak
+  const pk = eo(seg(t, 13.2, 13.4));
   if (pk > 0) { const p = KPTS[PK]; ctx.globalAlpha = pk; ctx.fillStyle = C.gold; ctx.beginPath(); ctx.arc(p[0], p[1], 8, 0, Math.PI * 2); ctx.fill(); text('高点 PEAK 7,080.92', p[0] + 16, p[1] - 16, F.mono(18), C.gold, 'left', 1, 'kpk'); ctx.globalAlpha = 1; }
-  // 爆环
+  // Burst ring
   const rb = seg(t, 16.62, 17.2); if (rb > 0 && rb < 1) { const p = KPTS[KPTS.length - 1]; ctx.strokeStyle = `rgba(242,207,29,${1 - rb})`; ctx.lineWidth = 8 * (1 - rb) + 1; ctx.beginPath(); ctx.arc(p[0], p[1], 20 + rb * 260, 0, Math.PI * 2); ctx.stroke(); }
-  // 连跌计数（线头旁）
+  // Losing-streak counter (next to the line's head)
   let nd = 0; for (let d = 1; d <= 7; d++) if (t >= KT[ST + d]) nd = d;
   if (nd > 0 && last) {
     const pop = 1 + .25 * (1 - eo(seg(t, KT[ST + nd], KT[ST + nd] + .2)));
@@ -480,7 +469,7 @@ function shotKospi(t) {
     text('DAY ' + nd, -lw + 14 + w1 + 10, 10, F.b8(26), nd === 7 ? C.ink : C.lemon, 'left', 2);
     ctx.restore();
   }
-  // 熊市章
+  // Bear-market stamp
   const sk = seg(t, 17.35, 17.53);
   if (sk > 0) {
     const s = 1 + 1.0 * (1 - eo(sk)); ctx.save(); ctx.translate(640, 440); ctx.rotate(-.07); ctx.scale(s, s); ctx.globalAlpha = clamp(sk * 3);
@@ -490,7 +479,7 @@ function shotKospi(t) {
     ctx.restore();
   }
   ctx.restore();
-  // 读数面板（右）
+  // Readout panel (right)
   const pa = eo(seg(t, 16.55, 16.8));
   if (pa > 0) {
     const X = 1300 + (1 - pa) * 600, Y = 150;
@@ -513,14 +502,14 @@ function shotKospi(t) {
   ctx.restore();
 }
 
-// ② 芯片股：两根下坠条
+// ② Chip stocks: two falling bars
 function shotChips(t) {
   photo(IM.wafer, 900, 470, lerp(1.17, 1.24, seg(t, 20.0, 24.0)));
   const g = ctx.createLinearGradient(0, 0, W, 0); g.addColorStop(0, 'rgba(14,16,19,.93)'); g.addColorStop(.4, 'rgba(14,16,19,.8)'); g.addColorStop(1, 'rgba(14,16,19,.6)');
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); vignette(.5); grain(t);
   ctx.save(); ctx.translate(0, DY.chips);
   const x = 150;
-  ctx.globalAlpha = eo(seg(t, 20.1, 20.3)); text('15 OCT 2026 · 单日涨跌 ONE-DAY CHANGE', x, 214, F.mono(20), C.gold, 'left', 2, 'c0'); ctx.globalAlpha = 1;
+  ctx.globalAlpha = eo(seg(t, 20.1, 20.3)); text('15 OCT 2026 · 单日涨跌', x, 214, F.mono(20), C.gold, 'left', 2, 'c0'); ctx.globalAlpha = 1;
   const tk = eo(seg(t, 20.15, 20.45));
   ctx.save(); ctx.beginPath(); ctx.rect(0, 230, 760, 100); ctx.clip(); text('芯片股领跌', x, 310 + (1 - tk) * 90, F.sc9(76), C.white, 'left', 2, 'c1'); ctx.restore();
   ctx.globalAlpha = tk; text('CHIPMAKERS LEAD THE FALL', x + 2, 360, F.b6(32), C.lemon, 'left', 3, 'c2'); ctx.globalAlpha = 1;
@@ -529,7 +518,7 @@ function shotChips(t) {
   ctx.fillStyle = C.paper; ctx.fillRect(780, Z - 1, 900 * zl, 3);
   text('0%', 768, Z + 7, F.mono(18), C.grey, 'right');
   const BARS = [[820, '三星电子', 'SAMSUNG ELECTRONICS', 9.48, 20.3], [1290, 'SK 海力士', 'SK HYNIX', 11.06, 20.8]];
-  // −9% 参考线（在条形之后画出）
+  // −9% reference line (drawn after the bars)
   const rl = eio(seg(t, 21.3, 21.6));
   if (rl > 0) {
     ctx.strokeStyle = C.gold; ctx.lineWidth = 3; ctx.setLineDash([14, 10]); ctx.beginPath(); ctx.moveTo(780, Z + 9 * PX); ctx.lineTo(780 + 900 * rl, Z + 9 * PX); ctx.stroke(); ctx.setLineDash([]);
@@ -561,9 +550,9 @@ function shotChips(t) {
   ctx.restore();
 }
 
-// ③ 欧洲地图一镜到底：布鲁塞尔（AI 办公室）点亮 → 推近 → 向右摇 → 两份信息调取从布鲁塞尔飞出（据 Euronews）
+// ③ Europe map in one continuous shot: Brussels (AI Office) lights up → push in → pan right → two information requests fly out of Brussels (per Euronews)
 let MP = null;
-const EUT = { light: 29.55, city: 29.85, push: [30.3, 31.5], label: 30.9, pan: [31.6, 32.4], docs: [32.1, 33.0], mark: [34.65, 35.2], badge: 36.1 };
+const EUT = { light: 23.75, city: 24.05, push: [24.55, 25.45], label: 24.95, pan: [25.35, 26.05], docs: [25.45, 26.2] };
 function buildMap() {
   MP = [];
   const [dx, dy] = EU.brussels;
@@ -581,10 +570,7 @@ function euView(t) {
   const O = [lerp(lerp(960, 900, z), 470, pn), lerp(lerp(440, 430, z), 440, pn)];
   return { S, F: F0, O, tf: (x, y) => [O[0] + (x - F0[0]) * S, O[1] + (y - F0[1]) * S] };
 }
-const DOCS = [
-  { org: 'OpenAI', cn: ['智能体逃出测试环境，', '攻入 Hugging Face'], en: 'AGENT ESCAPED ITS TEST ENVIRONMENT' },
-  { org: 'Anthropic', cn: ['模型未经授权，', '进入三家外部机构'], en: 'UNAUTHORISED ACCESS TO 3 OUTSIDE ORGS' },
-];
+const DOCS = [{ org: 'OpenAI' }, { org: 'Anthropic' }];
 function doc(t, side) {
   const a = EUT.docs[side], k = seg(t, a, a + .5); if (k <= 0) return;
   const D0 = DOCS[side], V = euView(t), B = V.tf(...EU.brussels), e = eio(k);
@@ -601,15 +587,9 @@ function doc(t, side) {
   text('致 TO', 28, 134, F.mono(16), C.grey2, 'left', 2);
   text(D0.org, 26, 192, F.b8(60), C.ink, 'left', 0, id ? 'do' + side : null);
   ctx.fillStyle = '#D9D4C5'; ctx.fillRect(28, 214, 324, 2);
-  text('事由 RE', 28, 252, F.mono(16), C.grey2, 'left', 2);
-  // 荧光笔扫过事由（对准旁白 "incidents"）
-  const mk = eio(seg(t, EUT.mark[side], EUT.mark[side] + .4));
-  D0.cn.forEach((L, i) => {
-    const w = tw(L, F.sc9(30));
-    if (mk > 0) { ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = '#F5D63A'; ctx.fillRect(22, 266 + i * 46, (w + 14) * mk, 40); ctx.restore(); }
-    text(L, 28, 298 + i * 46, F.sc9(30), C.ink, 'left', 0, id ? 'dc' + side + i : null);
-  });
-  text(D0.en, 28, 380, F.b6(19), '#6B6E73', 'left', 1, id ? 'de' + side : null);
+  // Body: grey placeholder text lines (no actual wording — the content of the requests has not been made public)
+  const lk = seg(t, a + .4, a + 1.2);
+  [324, 300, 316, 240, 310, 280].forEach((w, i) => { const k = clamp(lk * 6 - i); if (k > 0) { ctx.fillStyle = '#CFC9B8'; ctx.fillRect(28, 246 + i * 26, w * k, 10); } });
   ctx.fillStyle = '#D9D4C5'; ctx.fillRect(28, 412, 324, 2);
   text('EU AI OFFICE · 14 OCT 2026', 28, 446, F.mono(15), C.grey2, 'left', 1.5);
   text('据 EURONEWS 报道', 28, 472, F.sc7(16), C.grey2, 'left', 1);
@@ -645,9 +625,9 @@ function shotEU(t) {
     const w1 = text('布鲁塞尔', lx + 22, ly + 38, F.sc9(32), C.white, 'left', 0, 'bru'); text('BRUSSELS', lx + 22 + w1 + 12, ly + 37, F.b8(28), C.lemon, 'left', 2);
     ctx.globalAlpha = 1;
   }
-  const lg = eo(seg(t, ct + .1, ct + .35)) * (1 - eo(seg(t, EUT.pan[1] + .2, EUT.pan[1] + .45)));
+  const lg = eo(seg(t, ct + .1, ct + .35)) * (1 - eo(seg(t, 27.0, 27.25)));
   if (lg > 0) { ctx.globalAlpha = lg; ctx.fillStyle = '#4A4426'; ctx.fillRect(150, 636, 26, 18); ctx.strokeStyle = 'rgba(150,156,166,.7)'; ctx.lineWidth = 1; ctx.strokeRect(150, 636, 26, 18); const w1 = text('欧盟成员国', 188, 653, F.sc7(22), C.grey, 'left', 0, 'leg'); text('EU MEMBER STATES', 188 + w1 + 10, 652, F.b6(20), C.grey2, 'left', 2); ctx.globalAlpha = 1; }
-  // AI 办公室标注
+  // AI Office callout
   const ca = eo(seg(t, EUT.label, EUT.label + .3));
   if (ca > 0) {
     const bx = Math.max(110, B[0] - 520), by = B[1] - 260;
@@ -661,197 +641,113 @@ function shotEU(t) {
   const dk = eio(seg(t, EUT.pan[0], EUT.pan[0] + .6));
   if (dk > 0) { const g = ctx.createLinearGradient(820, 0, 1100, 0); g.addColorStop(0, 'rgba(13,15,18,0)'); g.addColorStop(1, `rgba(13,15,18,${.7 * dk})`); ctx.fillStyle = g; ctx.fillRect(820, -DY.eu, W - 820, H + DY.eu); }
   doc(t, 0); doc(t, 1);
-  // 夏季徽章：两起事件都发生在今年夏天
-  const bk = seg(t, EUT.badge, EUT.badge + .22);
-  if (bk > 0) {
-    const s = back(bk, 2.4); ctx.save(); ctx.translate(1380, 700); ctx.rotate(-.05); ctx.scale(s, s);
-    const w1 = tw('今年夏天', F.sc9(30)), w2 = tw('SUMMER 2026', F.b8(26), 2), lw = w1 + w2 + 50;
-    ctx.fillStyle = C.gold; ctx.fillRect(-lw / 2, -27, lw, 54);
-    text('今年夏天', -lw / 2 + 16, 11, F.sc9(30), C.ink, 'left', 0, 'summer'); text('SUMMER 2026', -lw / 2 + 34 + w1, 10, F.b8(26), C.ink, 'left', 2);
-    ctx.restore();
-  }
   ctx.restore();
 }
 
-// ============ 虚拟演播室：主播台 + 三联视频墙（2D 透视绘制）============
-// 摄影机：s=1 全景；s=SFULL 时中屏正好铺满画面（推进视频墙 = 进入报道）
-const PANEL = { x: 580, y: 186.25, w: 760, h: 427.5 }, SFULL = W / 760, P0 = [960, 400];
-function renderTo(fn, t) {            // 把一个镜头画进离屏画布（给视频墙用）；离屏里登记的字不进 TEXTS
-  const keep = ctx, n = TX.length; ctx = octx; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
-  fn(t); ctx = keep; TX.length = n;
-}
-function studio(t, s, wallFn, wallT, lit = 1) {
-  const u = (s - 1) / (SFULL - 1), Cx = 960, Cy = lerp(400, 540, u);
-  renderTo(wallFn, wallT);
-  ctx.fillStyle = '#0B0C0E'; ctx.fillRect(0, 0, W, H);
-  ctx.save(); ctx.translate(Cx, Cy); ctx.scale(s, s); ctx.translate(-P0[0], -P0[1]);
-  // 背景墙：冷黑渐变 + 竖向金色灯鳍
-  const bg = ctx.createLinearGradient(0, 40, 0, 660); bg.addColorStop(0, '#0E1013'); bg.addColorStop(1, '#1A1D22');
-  ctx.fillStyle = bg; ctx.fillRect(-400, -200, 2720, 860);
-  for (let i = 0; i < 18; i++) {
-    const x = -260 + i * 140, on = clamp(lit * 1.6 - Math.abs(i - 8.5) * .08);
-    const g = ctx.createLinearGradient(0, 120, 0, 660); g.addColorStop(0, 'rgba(212,176,100,0)'); g.addColorStop(.5, `rgba(212,176,100,${.28 * on})`); g.addColorStop(1, 'rgba(212,176,100,0)');
-    ctx.fillStyle = g; ctx.fillRect(x, 120, 3, 540);
-  }
-  // 顶部灯架
-  ctx.fillStyle = '#16191D'; ctx.fillRect(-400, 52, 2720, 18);
-  for (let i = 0; i < 14; i++) {
-    const x = 60 + i * 140, on = clamp(lit * 2 - i * .05);
-    const g = ctx.createRadialGradient(x, 82, 0, x, 82, 60); g.addColorStop(0, `rgba(255,244,214,${.55 * on})`); g.addColorStop(1, 'rgba(255,244,214,0)');
-    ctx.fillStyle = g; ctx.fillRect(x - 60, 22, 120, 120);
-    ctx.fillStyle = `rgba(255,248,230,${.4 + .6 * on})`; ctx.fillRect(x - 9, 72, 18, 8);
-  }
-  // 侧屏（斜着朝向中间）：柠檬黄斜纹慢移 + 字标
-  const side = (sx) => {
-    const xa = sx < 0 ? 250 : 1670, xb = sx < 0 ? 562 : 1358;
-    const path = new Path2D(); path.moveTo(xa, 232); path.lineTo(xb, 200); path.lineTo(xb, 600); path.lineTo(xa, 568); path.closePath();
-    ctx.fillStyle = '#15181C'; ctx.fill(path);
-    ctx.save(); ctx.clip(path); ctx.globalAlpha = .9 * lit;
-    for (let k = -6; k < 10; k++) { const x0 = Math.min(xa, xb) + k * 60 + ((t * 40) % 60) * (sx < 0 ? 1 : -1); ctx.fillStyle = 'rgba(242,207,29,.18)'; ctx.beginPath(); ctx.moveTo(x0, 200); ctx.lineTo(x0 + 22, 200); ctx.lineTo(x0 - 178, 600); ctx.lineTo(x0 - 200, 600); ctx.fill(); }
-    ctx.globalAlpha = lit; const mx = (xa + xb) / 2;
-    if (sx < 0) { text('12–18', mx, 400, F.b8(110), C.paper, 'center', 2); text('OCT 2026', mx, 462, F.b8(46), C.lemon, 'center', 6); }
-    else { text('WEEK', mx, 380, F.b8(54), C.paper, 'center', 10); text('42', mx, 486, F.b8(130), C.lemon, 'center', 2); }
+// ④ Meta releases the Muse Spark Open weights: spec card (ratio bar of total vs active parameters + context) + the unified memory of two Mac Studios
+const S4 = { title: 35.25, stamp: 36.0, bar1: 36.9, bar2: 38.2, ctx: 39.0, macs: 40.0, bracket: 41.2, bw: 41.7 };
+function shotStory4(t) {
+  ctx.fillStyle = C.ink; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = 'rgba(244,241,232,.035)';
+  for (let x = 40 - (t * 8) % 48; x < W; x += 48) for (let y = 24; y < H; y += 48) ctx.fillRect(x, y, 2, 2);
+  ctx.save(); ctx.translate(0, 40);
+  const zs = lerp(1.0, 1.025, eio(seg(t, 35.5, 44.7))); ctx.translate(960, 420); ctx.scale(zs, zs); ctx.translate(-960, -420);
+  const x = 150;
+  ctx.globalAlpha = eo(seg(t, S4.title, S4.title + .2)); text('META · AI RESEARCH BLOG · 15 OCT 2026', x + 4, 150, F.mono(22), C.gold, 'left', 3, 's4k'); ctx.globalAlpha = 1;
+  // Model name: pushed up through a mask
+  const k1 = eo(seg(t, S4.title, S4.title + .35));
+  if (k1 > 0) { ctx.save(); ctx.beginPath(); ctx.rect(0, 160, 1100, 140); ctx.clip(); text('Muse Spark Open', x - 4, 272 + (1 - k1) * 140, F.b8(124), C.white, 'left', 1, 's4t'); ctx.restore(); }
+  // "Open weights" stamp
+  const sk = seg(t, S4.stamp, S4.stamp + .18);
+  if (sk > 0) {
+    const s = 1 + .8 * (1 - eo(sk)), w1 = tw('开放权重', F.sc9(36)), w2 = tw('OPEN WEIGHTS', F.b8(34), 2), lw = w1 + w2 + 54;
+    ctx.save(); ctx.translate(x + lw / 2, 340); ctx.rotate(-.04); ctx.scale(s, s); ctx.globalAlpha = clamp(sk * 3);
+    ctx.fillStyle = C.lemon; ctx.fillRect(-lw / 2, -30, lw, 60);
+    text('开放权重', -lw / 2 + 18, 13, F.sc9(36), C.ink, 'left', 0, 's4st'); text('OPEN WEIGHTS', -lw / 2 + 36 + w1, 12, F.b8(34), C.ink, 'left', 2);
     ctx.restore();
-    ctx.strokeStyle = '#2A2E35'; ctx.lineWidth = 4; ctx.stroke(path);
+  }
+  // Ratio bar: 816B total parameters (full width) vs 42B active per token
+  const BW = 860, by1 = 440, by2 = 560, unit = BW / 816;
+  const bar = (y, label, en, v, a, col, id) => {
+    const la = eo(seg(t, a - .15, a + .1)); if (la <= 0) return;
+    ctx.globalAlpha = la; const w1 = text(label, x, y - 16, F.sc9(32), C.white, 'left', 0, id); text(en, x + w1 + 14, y - 17, F.b6(24), C.grey, 'left', 2); ctx.globalAlpha = 1;
+    ctx.fillStyle = '#22262C'; ctx.fillRect(x, y, BW, 56);
+    const k = eio(seg(t, a, a + .5)), w = Math.max(4, v * unit * k);
+    const g = ctx.createLinearGradient(x, 0, x + w, 0); g.addColorStop(0, col === C.lemon ? C.lemonD : '#B9B4A6'); g.addColorStop(1, col);
+    ctx.fillStyle = g; ctx.fillRect(x, y, w, 56);
+    const num = Math.round(v * k) + 'B';
+    text(num, x + Math.max(w, 0) + 20, y + 46, F.b8(56), col, 'left', 0);
+    if (k >= 1) TX.push({ id: id + 'v', text: v + 'B', x0: x + w, y0: y, x1: x + w + 160, y1: y + 56 });
   };
-  side(-1); side(1);
-  // 中屏：报道画面（离屏）
-  const pg = PANEL; ctx.fillStyle = '#000'; ctx.fillRect(pg.x - 10, pg.y - 10, pg.w + 20, pg.h + 20);
-  ctx.globalAlpha = lerp(.25, 1, lit); ctx.drawImage(OFF, pg.x, pg.y, pg.w, pg.h); ctx.globalAlpha = 1;
-  ctx.strokeStyle = '#2A2E35'; ctx.lineWidth = 4; ctx.strokeRect(pg.x - 10, pg.y - 10, pg.w + 20, pg.h + 20);
-  // 地面：光面 + 倒影 + 透视线
-  const fl = ctx.createLinearGradient(0, 660, 0, 1500); fl.addColorStop(0, '#15181C'); fl.addColorStop(1, '#08090A');
-  ctx.fillStyle = fl; ctx.fillRect(-400, 660, 2720, 900);
-  ctx.save(); ctx.globalAlpha = .16 * lit; ctx.translate(0, 706); ctx.scale(1, -.55); ctx.drawImage(OFF, pg.x, -pg.h, pg.w, pg.h); ctx.restore();
-  const rf = ctx.createLinearGradient(0, 700, 0, 960); rf.addColorStop(0, 'rgba(21,24,28,0)'); rf.addColorStop(1, 'rgba(12,13,16,1)'); ctx.fillStyle = rf; ctx.fillRect(-400, 700, 2720, 260);
-  ctx.strokeStyle = 'rgba(242,207,29,.07)'; ctx.lineWidth = 2;
-  for (let i = -12; i <= 12; i++) { ctx.beginPath(); ctx.moveTo(960 + i * 60, 660); ctx.lineTo(960 + i * 520, 1500); ctx.stroke(); }
-  for (let k = 1; k < 9; k++) { const y = 660 + Math.pow(k / 8, 2) * 840; ctx.beginPath(); ctx.moveTo(-400, y); ctx.lineTo(2320, y); ctx.stroke(); }
-  ctx.fillStyle = C.lemon; ctx.globalAlpha = .55 * lit; ctx.fillRect(-400, 658, 2720, 3); ctx.globalAlpha = 1;
-  ctx.restore();
-  // 主播台（前景，视差更大）
-  const sd = Math.pow(s, 1.9), dy = Cy + (800 - P0[1]) * sd;
-  if (dy < H + 400) {
-    ctx.save(); ctx.translate(Cx, dy); ctx.scale(sd, sd);
-    const top = new Path2D(); top.moveTo(-430, -40); top.quadraticCurveTo(0, -78, 430, -40); top.lineTo(470, 0); top.quadraticCurveTo(0, -30, -470, 0); top.closePath();
-    const tg = ctx.createLinearGradient(0, -78, 0, 0); tg.addColorStop(0, '#2B3038'); tg.addColorStop(1, '#1C1F24');
-    ctx.fillStyle = tg; ctx.fill(top);
-    const front = new Path2D(); front.moveTo(-470, 0); front.quadraticCurveTo(0, -30, 470, 0); front.lineTo(440, 170); front.quadraticCurveTo(0, 150, -440, 170); front.closePath();
-    const fg = ctx.createLinearGradient(0, -30, 0, 170); fg.addColorStop(0, '#16191D'); fg.addColorStop(1, '#0C0D10');
-    ctx.fillStyle = fg; ctx.fill(front);
-    ctx.save(); ctx.clip(front);
-    ctx.fillStyle = C.lemon; ctx.globalAlpha = lit; ctx.beginPath(); ctx.moveTo(-470, 4); ctx.quadraticCurveTo(0, -26, 470, 4); ctx.lineTo(470, 12); ctx.quadraticCurveTo(0, -18, -470, 12); ctx.fill(); ctx.globalAlpha = 1;
-    ctx.restore();
-    plate(-190, 80, .3, -1, 1); wordmark(-80, 98, 40, 'left');
+  bar(by1, '总参数', 'TOTAL PARAMETERS', 816, S4.bar1, C.paper, 's4b1');
+  bar(by2, '每个 token 激活', 'ACTIVE PER TOKEN', 42, S4.bar2, C.lemon, 's4b2');
+  // ≈5% badge
+  const pk = seg(t, S4.bar2 + .45, S4.bar2 + .65);
+  if (pk > 0) {
+    const s = back(pk, 2.4), w1 = tw('约 5%', F.sc9(30)), w2 = tw('ABOUT 1/20', F.b8(26), 2), lw = w1 + w2 + 50;
+    ctx.save(); ctx.translate(x + 300 + lw / 2, by2 + 28); ctx.scale(s, s);
+    ctx.fillStyle = C.gold; ctx.fillRect(-lw / 2, -26, lw, 52);
+    text('约 5%', -lw / 2 + 16, 11, F.sc9(30), C.ink, 'left', 0, 's4p'); text('ABOUT 1/20', -lw / 2 + 34 + w1, 10, F.b8(26), C.ink, 'left', 2);
     ctx.restore();
   }
-  // 镜头暗角
-  vignette(.45);
-}
-// 开场：1.5–3.0 灯亮 + 推进视频墙；收尾：45.8–46.9 从视频墙拉回全景
-const RUN_OPEN = t => rundown(t - .1, false), RUN_CLOSE = t => rundown(t - 7.8, true);
-function shotStudioOpen(t) {
-  const s = lerp(1, SFULL, Math.pow(eio(seg(t, 1.55, 3.0)), 1.15)), lit = eo(seg(t, 1.45, 1.95));
-  if (s >= SFULL - 1e-3) { RUN_OPEN(t); return; }
-  studio(t, s, RUN_OPEN, t, lit);
-}
-function shotStudioClose(t) {
-  const k = eio(seg(t, 46.3, 47.4)), s = lerp(SFULL, 1.04, k) - .03 * seg(t, 47.4, 48.0);
-  if (k <= 0) { RUN_CLOSE(t); return; }
-  studio(t, s, RUN_CLOSE, t, 1);
-}
-
-// ============ 条目 bumper：柠檬黄百叶合拢 → 条目号 → 百叶拉开（1.0 s）============
-const BUMPS = [
-  { a: 6.5, n: '01', cn: '模型', en: 'MODELS', d: 'TUE 13 OCT 2026' },
-  { a: 15.0, n: '02', cn: '市场', en: 'MARKETS', d: 'THU 15 OCT 2026' },
-  { a: 28.5, n: '03', cn: '监管', en: 'POLICY', d: 'WED 14 OCT 2026' },
-];
-function bumper(t, B, prevFn, nextFn) {
-  const u = t - B.a, NS = 6, sh = H / NS;
-  (u < .5 ? prevFn : nextFn)(t);        // 下面的画面：前半是上一镜，后半是下一镜
-  const cin = seg(u, .24, .4);
-  for (let i = 0; i < NS; i++) {
-    const kin = eio(seg(u, i * .03, .22 + i * .03)), kout = eio(seg(u, .7 + i * .03, .92 + i * .03));
-    if (kin <= 0 || kout >= 1) continue;
-    const x0 = lerp(W, 0, kin) - kout * W;
-    ctx.save(); ctx.beginPath(); ctx.rect(x0, i * sh, W, sh + 1); ctx.clip();
-    ctx.fillStyle = i % 2 ? C.lemon : C.lemonL; ctx.fillRect(x0, i * sh, W, sh + 1);
-    ctx.fillStyle = C.ink; ctx.fillRect(x0, i * sh, 10, sh + 1);
-    if (cin > 0) { ctx.translate(x0, 0); bumperCard(u, B, cin); }   // 条目内容切成六条，跟着各自的百叶走
-    ctx.restore();
-  }
-}
-function bumperCard(u, B, cin) {
-  const s = back(cin, 2.2);
-  ctx.save(); ctx.translate(150, 700); ctx.scale(s, s); text(B.n, 0, 0, F.b8(520), C.ink, 'left', -6); ctx.restore();
-  const nw = tw(B.n, F.b8(520), -6) + 190, k2 = eo(seg(u, .3, .44));
-  ctx.globalAlpha = k2;
-  text(B.cn, nw + (1 - k2) * 80, 470, F.sc9(150), C.ink, 'left', 6);
-  text(B.en, nw + 6 + (1 - k2) * 120, 560, F.b8(80), C.ink, 'left', 10);
-  ctx.fillStyle = C.ink; ctx.fillRect(nw + 6, 600, 520 * eo(seg(u, .34, .54)), 6);
-  text(B.d, nw + 6, 660, F.mono(30), C.ink, 'left', 4);
-  for (let i = 0; i < 3; i++) { const on = String(i + 1).padStart(2, '0') === B.n; ctx.fillStyle = on ? C.ink : 'rgba(18,20,23,.25)'; ctx.fillRect(nw + 6 + i * 74, 700, 62, 14); }
-  ctx.globalAlpha = 1;
-}
-
-// ============ 定位小地图：东亚 → 朝鲜半岛，首尔点亮 ============
-let AS = null, AP = null;
-function buildAsia() { AP = []; for (const id in AS.countries) { const c = AS.countries[id], p = new Path2D(); for (const r of c.rings) { r.forEach(([x, y], i) => i ? p.lineTo(x, y) : p.moveTo(x, y)); p.closePath(); } AP.push({ kr: c.kr, p }); } }
-function shotLocator(t) {
-  ctx.fillStyle = '#0D0F12'; ctx.fillRect(0, 0, W, H);
-  const [sx, sy] = AS.seoul, z = eio(seg(t, 15.9, 17.3));
-  const S = lerp(.26, .92, z), O = [lerp(1060, 860, z), lerp(470, 500, z)], F0 = [lerp(260, sx, z), lerp(-60, sy, z)];
-  const tf = (x, y) => [O[0] + (x - F0[0]) * S, O[1] + (y - F0[1]) * S];
-  ctx.save(); ctx.setTransform(S, 0, 0, S, O[0] - F0[0] * S, O[1] - F0[1] * S);
-  ctx.strokeStyle = 'rgba(244,241,232,.05)'; ctx.lineWidth = 1 / S;
-  for (let x = -4000; x <= 4000; x += 250) { ctx.beginPath(); ctx.moveTo(x, -3000); ctx.lineTo(x, 3000); ctx.stroke(); }
-  for (let y = -3000; y <= 3000; y += 250) { ctx.beginPath(); ctx.moveTo(-4000, y); ctx.lineTo(4000, y); ctx.stroke(); }
-  const kk = seg(t, 16.0, 16.3);
-  for (const c of AP) {
-    ctx.fillStyle = c.kr ? (kk > 0 ? mixc('FFFFFF', 'F2CF1D', kk) : C.ink3) : C.ink3; ctx.fill(c.p);
-    ctx.strokeStyle = c.kr && kk > 0 ? 'rgba(18,20,23,.9)' : 'rgba(150,156,166,.5)'; ctx.lineWidth = 1.1 / S; ctx.stroke(c.p);
-  }
-  ctx.restore();
-  const D = tf(sx, sy), da = eo(seg(t, 16.12, 16.35));
-  if (da > 0) {
-    const rb = seg(t, 16.12, 16.7); if (rb < 1) { ctx.strokeStyle = `rgba(242,207,29,${1 - rb})`; ctx.lineWidth = 6 * (1 - rb) + 1; ctx.beginPath(); ctx.arc(D[0], D[1], 20 + rb * 260, 0, Math.PI * 2); ctx.stroke(); }
-    ctx.fillStyle = C.ink; ctx.beginPath(); ctx.arc(D[0], D[1], 12, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = C.white; ctx.beginPath(); ctx.arc(D[0], D[1], 7, 0, Math.PI * 2); ctx.fill();
-    ctx.globalAlpha = da;
-    const lx = D[0] - 40, ly = D[1] - 150, lw = 26 + tw('首尔', F.sc9(40)) + 14 + tw('SEOUL', F.b8(36), 3) + 22;
-    ctx.strokeStyle = C.lemon; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(D[0], D[1] - 12); ctx.lineTo(D[0] - 20, ly + 64); ctx.stroke();
-    ctx.fillStyle = 'rgba(18,20,23,.94)'; ctx.fillRect(lx - lw + 40, ly, lw, 64); ctx.fillStyle = C.lemon; ctx.fillRect(lx - lw + 40, ly, 6, 64);
-    const w1 = text('首尔', lx - lw + 62, ly + 46, F.sc9(40), C.white, 'left', 0, 'seoul'); text('SEOUL', lx - lw + 62 + w1 + 14, ly + 45, F.b8(36), C.lemon, 'left', 3);
+  // Context
+  const ck = eo(seg(t, S4.ctx, S4.ctx + .3));
+  if (ck > 0) {
+    ctx.globalAlpha = ck; const y = 700;
+    ctx.fillStyle = 'rgba(27,30,35,.95)'; ctx.fillRect(x, y - 52, 520, 72); ctx.fillStyle = C.lemon; ctx.fillRect(x, y - 52, 6, 72);
+    const w1 = text('上下文', x + 26, y - 4, F.sc9(32), C.white, 'left', 0, 's4c'); const w2 = text('CONTEXT', x + 26 + w1 + 12, y - 5, F.b6(24), C.grey, 'left', 2);
+    text('1M token', x + 26 + w1 + w2 + 28, y - 2, F.b8(46), C.lemon, 'left', 1, 's4cv');
     ctx.globalAlpha = 1;
   }
-  const ca = eo(seg(t, 16.55, 16.8));
-  if (ca > 0) {
-    const x = 150, y = 230; ctx.globalAlpha = ca;
-    text('KOREA EXCHANGE · 15 OCT 2026', x, y, F.mono(22), C.gold, 'left', 3);
-    ctx.save(); ctx.beginPath(); ctx.rect(0, y + 10, 900, 130); ctx.clip();
-    text('KOSPI', x - 4, y + 120 + (1 - ca) * 120, F.b8(130), C.white, 'left', 4);
+  // Right column: two Mac Studios, 512 GB unified memory each → about 1 TB together
+  const RX = 1180, units = [[300, 0], [480, 1]];
+  units.forEach(([y, i]) => {
+    const a = S4.macs + i * .25, k = eo(seg(t, a, a + .35)); if (k <= 0) return;
+    ctx.save(); ctx.translate((1 - k) * 500, 0); ctx.globalAlpha = clamp(k * 2);
+    // Body: flat rounded box + two ports on the front panel
+    ctx.fillStyle = '#2B3038'; ctx.beginPath(); ctx.roundRect(RX, y, 420, 130, 22); ctx.fill();
+    ctx.fillStyle = '#353B44'; ctx.beginPath(); ctx.roundRect(RX, y, 420, 18, [22, 22, 0, 0]); ctx.fill();
+    ctx.fillStyle = '#16191D'; ctx.beginPath(); ctx.roundRect(RX + 30, y + 90, 26, 8, 4); ctx.fill(); ctx.beginPath(); ctx.roundRect(RX + 66, y + 90, 26, 8, 4); ctx.fill();
+    text('Mac Studio · M5 Ultra', RX + 30, y + 62, F.b6(28), C.paper, 'left', 1, i ? null : 's4m');
+    // Memory cells: 8 cells light up one by one
+    const mk = seg(t, a + .35, a + .85);
+    for (let j = 0; j < 8; j++) { ctx.fillStyle = j < Math.floor(mk * 8.999) ? C.lemon : '#1C1F24'; ctx.fillRect(RX + 300 + (j % 4) * 26, y + 40 + Math.floor(j / 4) * 30, 20, 22); }
     ctx.restore();
-    text('韩国综合股价指数', x, y + 176, F.sc9(40), C.white, 'left', 2);
+    if (mk >= 1) { text('512 GB', RX + 440, y + 80, F.b8(44), C.white, 'left', 0); if (i === 0) TX.push({ id: 's4g', text: '512 GB', x0: RX + 440, y0: y + 36, x1: RX + 600, y1: y + 88 }); }
+  });
+  // Bracket: about 1 TB together
+  const bk = eio(seg(t, S4.bracket, S4.bracket + .3));
+  if (bk > 0) {
+    const yA = 300, yB = 610, bx = RX + 610;
+    ctx.strokeStyle = C.lemon; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(bx - 20, yA); ctx.lineTo(bx, yA); ctx.lineTo(bx, lerp(yA, yB, bk)); if (bk >= 1) ctx.lineTo(bx - 20, yB); ctx.stroke();
+    const tk = seg(t, S4.bracket + .2, S4.bracket + .4);
+    if (tk > 0) {
+      const s = back(tk, 2.2); ctx.save(); ctx.translate(bx - 20, 755); ctx.scale(s, s);
+      text('≈ 1 TB', -600, 0, F.b8(110), C.lemon, 'left', 0, 's4tb');
+      ctx.restore();
+    }
+    ctx.globalAlpha = eo(seg(t, S4.bracket + .35, S4.bracket + .6));
+    const w1 = text('统一内存', RX, 812, F.sc9(32), C.white, 'left', 0, 's4u'); text('UNIFIED MEMORY', RX + w1 + 14, 811, F.b6(24), C.grey, 'left', 2);
     ctx.globalAlpha = 1;
   }
+  ctx.restore();
 }
 
-// ============ 引语卡：官方原话 + 出处 ============
-// QUOTE 在核实后填入（见 FACTS.md）；引号先落，字逐行从下推入
+// ============ Quote card: official words verbatim + source ============
+// QUOTE is filled in once verified (see FACTS.md); the quote mark lands first, then the text pushes in line by line from below
 let QUOTE = {
-  a: 38.55, stamp: 42.1, ul: 40.85,
+  a: 30.45, stamp: 33.9, ul: 33.3,
   lines: ['Our AI Office has started', 'enforcing these rules …'],
-  cn: '欧盟 AI 办公室已经开始执行这些规则',
+  cn: '欧盟 AI 办公室已开始执行这些规则',
   who: 'HENNA VIRKKUNEN · EUROPEAN COMMISSION',
   src: 'SPEECH · INTERNATIONAL AI SUMMIT, DUBLIN · 14 OCT 2026',
 };
 function shotQuote(t) {
   studioBg(t);
   if (!QUOTE) return;
-  const zq = lerp(1, 1.035, eio(seg(t, 38.5, 43.7)));
+  const zq = lerp(1, 1.035, eio(seg(t, 30.5, 35.5)));
   ctx.save(); ctx.translate(900, 420); ctx.scale(zq, zq); ctx.translate(-900, -420);
-  // 旁白说到 "enforcement" 时，柠檬黄下划线扫过第二行的 enforcing
+  // When the narration says 「执行」 ("enforce"), a lemon-yellow underline sweeps under "enforcing" on the second line
   const ul = eio(seg(t, QUOTE.ul, QUOTE.ul + .35));
   if (ul > 0) { ctx.fillStyle = C.lemon; ctx.fillRect(370, 300 + 120 + 18, tw('enforcing', F.b8(112), 1) * ul, 10); }
   const a = QUOTE.a, x = 220;
@@ -884,7 +780,7 @@ function shotQuote(t) {
   ctx.restore();
 }
 
-// 落版
+// End slate
 function shotEnd(t) {
   const g = ctx.createLinearGradient(0, 0, W, H); g.addColorStop(0, '#1A1D22'); g.addColorStop(1, '#0E1013');
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
@@ -896,100 +792,102 @@ function shotEnd(t) {
   const r = (y, h, k, fn) => { if (k <= 0) return; ctx.save(); ctx.beginPath(); ctx.rect(0, y - h, 1120, h + 30); ctx.clip(); ctx.translate(0, (1 - k) * (h + 30)); fn(); ctx.restore(); };
   const x = 150;
   ctx.globalAlpha = m(39.1, 39.3); text('LEMO AI NEWS · WEEK 42 · 12–18 OCT 2026', x, 210, F.mono(24), C.gold, 'left', 3, 'e0'); ctx.globalAlpha = 1;
-  r(350, 130, m(39.12, 39.42), () => text('本周 AI 三件事', x - 4, 350, F.sc9(120), C.white, 'left', 4, 'e1'));
+  r(350, 130, m(39.12, 39.42), () => text('本周 AI 四件事', x - 4, 350, F.sc9(120), C.white, 'left', 4, 'e1'));
   r(440, 80, m(39.25, 39.52), () => text('The Week in AI', x, 440, F.b6i(76), C.lemon, 'left', 2, 'e2'));
   const lk = eio(seg(t, 39.4, 39.7)); ctx.fillStyle = C.lemon; ctx.fillRect(x, 482, 880 * lk, 2);
   ctx.globalAlpha = m(39.55, 39.8); text('LEMO AI NEWS · 电视新闻包装 BROADCAST NEWS PACKAGE', x, 548, F.sc7(30), C.white, 'left', 1, 'e3'); ctx.globalAlpha = 1;
   ctx.globalAlpha = m(39.65, 39.9); text('LemoLab × Claude Opus 5.5', x, 604, F.b6(38), C.gold, 'left', 1.5, 'e4'); ctx.globalAlpha = 1;
   const sm = m(39.8, 40.1); ctx.globalAlpha = sm;
-  ctx.fillStyle = C.line; ctx.fillRect(x, 830, 1620, 1);
-  text('新闻来源：Google · Korea Herald · Bloomberg · Euronews', x, 868, F.sc7(21), C.grey, 'left', 0, 'e5');
-  text('数据：韩国交易所 · 讲话原文：欧盟委员会', x, 900, F.sc7(21), C.grey, 'left', 0, 'e5b');
-  text('配乐采样 VSCO 2 CE、VCSL（CC0）· 地图 Natural Earth（公有领域）', x, 932, F.sc7(21), C.grey, 'left', 0, 'e6');
-  text('字体 Noto Sans SC、Barlow Condensed、IBM Plex Mono（OFL）', x, 964, F.sc7(21), C.grey, 'left', 0, 'e6b');
-  text('配音 Kokoro（Apache 2.0）· 机房、晶圆背景为 AI 生成示意', x, 996, F.sc7(21), C.grey, 'left', 0, 'e7');
+  ctx.fillStyle = C.line; ctx.fillRect(x, 816, 1620, 1);
+  [['新闻来源：Google · Meta · Korea Herald · Bloomberg · Euronews', 'e5'], ['数据：韩国交易所 · 讲话原文：欧盟委员会', 'e5b'],
+   ['配乐采样 VSCO 2 CE、VCSL（CC0）· 地图 Natural Earth（公有领域）', 'e6'], ['字体 Noto Sans SC、Barlow Condensed、IBM Plex Mono（OFL）', 'e6b'],
+   ['配音：豆包语音合成 2.0（解说小明）', 'e7'], ['机房、晶圆背景为 AI 生成示意图', 'e7b']].forEach(([s, id], i) => text(s, x, 854 + i * 31, F.sc7(20), C.grey, 'left', 0, id));
   ctx.globalAlpha = 1;
-  // 台标
+  // Station logo
   const la = m(39.3, 39.6); ctx.globalAlpha = la;
   plate(1600, 360, .62, seg(t, 40.0, 40.45) || -1, seg(t, 39.3, 39.8));
   wordmark(1600, 520, 48, 'center', 'e8');
   ctx.globalAlpha = 1;
 }
 
-// ============ 合成 ============
+// ============ Compositing ============
 function wipeBand(bx) { ctx.fillStyle = C.lemon; ctx.fillRect(bx - 84, 0, 84, H); ctx.fillStyle = C.ink; ctx.fillRect(bx, 0, 5, H); ctx.fillStyle = C.gold; ctx.fillRect(bx + 5, 0, 14, H); }
+// One picture = a shot + its own wrapper layers (corner tag, source credit, strap); the wrapper layers are drawn in their state at time tov
+function layer(fn, t, tov) { fn(t); cornerTag(tov); credit(tov); strap(tov); }
+// Vertical-band wipe: right of the band is the old picture (wrapper layers frozen just before the wipe starts), left is the new picture (wrapper layers already on the new story) — the strap's text gets "brushed" over by the band
 function wipe(t, a, b, oldFn, newFn) {
   const bx = lerp(-140, W + 140, eio(seg(t, a, b)));
-  newFn(t);
-  ctx.save(); ctx.beginPath(); ctx.rect(bx, 0, W, H); ctx.clip(); oldFn(t); ctx.restore();
+  // Reading check: before the band is halfway, count the old picture's text; after, the new picture's (never register both on the same frame)
+  const n0 = TX.length; layer(newFn, t, b + .001); const NEW = TX.splice(n0);
+  ctx.save(); ctx.beginPath(); ctx.rect(bx, 0, W, H); ctx.clip(); layer(oldFn, t, a - .001); ctx.restore();
+  const OLD = TX.splice(n0); TX.push(...(seg(t, a, b) < .5 ? OLD : NEW));
   wipeBand(bx);
 }
-// 旧镜头函数里的时间是定稿版的绝对时间，这里按段平移
-const TYPE = t => shotType(t - 1.5), PRICE = t => shotPrice(t - 1.5);
-const KOSPI = t => shotKospi(t - 4.5), CHIPS = t => shotChips(t - 4.5);
-const EUMAP = shotEU, END = t => shotEnd(t - 9.0);
+// Only three transitions: vertical-band wipe (to a new story), hard cut (within one story), slanted wipe (into the end slate)
+// The new picture's entrance animation starts early, during the wipe, so there is already content underneath when the band sweeps past
+const OPEN = t => rundown(t + .7, false), TYPE = t => shotType(t + .4);
+const RECAP = t => rundown(t - 8.8, true), END = t => shotEnd(t - 8.2);
 const SCENES = [
-  [1.5, shotStudioOpen], [7.5, TYPE], [10.5, PRICE], [16.0, shotLocator], [17.5, KOSPI], [24.5, CHIPS],
-  [29.5, EUMAP], [38.5, shotQuote], [44.0, shotStudioClose], [48.0, END],
+  [1.5, OPEN], [6.0, TYPE], [9.0, shotPrice], [13.0, shotKospi], [20.0, shotChips],
+  [24.0, shotEU], [30.5, shotQuote], [35.5, shotStory4], [45.0, RECAP], [47.5, END],
 ];
-const SC_BUMP = [[BUMPS[0], shotStudioOpen, TYPE], [BUMPS[1], PRICE, shotLocator], [BUMPS[2], CHIPS, EUMAP]];
+const WIPES = [[1.2, 1.5], [5.7, 6.0], [12.7, 13.0], [23.7, 24.0], [35.2, 35.5], [44.7, 45.0]];
 function scene(t) {
   if (t < 1.5) {
-    if (t >= 1.2) wipe(t, 1.2, 1.5, shotSting, shotStudioOpen); else shotSting(t);
+    if (t >= 1.2) wipe(t, 1.2, 1.5, shotSting, SCENES[0][1]); else layer(shotSting, t, t);
     stingLogo(t); return;
   }
-  const b = SC_BUMP.find(([B]) => t >= B.a && t < B.a + 1);
-  if (b) { bumper(t, b[0], b[1], b[2]); return; }
-  if (t >= 43.7 && t < 44.0) { wipe(t, 43.7, 44.0, shotQuote, shotStudioClose); return; }
-  if (t >= 47.7 && t < 48.0) {   // 斜面擦除进落版
-    shotStudioClose(t);
-    const k = eio(seg(t, 47.7, 48.0)); const x = W - k * (W + 340);
-    ctx.save(); ctx.beginPath(); ctx.moveTo(x + 340, 0); ctx.lineTo(W + 340, 0); ctx.lineTo(W + 340, H); ctx.lineTo(x, H); ctx.closePath(); ctx.clip(); END(48.0); ctx.restore();
+  const w = WIPES.find(([a, b]) => t >= a && t < b);
+  if (w) { const i = SCENES.findIndex(s => Math.abs(s[0] - w[1]) < .01); wipe(t, w[0], w[1], SCENES[i - 1][1], SCENES[i][1]); return; }
+  if (t >= 47.25 && t < 47.5) {   // slanted wipe into the end slate (the end-slate content is already moving)
+    layer(RECAP, t, t);
+    const k = eio(seg(t, 47.25, 47.5)); const x = W - k * (W + 340);
+    ctx.save(); ctx.beginPath(); ctx.moveTo(x + 340, 0); ctx.lineTo(W + 340, 0); ctx.lineTo(W + 340, H); ctx.lineTo(x, H); ctx.closePath(); ctx.clip(); END(t); ctx.restore();
     ctx.fillStyle = C.lemon; ctx.beginPath(); ctx.moveTo(x + 340, 0); ctx.lineTo(x + 380, 0); ctx.lineTo(x + 40, H); ctx.lineTo(x, H); ctx.fill();
     return;
   }
   let fn = SCENES[0][1]; for (const [a, f] of SCENES) if (t >= a) fn = f;
-  fn(t);
+  layer(fn, t, t);
 }
 function render(t) {
   TX = []; t_ = t;
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
   scene(t);
-  cornerTag(t); bug(t); strap(t); credit(t);
-  if (t > 53.2) { ctx.fillStyle = `rgba(0,0,0,${seg(t, 53.2, 53.9)})`; ctx.fillRect(0, 0, W, H); }
+  bug(t);
+  if (t > 52.7) { ctx.fillStyle = `rgba(0,0,0,${seg(t, 52.7, 53.4)})`; ctx.fillRect(0, 0, W, H); }
 }
 
-// —— 事件（音效 / 旁白），events.mjs 导出给 mix.py ——
+// —— Events (sound effects / narration), exported by events.mjs for mix.py ——
 const sh = (d, L) => L.map(e => ({ ...e, t: Math.round((e.t + d) * 1000) / 1000 }));
 const EV = [
   { t: .04, type: 'swish' }, { t: .4, type: 'stab' }, { t: .9, type: 'glint' }, { t: 1.2, type: 'whoosh' },
-  { t: 1.5, type: 'lights' }, { t: 2.3, type: 'push' },
-  ...sh(.1, [{ t: 1.6, type: 'tab' }, { t: 2.0, type: 'slide' }, { t: 2.6, type: 'slide' }, { t: 3.0, type: 'row' }, { t: 3.5, type: 'row' }, { t: 4.0, type: 'row' }, { t: 5.1, type: 'blip' }]),
-  ...BUMPS.map(B => ({ t: B.a, type: 'bump' })),
-  ...sh(1.5, [{ t: 6.2, type: 'slam' }, { t: 6.5, type: 'slam' }, { t: 7.0, type: 'slam' }, { t: 7.5, type: 'stamp' },
-    ...Array.from({ length: 24 }, (_, i) => ({ t: 8.0 + i * (.6 / 24), type: 'key' })),
-    { t: 9.0, type: 'card' }, { t: 9.2, type: 'flap' }, { t: 9.4, type: 'flap' }, { t: 9.9, type: 'flap' }, { t: 9.9, type: 'swap' }, { t: 10.1, type: 'flap' }, { t: 10.45, type: 'ding' }]),
-  { t: 7.55, type: 'hit' }, { t: 16.15, type: 'pulse' }, { t: 16.55, type: 'slide' }, { t: 16.0, type: 'zoom' },
-  { t: 17.2, type: 'market', dur: 7.3 },
-  ...sh(4.5, [{ t: 13.05, type: 'draw' }, ...[1, 2, 3, 4, 5, 6].map(d => ({ t: 14.15 + (d - 1) * .3, type: 'drop', d })), { t: 16.5, type: 'boom' }, ...Array.from({ length: 10 }, (_, i) => ({ t: 16.6 + i * .04, type: 'roll' })), { t: 17.35, type: 'stamp' },
-    { t: 20.0, type: 'card' }, { t: 20.05, type: 'swap' }, { t: 20.3, type: 'fall' }, { t: 20.8, type: 'fall' }, { t: 21.5, type: 'ding' }]),
-  { t: 29.85, type: 'pulse' }, { t: 30.3, type: 'zoom' }, { t: 30.9, type: 'pop' }, { t: 31.6, type: 'zoom' },
-  { t: 32.1, type: 'paper' }, { t: 33.0, type: 'paper' }, { t: 34.2, type: 'swap' }, { t: 34.65, type: 'mark' }, { t: 35.2, type: 'mark' }, { t: 36.1, type: 'ding' },
-  { t: 38.55, type: 'swap' },
-  { t: 38.5, type: 'card' }, { t: 38.55, type: 'quote' }, { t: 40.85, type: 'mark' }, { t: 42.1, type: 'stamp_big' },
-  { t: 43.7, type: 'whoosh' }, ...sh(7.8, [{ t: 37.0, type: 'tick_ok', i: 0 }, { t: 37.5, type: 'tick_ok', i: 1 }, { t: 38.0, type: 'tick_ok', i: 2 }]), { t: 46.3, type: 'pull' },
-  { t: 47.7, type: 'whoosh' }, { t: 48.0, type: 'end' },
+  { t: 1.3, type: 'slide' }, { t: 1.9, type: 'slide' },
+  { t: 2.3, type: 'row' }, { t: 2.7, type: 'row' }, { t: 3.1, type: 'row' }, { t: 3.5, type: 'row' }, { t: 4.4, type: 'blip' }, { t: 5.7, type: 'whoosh' },
+  { t: 6.0, type: 'hit' }, { t: 6.1, type: 'slam' }, { t: 6.6, type: 'slam' }, { t: 7.1, type: 'stamp' },
+  ...Array.from({ length: 24 }, (_, i) => ({ t: 7.6 + i * (.6 / 24), type: 'key' })),
+  { t: 9.0, type: 'card' }, { t: 9.2, type: 'flap' }, { t: 9.4, type: 'flap' }, { t: 9.9, type: 'flap' }, { t: 9.9, type: 'swap' }, { t: 10.1, type: 'flap' }, { t: 10.3, type: 'ding' },
+  { t: 12.7, type: 'whoosh' }, { t: 12.7, type: 'market', dur: 7.3 },
+  { t: 13.0, type: 'hit' }, { t: 12.75, type: 'draw' },
+  ...[1, 2, 3, 4, 5, 6].map(d => ({ t: 14.15 + (d - 1) * .3, type: 'drop', d })),
+  { t: 16.5, type: 'boom' }, ...Array.from({ length: 10 }, (_, i) => ({ t: 16.6 + i * .04, type: 'roll' })), { t: 17.35, type: 'stamp' },
+  { t: 20.0, type: 'card' }, { t: 20.05, type: 'swap' }, { t: 20.3, type: 'fall' }, { t: 20.8, type: 'fall' }, { t: 21.5, type: 'ding' },
+  { t: 23.7, type: 'whoosh' }, { t: 24.0, type: 'hit' }, { t: 24.05, type: 'pulse' }, { t: 24.55, type: 'zoom' }, { t: 24.95, type: 'pop' }, { t: 25.35, type: 'zoom' },
+  { t: 25.45, type: 'paper' }, { t: 26.2, type: 'paper' }, { t: 25.85, type: 'type' }, { t: 26.6, type: 'type' },
+  { t: 30.5, type: 'card' }, { t: 30.45, type: 'quote' }, { t: 33.3, type: 'mark' }, { t: 33.9, type: 'stamp_big' },
+  { t: 35.2, type: 'whoosh' }, { t: 35.5, type: 'hit' }, { t: 36.0, type: 'stamp' },
+  { t: 44.7, type: 'whoosh' }, ...sh(8.8, [0, 1, 2, 3].map(i => ({ t: 37.0 + i * .4, type: 'tick_ok', i }))),
+  { t: 47.25, type: 'whoosh' }, { t: 47.5, type: 'end' },
 ];
-const VO_AT = { v1: 1.6, v2: 7.6, v3: 16.4, v4: 24.6, v5: 29.6, v6: 34.2, v7: 38.7, v8: 44.1 };
+const VO_AT = { v1: 1.6, v2: 6.1, v3: 13.1, v4: 20.1, v5: 24.1, v6: 30.6, v7: 35.6, v8: 45.1 };
 for (const id in VO_AT) EV.push({ t: VO_AT[id], type: 'vo', id });
 
 window.DUR = DUR; window.EV = EV; window.render = render; window.TEXTS = t => { render(t); return TX; };
 (async () => {
   makeGrain();
   const names = ['datacenter', 'wafer'];
-  const [imgs, eu, as] = await Promise.all([Promise.all(names.map(n => loadImg(`assets/plate_${n}.jpg`))), fetch('assets/europe.json').then(r => r.json()), fetch('assets/eastasia.json').then(r => r.json())]);
-  names.forEach((n, i) => IM[n] = imgs[i]); EU = eu; AS = as;
-  buildMap(); buildAsia();
+  const [imgs, eu] = await Promise.all([Promise.all(names.map(n => loadImg(`assets/plate_${n}.jpg`))), fetch('assets/europe.json').then(r => r.json())]);
+  names.forEach((n, i) => IM[n] = imgs[i]); EU = eu;
+  buildMap();
   for (const c of MP) if (c.eu) EV.push({ t: Math.round((EUT.light + c.d / 3600 * .8) * 1000) / 1000, type: 'tick' });
   await Promise.all([F.sc9(40), F.sc7(40), F.b8(40), F.b6(40), F.b6i(40), F.mono(40)].map(f => document.fonts.load(f, '本周 Aa')));
   render(0); window.READY = true;

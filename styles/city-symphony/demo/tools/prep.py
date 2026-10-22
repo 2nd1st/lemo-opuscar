@@ -1,10 +1,10 @@
-"""切片引擎：源 → work/clips/<id>.mp4（帧数准确）。一个函数覆盖延时加速、光河、速度坡、慢放：
-  1. 速度曲线 speed(t)（常数或关键帧平滑插值）积分成源时间 pos(t)；
-  2. 输出第 i 帧覆盖源时间窗 [pos(i/30), pos((i+1)/30))；
-  3. 窗里有多帧 → 取最多 blend 帧平均（360° 快门：车灯成线、人流成雾、云成水）；
-     窗里没有帧（慢放）→ 取最近一帧；interp>1 时先用 minterpolate 运动补偿插帧，慢放不卡顿。
-源的预处理：Herder 片放大 1.18 倍把左上角台标推出画外；Schwab 延时轻降噪；1899 年老片去噪 + 轻锐化。
-用法：python tools/prep.py [id …] [--force] [-j 4]"""
+"""Clip engine: source → work/clips/<id>.mp4 (frame-accurate). One function covers time-lapse speed-up, light rivers, speed ramps and slow motion:
+  1. the speed curve speed(t) (a constant, or keyframes with smooth interpolation) is integrated into source time pos(t);
+  2. output frame i covers the source time window [pos(i/30), pos((i+1)/30));
+  3. several frames in the window → average up to `blend` frames (360° shutter: headlights become lines, crowds become fog, clouds become water);
+     no frame in the window (slow motion) → take the nearest frame; with interp>1, first interpolate frames with minterpolate motion compensation so slow motion doesn't stutter.
+Source pre-processing: the Herder footage is scaled up 1.18× to push the top-left channel logo out of frame; the Longfellow footage has its bottom-right watermark cropped off; the Schwab time-lapse gets light denoising; the 1899 film gets denoising + light sharpening.
+Usage: python tools/prep.py [id …] [--force] [-j 4]"""
 import os, sys, json, math, subprocess
 from concurrent.futures import ProcessPoolExecutor
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
@@ -14,9 +14,12 @@ from timeline import FPS
 os.chdir(os.path.join(HERE, '..'))
 
 PRE = {
-    'nyim': 'scale=2266:1275:flags=lanczos,crop=1920:1080:173:97',    # 居中放大 1.18×：左上角台标（x≤140 px）整块出画
+    'nyim': 'scale=2266:1275:flags=lanczos,crop=1920:1080:173:97',    # centred 1.18× scale-up: the top-left channel logo (x≤140 px) goes entirely out of frame
     'sky': 'hqdn3d=1.5:1.5:3:3',
     'b99': 'hqdn3d=2:2:5:5,unsharp=5:5:0.45:5:5:0',
+    'empty': 'crop=1804:1014:58:0',                                   # crop off the bottom-right “© Longfellow Films” watermark (y≥1022)
+    'sun': 'crop=1270:714:0:3',                                       # 1270×720 → 16:9
+    'earth': 'eq=gamma=1.5:saturation=1.1',                          # the night aerial source is dark; lift the midtones
 }
 
 
@@ -29,7 +32,7 @@ def src_fps(path, _c={}):
 
 
 def speed_curve(sp, n):
-    """每个输出帧边界的源时间偏移（秒）：对 speed(t) 做数值积分"""
+    """Source time offset (seconds) at each output frame boundary: numerical integration of speed(t)"""
     T = n / FPS
     ts = np.linspace(0, T, n * 16 + 1)
     if isinstance(sp, (int, float)):
@@ -44,7 +47,7 @@ def speed_curve(sp, n):
             u = (t - kt[j]) / (kt[j + 1] - kt[j]); u = u * u * (3 - 2 * u)
             v[i] = kv[j] + (kv[j + 1] - kv[j]) * u
     pos = np.concatenate([[0], np.cumsum((v[1:] + v[:-1]) / 2 * np.diff(ts))])
-    return pos[::16]          # n+1 个边界
+    return pos[::16]          # n+1 boundaries
 
 
 def make(cid):
@@ -54,13 +57,13 @@ def make(cid):
     R = src_fps(path) * c['interp']
     n = c['n']; W, H = c['size']
     edges = speed_curve(c['speed'], n)
-    need = []                                          # 每个输出帧：[(源帧号, 权重)]
+    need = []                                          # per output frame: [(source frame index, weight)]
     for i in range(n):
         a, b = edges[i] * R, edges[i + 1] * R
         js = list(range(math.ceil(a - 1e-6), math.ceil(b - 1e-6)))
-        if not js:                                     # 慢放：窗里没有整帧
+        if not js:                                     # slow motion: no whole frame in the window
             m = (a + b) / 2
-            if c.get('mix'):                           # 相邻两帧按距离交叉（比运动补偿干净，不扭曲细线）
+            if c.get('mix'):                           # crossfade the two neighbouring frames by distance (cleaner than motion compensation, doesn't warp thin lines)
                 j0 = int(math.floor(m)); w1 = m - j0
                 need.append([(j0, 1 - w1), (j0 + 1, w1)] if w1 > .02 else [(j0, 1.0)]); continue
             js = [int(round(m))]
@@ -97,7 +100,7 @@ def make(cid):
         while nxt in done:
             enc.stdin.write(done.pop(nxt).tobytes()); nxt += 1
     dec.stdout.close(); dec.wait()
-    while nxt < n:      # 源不够长：补最后一帧（会打印警告）
+    while nxt < n:      # source too short: pad with the last frame (prints a warning)
         fr = done.pop(nxt, None)
         if fr is None:
             fr = last

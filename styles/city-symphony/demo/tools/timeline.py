@@ -1,27 +1,27 @@
-"""拍点表：音乐和画面唯一的时间来源。120 BPM，T0 = 0，1 小节 = 4 拍 = 2 s，30 fps（1 拍 = 15 帧，三连音 = 5 帧）。
-换歌：改 BPM / T0，把 BRAKE / DUSK / STOP 对到新歌的 breakdown、再起、断点；shots.py 的长度都由 bar() 算出。"""
+"""Beat map: the single source of timing for music and picture. 120 BPM, T0 = 0, 1 bar = 4 beats = 2 s, 30 fps (1 beat = 15 frames, triplet = 5 frames).
+To change the music: change BPM / T0 and align BRAKE / DUSK / STOP to the new track's breakdown, restart and cut-off; all lengths in shots.py are computed by bar()."""
 BPM = 120
 BEAT = 60 / BPM          # 0.5 s
 BAR = 4 * BEAT           # 2.0 s
-T0 = 0.0                 # 第一拍 = 第一帧：0.0 s 管风琴全奏砸入
+T0 = 0.0                 # first beat = first frame: full organ slams in at 0.0 s
 FPS = 30
 
 
 def bar(n, beat=0.0):
-    """第 n 小节（从 0 起）第 beat 拍的时间（秒）"""
+    """Time (seconds) of beat `beat` in bar n (counting from 0)"""
     return T0 + n * BAR + beat * BEAT
 
 
-# 段落（小节）——音乐织体密度 = 剪辑密度
-NIGHT = bar(0)     # 0–3   夜→晨：八分琶音；4 s → 2 s → 1 s → 半拍
-MORNING = bar(4)   # 4–7   三连音对八分 + 木管断奏；1 拍 → 半拍
-NOON = bar(8)      # 8–9   正午云河 + 人口数字（一个 4 s 长镜）
-GRID = bar(10)     # 10–11 网格：1×2 → 2×2 → 3×3 → 4×4，十六分
-BRAKE = bar(12)    # 12–15 刹车：琶音全停（肥皂泡 / 1899 分屏 / 长曝光）
-DUSK = bar(16)     # 16–19 黄昏→夜：八分 → 三连音 → 十六分
-FLASH = bar(20)    # 20    一天倒着闪回：4 帧 → 2 帧
-STOP = bar(21)     # 42.0  硬停：干声切断，黑
-PAGE = bar(21, .6)   # 42.3 书页（Leaves of Grass 1860, p.380）
-CARD = bar(21, 2.5)  # 43.25 引文压在最后一个城市镜头上（第二天的黎明）
-SLATE = bar(23, 2.5) # 47.25 落版（同一镜头压暗继续走）
+# sections (in bars): musical texture density = cutting density
+NIGHT = bar(0)     # 0–3   night → morning: eighth-note arpeggios; 4 s → 2 s → 1 s → half beat
+MORNING = bar(4)   # 4–7   triplets against eighths + staccato woodwinds; 1 beat → half beat
+NOON = bar(8)      # 8–9   noon cloud river + population figure (one 4 s long take)
+GRID = bar(10)     # 10–11 grid: 1×2 → 2×2 → 3×3 → 4×4, sixteenths
+BRAKE = bar(12)    # 12–15 brake: arpeggios all stop (soap bubbles / 1899 split screen / long exposure)
+DUSK = bar(16)     # 16–19 dusk → night: eighths → triplets → sixteenths
+FLASH = bar(20)    # 20    the day flashes back in reverse: 4 frames → 2 frames
+STOP = bar(21)     # 42.0  hard stop: dry signal cut, black
+PAGE = bar(21, .6)   # 42.3 book page (Leaves of Grass 1860, p.380)
+CARD = bar(21, 2.5)  # 43.25 quotation over the last city shot (the next day's dawn)
+SLATE = bar(23, 2.5) # 47.25 end slate (same shot, darkened, keeps running)
 DUR = bar(26)        # 52.0

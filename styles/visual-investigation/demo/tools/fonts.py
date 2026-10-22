@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""按片中实际用到的字（index.html + film.json），从 Google Fonts 取子集 woff2（全部 SIL OFL 1.1）到 fonts/。
-改了片中文字就删掉 fonts/ 重跑。"""
+"""Fetch subset woff2 files from Google Fonts (all SIL OFL 1.1) into fonts/, covering the characters actually used in the film (index.html + film.json).
+If the film's text changes, delete fonts/ and rerun."""
 import re, sys, urllib.parse, urllib.request, os
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 src = ''.join(open(os.path.join(D, f), encoding='utf-8').read() for f in ['index.html', 'film.json'])

@@ -1,5 +1,5 @@
 #!/bin/bash
-# 抽帧看片：sh tools/stills.sh 秒 秒 … → work/st/t_<秒>.jpg + work/st_sheet.jpg
+# grab stills to check the cut: sh tools/stills.sh sec sec … → work/st/t_<sec>.jpg + work/st_sheet.jpg
 cd "$(dirname "$0")/.."
 PY=../../../.venv/bin/python
 mkdir -p work/st; A=(); F=()

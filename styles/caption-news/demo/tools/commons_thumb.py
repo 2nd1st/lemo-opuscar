@@ -1,9 +1,9 @@
-"""Commons 缩略图下载（原图被 429 时用）：python3 tools/commons_thumb.py "File:X.jpg" name width
-查 imageinfo 拿 thumburl + 许可，再交给 footage.py fetch <url> 记录来源。"""
+"""Commons thumbnail download (for when the original is rate-limited with 429): python3 tools/commons_thumb.py "File:X.jpg" name width
+Query imageinfo for thumburl + licence, then hand it to footage.py fetch <url> to record the source."""
 import json, sys, time, urllib.request, urllib.parse, subprocess, os, re
-UA = "LemoOpuscarTrial/1.0 (lemomo.studio research; footage sourcing)"
+UA = "lemo-opuscar/1.0 (https://github.com/lemomo-ai/lemo-opuscar)"
 t, name, w = sys.argv[1], sys.argv[2], sys.argv[3]
-# Commons 只稳定提供标准缩略图宽度，其他宽度会一直 429/失败：就近取一个标准宽度（0 = 原图）
+# Commons reliably serves only standard thumbnail widths; other widths keep failing with 429/errors: snap to the nearest standard width (0 = original)
 STD = [330, 500, 960, 1280, 1920, 2560, 3840]
 if w != "0":
     w = str(min(STD, key=lambda x: abs(x - int(w))))

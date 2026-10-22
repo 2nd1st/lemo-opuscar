@@ -147,7 +147,7 @@ for i, (cn, en) in enumerate(cats, 1):
         f'<svg class="lf"><use href="#laurel"/></svg></header>\n'
         f'  <div class="grid">\n' + '\n'.join(map(card, group)) + '\n  </div>\n</section>')
 
-# the feature presentation above the nominees: Opuscar 98 (the film lives in promo/, which is not in the repo;
+# the feature presentation above the nominees: Opuscar 98 (the film's sources are not part of the library;
 # the gallery streams the 720p web cut from Pages, the 1080p file is on the "films" release, the poster is styleboard/img)
 FEATURE = dict(poster='img/feature_opuscar98.jpg', dur='6:31',
                src='films/opuscar98.mp4' if site else '../.release/web/opuscar98.mp4', full=f'{FILMS_URL}/opuscar98.mp4')
@@ -210,8 +210,8 @@ open(os.path.join(out_dir, 'index.html'), 'w', encoding='utf-8').write(fill('tem
     '{{LAUREL}}': laurel_symbol(), '{{SECTIONS}}': '\n'.join(sections), '{{TABS}}': ''.join(tabs),
     '{{DESC}}': html.escape(GALLERY_DESC), '{{HEAD_META}}': gallery_meta,
     '{{FEATURE_POSTER}}': FEATURE['poster'], '{{FEATURE_SRC}}': FEATURE['src']}))
-# The 98 styles of OPUSCAR 98, listed under the film on its page: styleboard/opuscar98_styles.json (written from the production
-# archive in promo/opuscar98, which is not in the repo) + one frame per film in styleboard/img/opuscar98/<no>.jpg.
+# The 98 styles of OPUSCAR 98, listed under the film on its page: styleboard/opuscar98_styles.json (one entry
+# per film: style, prompts, shots) + one frame per film in styleboard/img/opuscar98/<no>.jpg.
 BOOK = json.load(open(os.path.join(HERE, 'opuscar98_styles.json'), encoding='utf-8'))
 
 def stylebook():
@@ -272,10 +272,10 @@ open(os.path.join(out_dir, 'opuscar98', 'index.html'), 'w', encoding='utf-8').wr
     '{{DESC}}': html.escape(FILM_DESC), '{{HEAD_META}}': film_meta,
     '{{FEATURE_POSTER}}': '../' + FEATURE['poster'], '{{FEATURE_SRC}}': '../' + FEATURE['src'],
     '{{BOOK_TABS}}': book_tabs, '{{BOOK_KINDS}}': book_kinds, '{{BOOK_FILMS}}': book_films}))
-# Thank-you films (made at 300, 800 and 2,000 stars): their own page. Like OPUSCAR 98 the films live in promo/ (not in the repo);
+# Thank-you films (made at 300, 800 and 2,000 stars): their own page. Like OPUSCAR 98 the films are not in the repo;
 # the 720p cuts are on the "web" release as stars<n>.mp4 (copied into the site), 1080p on the "thanks" release, posters in img/thanks/.
 THANKS_REL = f'https://github.com/{REPO}/releases/download/thanks'
-THANKS = [  # (id, title, 中文, length, date, description, 中文说明)
+THANKS = [  # (id, title, Chinese title, length, date, description, Chinese description)
     ('stars2000', '2,000 stars · Refresh', '2000 星 · 刷新', '0:50', '2026-10-12',
      'One screen, seventeen days. Every count, name and timestamp is real: from the first git push to the 2,000th star, and a reply to the first issue.',
      '一块屏幕上的十七天。每个数字、名字和时间都是真的：从第一次 git push 到第 2000 颗星，再到给第一个 issue 的回复。'),

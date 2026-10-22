@@ -126,14 +126,14 @@
   "cat": "剪辑与纪实",
   "cat_en": "Edit & Documentary",
   "film": "The Week in AI",
-  "line": "A model opens to every developer, Seoul's market breaks its September high by 20 %, Brussels sends questions to two AI labs: a newsroom bulletin with a virtual studio, numbered bumpers and a strap that never leaves.",
-  "line_cn": "一个模型全面开放，首尔股市较 9 月高点跌破两成，布鲁塞尔向两家 AI 实验室发出问询：虚拟演播室、条目 bumper、一直在底部的条带，一档电视新闻的包装系统。",
+  "line": "Four AI stories from one week, in a newsroom's on-air package: a rundown that opens and closes the bulletin, a headline strap that never leaves, a price board that flips, a market line that breaks its threshold, letters flying out of Brussels, a spec card for an open model.",
+  "line_cn": "一周四条 AI 新闻，一套电视台包装：开场串联单、一直贴底的标题条带、翻牌价格表、击穿熊市线的走势、从布鲁塞尔飞出的问询函、开放模型的规格卡。",
   "uses": [
    "Weekly news round-ups",
    "Company or channel bulletins",
    "Market and policy updates"
   ],
-  "dur": 54.0
+  "dur": 53.5
  },
  {
   "slug": "satellite-briefing",
@@ -414,9 +414,9 @@
   "cn": "浮世绘",
   "cat": "东方传统",
   "cat_en": "East Asian Traditions",
-  "film": "A Journey Toward the Mountain",
-  "line": "A traveller walks toward a distant mountain; every shot is a woodblock print, ending in a great wave.",
-  "line_cn": "旅人走向远山，每个镜头都是一幅版画，最后迎来一道巨浪。",
+  "film": "Toward the Mountain",
+  "line": "A traveller walks toward a distant mountain; every shot is a woodblock print, a great wave at the climax, the mountain and the whole scroll at the end.",
+  "line_cn": "旅人走向远山，每个镜头都是一幅版画；巨浪是高潮，结尾是远山与整幅画轴拉远。",
   "uses": [
    "Travel",
    "Japanese culture",
@@ -462,12 +462,12 @@
   "slug": "risograph",
   "num": "12",
   "en": "Risograph Print",
-  "cn": "Risograph 丝网印刷",
+  "cn": "Risograph 孔版印刷",
   "cat": "印刷与版画",
   "cat_en": "Print & Printmaking",
   "film": "Sunday Ride",
-  "line": "A Sunday-morning bike ride through the city — bakery, park, riverside — in two misregistered inks.",
-  "line_cn": "周日早晨骑车穿过城市：面包店、公园、河边。",
+  "line": "A Sunday-morning bike ride through the city — bakery, park, riverside — each stop adding an ink until three misregistered plates overprint.",
+  "line_cn": "周日早晨骑车穿过城市：面包店、公园、河边，每到一处加一版油墨，最后三版套印。",
   "uses": [
    "Indie brands",
    "Zines",
@@ -853,7 +853,7 @@
   "slug": "microgame",
   "num": "32",
   "en": "Microgame Frenzy",
-  "cn": "微游戏快闪（瓦里奥制造式）",
+  "cn": "微游戏快闪",
   "cat": "游戏",
   "cat_en": "Games",
   "film": "Five-Second Astronaut",

@@ -1,8 +1,8 @@
-"""大文件只下需要的一段：从 Commons 原文件 URL 按时间截取，转 1080p 以内 H.264，并把来源记进 SOURCES.jsonl（格式同 footage.py）。
-用法：python3 seg.py "File:X.webm" 名字 起点秒 时长秒 "许可" "作者" ["备注"]"""
+"""For a large file download only the needed segment: cut by time from the Commons original-file URL, convert to H.264 at 1080p or below, and record the source in SOURCES.jsonl (same format as footage.py).
+Usage: python3 seg.py "File:X.webm" name start_s duration_s "licence" "author" ["note"]"""
 import sys, json, subprocess, hashlib, urllib.parse, time, os
 from pathlib import Path
-UA = "LemoOpuscarTrial/1.0 (https://github.com/lemomo-ai/lemo-opuscar)"
+UA = "lemo-opuscar/1.0 (https://github.com/lemomo-ai/lemo-opuscar)"
 t, name, ss, du, lic, credit = sys.argv[1:7]; note = sys.argv[7] if len(sys.argv) > 7 else ""
 fn = t.removeprefix("File:").replace(" ", "_"); h = hashlib.md5(fn.encode()).hexdigest()
 url = f"https://upload.wikimedia.org/wikipedia/commons/{h[0]}/{h[:2]}/{urllib.parse.quote(fn)}"
@@ -19,7 +19,7 @@ pr = json.loads(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "stre
 v = next(s for s in pr["streams"] if s["codec_type"] == "video")
 rec = {"name": name, "file": str(dest), "url": url, "input": f"commons:{t}", "page": "https://commons.wikimedia.org/wiki/" + urllib.parse.quote(t.replace(" ", "_")),
        "title": t, "credit": credit, "license": lic, "w": v["width"], "h": v["height"], "fps": v["r_frame_rate"], "dur": float(pr["format"]["duration"]),
-       "audio": any(s["codec_type"] == "audio" for s in pr["streams"]), "note": f"原片 {ss}–{float(ss)+float(du):g} s 截取（转 H.264）" + (f"；{note}" if note else ""),
+       "audio": any(s["codec_type"] == "audio" for s in pr["streams"]), "note": f"{ss}–{float(ss)+float(du):g} s excerpt of the original (transcoded to H.264)" + (f"; {note}" if note else ""),
        "used": [], "fetched": time.strftime("%Y-%m-%d %H:%M")}
 log = Path("SOURCES.jsonl"); recs = [json.loads(l) for l in log.read_text().splitlines() if l.strip()] if log.exists() else []
 recs = [r for r in recs if r["name"] != name] + [rec]; log.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in recs))

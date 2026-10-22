@@ -1,5 +1,5 @@
 #!/bin/sh
-# footage.py fetch 带 429 退避：sh tools/f.sh <src> <name> [其他参数…]
+# footage.py fetch with 429 back-off: sh tools/f.sh <src> <name> [other args…]
 src="$1"; name="$2"; shift 2
 for k in 1 2 3 4 5 6; do
   if python3 tools/footage.py fetch "$src" --name "$name" --out raw --max-mb 400 "$@" > /dev/null 2> work/fetch_err.txt; then

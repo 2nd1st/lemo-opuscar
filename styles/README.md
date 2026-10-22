@@ -47,7 +47,7 @@ Users may name a style in English, in Chinese, or by its folder. Find it here, t
 | Style | 风格 | Folder | Our demo |
 |---|---|---|---|
 | Shadow Puppetry | 皮影戏 | [`shadow-puppet`](shadow-puppet/STYLE.md) | *Hou Yi Shoots the Suns* |
-| Ukiyo-e | 浮世绘 | [`ukiyoe`](ukiyoe/STYLE.md) | *A Journey Toward the Mountain* |
+| Ukiyo-e | 浮世绘 | [`ukiyoe`](ukiyoe/STYLE.md) | *Toward the Mountain* |
 | Red Paper-cut | 红色窗花剪纸 | [`papercut-red`](papercut-red/STYLE.md) | *Nian Comes to Town* |
 | Paper-cut Lightbox | 纸雕灯影 | [`paper-lantern`](paper-lantern/STYLE.md) | *A Mooncake's Longing* |
 
@@ -55,7 +55,7 @@ Users may name a style in English, in Chinese, or by its folder. Find it here, t
 
 | Style | 风格 | Folder | Our demo |
 |---|---|---|---|
-| Risograph Print | Risograph 丝网印刷 | [`risograph`](risograph/STYLE.md) | *Sunday Ride* |
+| Risograph Print | Risograph 孔版印刷 | [`risograph`](risograph/STYLE.md) | *Sunday Ride* |
 | Halftone Dossier | 复古半调案卷 | [`halftone-dossier`](halftone-dossier/STYLE.md) | *Case File: Chubby* |
 | Woodcut Print | 木刻版画 | [`woodcut`](woodcut/STYLE.md) | *The Bell Founder* |
 | Copperplate Engraving | 铜版画 | [`engraving`](engraving/STYLE.md) | *The Honeybee, Plate VII* |
@@ -98,7 +98,7 @@ Users may name a style in English, in Chinese, or by its folder. Find it here, t
 |---|---|---|---|
 | 16-bit Pixel RPG | 16-bit 像素 RPG | [`pixel-rpg`](pixel-rpg/STYLE.md) | *The Last Save Point* |
 | HD-2D | HD-2D | [`hd-2d`](hd-2d/STYLE.md) | *The Lampbearer* |
-| Microgame Frenzy | 微游戏快闪（瓦里奥制造式） | [`microgame`](microgame/STYLE.md) | *Five-Second Astronaut* |
+| Microgame Frenzy | 微游戏快闪 | [`microgame`](microgame/STYLE.md) | *Five-Second Astronaut* |
 | Game Show Flat | 综艺节奏扁平 | [`game-show`](game-show/STYLE.md) | *Rhythm of AI, 1997 → 2026* |
 
 ## Cinema & Eras · 电影与时代

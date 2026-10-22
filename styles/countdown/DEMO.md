@@ -79,7 +79,7 @@ demo/
   tools/fetch_fonts.py  Barlow, Barlow Condensed, IBM Plex Mono, Noto Sans SC subset (OFL)
   tools/final_asr.py  Whisper on the finished film
   audio/lines.json    narrator (Kokoro)      audio/mix.py   native audio, ticks, foley, score, ducking, pre-master
-  FACTS.md · SOURCES.md · SOURCES.jsonl · CREDITS · TREATMENT.md · PRODUCTION_LOG.md
+  FACTS.md · SOURCES.md · SOURCES.jsonl · CREDITS
   raw/ frames/ out/ fonts/ audio/vo/   downloaded or generated, not committed
 ```
 

@@ -1,6 +1,6 @@
-"""一次查多个 Commons 文件的大小、许可、作者、描述（减少请求数，防 429）。用法：python3 cinfo.py titles.txt"""
+"""Look up size, licence, author and description for several Commons files at once (fewer requests, avoids 429). Usage: python3 cinfo.py titles.txt"""
 import json, sys, time, re, urllib.request, urllib.parse
-UA = "LemoOpuscarTrial/1.0 (lemomo.studio research; footage sourcing)"
+UA = "lemo-opuscar/1.0 (https://github.com/lemomo-ai/lemo-opuscar)"
 titles = [l.strip() for l in open(sys.argv[1]) if l.strip()]
 g = lambda m, k: re.sub("<[^>]+>", "", m.get(k, {}).get("value", "")).strip()
 for i in range(0, len(titles), 40):

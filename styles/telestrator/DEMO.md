@@ -8,6 +8,8 @@ Istanbul, 25 February 2019: Beşiktaş lead Fenerbahçe 3–0 at half-time; Fene
 
 This is an unofficial fan analysis made from real broadcast footage released under CC BY by the broadcaster itself (beIN SPORTS Türkiye, on its verified YouTube channel; one clip via Wikimedia Commons), a CC BY photo and a CC0 photo. The show is fictional; beIN SPORTS, the clubs and the league did not make or endorse it. Every fact is quoted in [`demo/FACTS.md`](demo/FACTS.md); the licence check is in [`demo/SOURCES.md`](demo/SOURCES.md).
 
+The CC BY rests on the broadcaster's own licence statement on YouTube (checked 2026-10-21; evidence in `demo/tools/license-evidence.json`); we cannot see the rights chain from league and clubs to broadcaster. Hosting the film here with full attribution is what the licence allows, but re-uploads to video platforms may still be matched by Content ID. A film made in this style for your own topic should use your own footage, or footage whose licence you have checked the same way.
+
 ## Story & structure
 
 Shape: a chronological build to the deep breakdown, then a summary. Sting and match-record card (0–5.2 s) set up 0–3 and bracket the three second-half goals. Goal one (5.2–10.6) and goal two (10.6–17.8) are light treatments, so the third keeps the full grammar to itself (17.8–36.8). The shot map (36.8–42.6) is the only new idea after the breakdown: where the three were struck. The data card (42.6–47.0), the 67′ slate (47.0–49.6) and the end card (49.6–54.4) close.

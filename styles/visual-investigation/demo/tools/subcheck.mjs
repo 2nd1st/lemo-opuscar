@@ -1,8 +1,8 @@
-// 字幕检查：每种语言一行。
+// Subtitle check: one line per language.
 //   node tools/subcheck.mjs [path/to/film.srt]
-// 1. 页面里（window.SUBCHECK）用烧录字体实测中英两行宽度，必须 ≤ 1500 px 安全宽度（nowrap，绝不换行）。
-// 2. 时长：每条 ≥ 1.8 s（film.json）。
-// 3. .srt：每条恰好两行，中文在上、英文在下。
+// 1. In the page (window.SUBCHECK), the widths of the Chinese and English lines are measured in the burned-in font and must be ≤ the 1500 px safe width (nowrap, never wrapped).
+// 2. Duration: each cue ≥ 1.8 s (film.json).
+// 3. .srt: exactly two lines per cue, Chinese on top, English below.
 import path from 'path'; import fs from 'fs'; import { fileURLToPath } from 'url';
 const HERE = path.dirname(fileURLToPath(import.meta.url)), DEMO = path.resolve(HERE, '..');
 const LIB = process.env.LIB || path.resolve(DEMO, '../../..');

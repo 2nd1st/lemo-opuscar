@@ -1,5 +1,5 @@
 #!/bin/sh
-# Live Countdown Split-screen — "Counting Itself Down" (自己倒数): one-command build.
+# Live Countdown Split-screen — "Counting Itself Down" (自己倒数, the Chinese title): one-command build.
 # fetch what git does not hold → fonts → voice (+ speech check) → frames (sync table) → subtitles (+ one-line check)
 # → reading check → events → picture → score and mix → master (−14 LUFS, grain 1) → small cut → poster → speech check on the film.
 # From a clean clone (library set up with `setup.sh deps voice music`) the first run also downloads:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""按页面和时间线里实际用到的字，从 Google Fonts 取子集 woff2（均为 OFL）到 fonts/。改了片中文字就删掉 fonts/*.woff2 重取。"""
+"""Fetches subset woff2 files from Google Fonts (all OFL) into fonts/, covering only the characters actually used in the page and the timeline. If you change any text in the film, delete fonts/*.woff2 and fetch again."""
 import re, sys, urllib.parse, urllib.request, os
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 src = open(os.path.join(D, 'index.html'), encoding='utf-8').read() + open(os.path.join(D, 'timeline.json'), encoding='utf-8').read()
