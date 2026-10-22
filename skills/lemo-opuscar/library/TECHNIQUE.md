@@ -21,7 +21,7 @@ Everything else installs in tiers, from the library root (`$LIB` in skill mode).
 | Command | Adds | Size |
 |---|---|---|
 | `sh tools/setup.sh deps` | core: npm packages, headless browser, Python `.venv` (numpy, scipy, soundfile, soxr, pillow): render, synthesize sound, mux | ~350 MB |
-| `… setup.sh deps voice` | Kokoro + model (English and plain Chinese, offline), edge-tts (better Chinese, online, only with the user's consent), faster-whisper (voice check) | ~0.55 GB + ~145 MB Whisper model on first check |
+| `… setup.sh deps voice` | Kokoro + model (English and plain Chinese, offline), edge-tts (better Chinese, online, only with the user's consent), faster-whisper (voice check) | ~0.55 GB + a Whisper model on first check (~145 MB for English, ~480 MB for Chinese) |
 | `… setup.sh deps music` | numba, for plucked strings (`pluck.py`); the sampler itself needs only the core | ~140 MB |
 | `sh tools/fetch.sh instruments <lib>` | a sample library: `freepats`, `karoryfer`, `salamander`, `vcsl`, `vsco2ce` or `all` | 70–400 MB each |
 | `sh tools/fetch.sh hdri` | HDRIs for 3D styles | 12 MB |
