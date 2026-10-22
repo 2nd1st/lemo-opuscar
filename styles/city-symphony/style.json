@@ -6,12 +6,12 @@
  "category_en": "Edit & Documentary",
  "category_cn": "剪辑与纪实",
  "film": "One Day in New York",
- "line": "A city falls out of orbit into one day: time-lapse light rivers, a sixteen-cell grid on the score's sixteenths, a soap bubble that stops time, 1899 beside today, and a hard stop on the downbeat.",
- "line_cn": "从轨道落进一座城市的一天：延时把车流拉成光河，网格跟着十六分音符长满，一个肥皂泡让时间停住，1899 年和今天并排，最后在小节线上硬停。",
+ "line": "One day in New York in time-lapse: rivers of light, a grid on the sixteenths, 1899 beside today.",
+ "line_cn": "纽约的一天：延时光河、踩着十六分音符的网格，1899 年和今天并排。",
  "uses": [
-  "City & place films",
-  "Music-led montages",
-  "Brand and event openers"
+  "City films",
+  "Music montages",
+  "Openers"
  ],
  "frame_sec": 11.2,
  "dur": 52.0

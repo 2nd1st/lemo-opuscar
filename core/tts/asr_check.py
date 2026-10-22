@@ -7,9 +7,9 @@ A line in lines.json may carry an "asr" field that overrides the expected text (
         numbers with punctuation (3.5, 1:30, 1,000, 40%) are not, so write the expected transcription in the "asr" field). zh (also ja / ko) compares
         characters: after dropping punctuation, folding full-width to half-width and turning Chinese numerals into digits, a difflib similarity
         ≥ --threshold (default 0.92) passes.
-Model: --model (or the WHISPER_MODEL environment variable; a model name, or a local folder for offline use); default en → base.en, other languages → base (multilingual).
-      If base mishears a line that sounds right to you, check again with --model small (more accurate, about 480 MB, several times slower).
-      The first run downloads from Hugging Face (base / base.en ≈ 145 MB); behind a firewall set HF_ENDPOINT=https://hf-mirror.com,
+Model: --model (or the WHISPER_MODEL environment variable; a model name, or a local folder for offline use); default en → base.en, zh → small (base mishears too many Chinese lines), other languages → base (multilingual).
+      If the default mishears a line that sounds right to you, check again with a larger model (base → small, about 480 MB; small → medium), more accurate and several times slower.
+      The first run downloads from Hugging Face (base / base.en ≈ 145 MB, small ≈ 480 MB); behind a firewall set HF_ENDPOINT=https://hf-mirror.com,
       or download the model beforehand and pass --model /path/to/model-dir.
 Exit codes: 0 all lines pass; 1 some lines differ; 2 the check could not run (model failed to load, etc.).
 """
@@ -99,7 +99,7 @@ def main():
     lines = json.load(open(a.lines, encoding='utf-8'))
     want = {L['id']: L.get('asr', L['text']) for L in lines}
     lang = detect_lang(list(want.values())) if a.lang == 'auto' else a.lang
-    name = a.model or os.environ.get('WHISPER_MODEL') or ('base.en' if lang == 'en' else 'base')
+    name = a.model or os.environ.get('WHISPER_MODEL') or {'en': 'base.en', 'zh': 'small'}.get(lang, 'base')
     if lang != 'en' and os.path.basename(name.rstrip('/')).endswith('.en'):
         print(f"asr_check.py: model '{name}' is English-only but the lines are '{lang}'. Use a multilingual model (e.g. --model base or --model small).", file=sys.stderr); sys.exit(2)
     import numpy as np, soundfile as sf, soxr

@@ -37,6 +37,9 @@ EDGE_CONSENT = ('it sends the narration text to Microsoft, so in this edition us
 # (file, old, new): exact replacements in the bundled copies, each must match once
 EDITS = [
     ('AGENTS.md', '| Adding a style to the library (owner only) | [`MAINTAINING.md`](MAINTAINING.md) |\n', ''),
+    ('AGENTS.md',
+     'One exception: a style cut from real material (Edit & Documentary) needs its material before the treatment, so the tools its `STYLE.md` names in `demo/tools/` for finding and logging material (`footage.py` and the like) may be used first, copied into the project folder and run there; still read `DEMO.md` and the rest of the demo only after the treatment is written.',
+     'A style cut from real material (Edit & Documentary) needs its material before the treatment. This edition has no demo sources, so the `demo/tools/` its `STYLE.md` names aren\'t here: search for material and log each item\'s page, author and licence yourself, as its `STYLE.md` describes.'),
     ('DIRECTOR.md',
      'a good Chinese voice uses Microsoft\'s online service (edge-tts) and needs a connection; offline, Kokoro reads Chinese but sounds plain (TECHNIQUE.md §4).',
      'offline, Kokoro reads Chinese but sounds plain; Microsoft\'s online service (edge-tts) sounds much better, but '
@@ -51,6 +54,8 @@ EDITS = [
      'with the same outputs as `tts.py`, a rate per line and the silence trimmed. **It needs a network connection.**',
      'with the same outputs as `tts.py`, a rate per line and the silence trimmed. **It needs a network connection, and '
      + EDGE_CONSENT + '.** Without that, use Kokoro\'s Chinese voices.'),
+    ('TECHNIQUE.md', ' (an Edit & Documentary style\'s material tools in `demo/tools/` come first: AGENTS.md, "Treatment first")', ''),
+    ('MY-STYLES.md', ' (and, in skill mode, get its source with `setup.sh demo <slug>`)', ''),
     ('TECHNIQUE.md',
      ' In skill mode, get the source with `sh <skill folder>/scripts/setup.sh demo <slug>`. Copied demo code often reaches the library with `../..`: replace that with `$LIB` or absolute URLs.',
      ' This edition of the plugin doesn\'t include the demo sources: read `DEMO.md` for how a demo was built and write your own code.'),

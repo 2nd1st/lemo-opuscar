@@ -6,12 +6,12 @@
  "category_en": "Edit & Documentary",
  "category_cn": "剪辑与纪实",
  "film": "410 Days",
- "line": "The Empire State Building's own 1931 brochure names the men who did the job; the construction film and Hine's photographs answer with 2,500 workers a day, cut on a machine beat into a photomontage tower.",
- "line_cn": "帝国大厦 1931 年的官方小册子写着“干活的人”；工地实拍和 Hine 的照片给出另一份名单：每天 2,500 人，按机器节拍剪成一座照片拼贴的楼。",
+ "line": "The Empire State's 1931 brochure credits its builders; the site film and Hine's photos answer: 2,500 a day.",
+ "line_cn": "帝国大厦的小册子写着建造者，工地实拍和老照片给出答案：每天 2,500 人。",
  "uses": [
-  "Construction & industry histories",
-  "Anniversaries & milestones",
-  "Labour & collective effort"
+  "Industry histories",
+  "Milestones",
+  "Collective effort"
  ],
  "frame_sec": 2.5,
  "dur": 60.0

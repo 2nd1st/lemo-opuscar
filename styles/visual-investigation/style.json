@@ -6,12 +6,12 @@
  "category_en": "Edit & Documentary",
  "category_cn": "剪辑与纪实",
  "film": "The Hindenburg: Four Minutes, 32 Seconds",
- "line": "Newsreel, photos, testimony, radiograms, a survey map and the 1937 inquiry are laid on one clock; five sources point to the same place, and what was never proven stays marked.",
- "line_cn": "新闻片、照片、证词、电报、地图和 1937 年的调查报告排在同一条时间轴上，五路来源指向同一处，没查清的照样标出来。",
+ "line": "Newsreel, photos, testimony and the 1937 inquiry on one clock: five sources point to the same spot.",
+ "line_cn": "新闻片、照片、证词和调查报告排上同一条时间轴，五路来源指向一处。",
  "uses": [
-  "Event reconstructions",
+  "Reconstructions",
   "Fact-checks",
-  "Incident & accident reports"
+  "Incident reports"
  ],
  "frame_sec": 30.9,
  "dur": 60.0

@@ -6,12 +6,12 @@
  "category_en": "Edit & Documentary",
  "category_cn": "剪辑与纪实",
  "film": "The Week in AI",
- "line": "Four AI stories from one week, in a newsroom's on-air package: a rundown that opens and closes the bulletin, a headline strap that never leaves, a price board that flips, a market line that breaks its threshold, letters flying out of Brussels, a spec card for an open model.",
- "line_cn": "一周四条 AI 新闻，一套电视台包装：开场串联单、一直贴底的标题条带、翻牌价格表、击穿熊市线的走势、从布鲁塞尔飞出的问询函、开放模型的规格卡。",
+ "line": "Four AI stories from one week in a full on-air package: rundown, headline strap, price board, spec card.",
+ "line_cn": "一周四条 AI 新闻，一整套电视台包装：串联单、标题条、翻牌价格表、规格卡。",
  "uses": [
-  "Weekly news round-ups",
-  "Company or channel bulletins",
-  "Market and policy updates"
+  "News round-ups",
+  "Bulletins",
+  "Market updates"
  ],
  "frame_sec": 18.4,
  "dur": 53.5

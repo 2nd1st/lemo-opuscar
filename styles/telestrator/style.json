@@ -6,12 +6,12 @@
  "category_en": "Edit & Documentary",
  "category_cn": "剪辑与纪实",
  "film": "Freeze Frame",
- "line": "Down 3–0 at half-time, Fenerbahçe scored three in twelve minutes: a TV analysis segment freezes the broadcast, draws on it, splits the angles and flattens the pitch into a shot map.",
- "line_cn": "半场 0–3，费内巴切 12 分钟连进三球：一段电视战术分析，把转播画面冻住、在上面画线、双机位分屏，再把球场展平成俯视射门图。",
+ "line": "Down 3–0 at half-time, Fenerbahçe scored three in 12 minutes: freeze, draw, split screen, shot map.",
+ "line_cn": "半场 0–3，费内巴切 12 分钟连进三球：冻住画面、画线、分屏、射门图。",
  "uses": [
-  "Sports breakdowns",
-  "Play-by-play analysis",
-  "Coaching and replay explainers"
+  "Sports analysis",
+  "Match recaps",
+  "Coaching"
  ],
  "frame_sec": 13.6,
  "dur": 54.4
