@@ -1,6 +1,6 @@
-// 孟菲斯微缩景观 Memphis Diorama — 3D 引擎
-// 平涂材质（不用光照算明暗，只用固定的面色调 + 硬边深靛阴影 + 世界坐标图案 + 立面窗格），
-// 法线/深度描边，颗粒喷漆画框，底部三行字。所有东西都是 t 的确定性函数。
+// Memphis Diorama: 3D engine
+// Flat materials (no lighting model: fixed face tones + hard-edged deep-indigo shadows + world-space patterns + facade windows),
+// normal/depth outlines, grainy spray-paint frame, three lines of type at the bottom. Everything is a deterministic function of t.
 import * as THREE from 'three';
 
 export const W = 1920, H = 1080, SS = 2;
@@ -8,13 +8,13 @@ export const INK = '#25214A', PAPER = '#FFFCF6';
 export const FRAME = { cx: 960, cy: 468, hw: 760, hh: 372, r: 34 };
 export const SUN = new THREE.Vector3(-0.42, 0.78, 0.46).normalize();
 
-// ---------- 随机 ----------
+// ---------- Random ----------
 export function rng(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 export const ease = (x) => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
 export const clamp01 = (x) => Math.max(0, Math.min(1, x));
 export const lerp = (a, b, u) => a + (b - a) * u;
 
-// ---------- 平涂材质 ----------
+// ---------- Flat material ----------
 const FLAT_VS = /* glsl */`
 varying vec3 vWP;
 varying vec3 vWN;
@@ -49,7 +49,7 @@ varying vec3 vWN;
 #include <shadowmask_pars_fragment>
 float h21(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float aaStep(float e, float x) { float w = fwidth(x) * 0.75; return smoothstep(e - w, e + w, x); }
-// 亮灯波 + 银杏巷：波还没扫到的窗不亮；巷子里的窗按随机顺序逐格亮（uZoneLit 0→1）
+// Light-up wave + ginkgo lane: windows the wave hasn't reached stay dark; lane windows light pane by pane in random order (uZoneLit 0→1)
 bool inZone(vec3 p) { return p.x > uZone.x && p.x < uZone.z && p.z > uZone.y && p.z < uZone.w; }
 float waveOn(vec3 p, float hsh) {
   float on = step(length(p.xz - uWaveC), uWave);
@@ -61,34 +61,34 @@ void main() {
   bool top = n.y > 0.6;
   vec2 puv = abs(n.y) > 0.5 ? vWP.xz : vec2(abs(n.x) > abs(n.z) ? vWP.z : vWP.x, vWP.y);
   puv /= uPatScale;
-  // 换季波：波扫过的地方换成下一季的颜色
+  // season wave: whatever it has passed takes the next season's colour
   bool nxt = uHasC2 > 0.5 && length(vWP.xz - uSeas.xy) < uSeas.z;
   vec3 col = nxt ? uCol2 : uCol, pc = nxt ? uPatCol2 : uPatCol;
-  if (uPat > 0.5 && uPat < 1.5) {            // 圆点
+  if (uPat > 0.5 && uPat < 1.5) {            // dots
     vec2 q = puv; q.x += 0.5 * mod(floor(q.y), 2.0);
     float d = length(fract(q) - 0.5);
     col = mix(col, pc, 1.0 - aaStep(0.17, d));
-  } else if (uPat > 1.5 && uPat < 2.5) {     // 斜条纹
+  } else if (uPat > 1.5 && uPat < 2.5) {     // diagonal stripes
     float s = fract(puv.x + puv.y);
     col = mix(col, pc, 1.0 - aaStep(0.28, abs(s - 0.5)));
-  } else if (uPat > 2.5 && uPat < 3.5) {     // 折线
+  } else if (uPat > 2.5 && uPat < 3.5) {     // zigzag
     float y = fract(puv.y) - abs(fract(puv.x) - 0.5) * 0.7;
     col = mix(col, pc, 1.0 - aaStep(0.07, abs(fract(y + 0.5) - 0.5)));
-  } else if (uPat > 3.5 && uPat < 4.5) {     // 竖条纹（遮阳棚）
+  } else if (uPat > 3.5 && uPat < 4.5) {     // vertical stripes (awnings)
     float s = fract(puv.x);
     col = mix(col, pc, aaStep(0.5, s));
-  } else if (uPat > 5.5 && uPat < 6.5) {     // 横条纹（卷帘门）
+  } else if (uPat > 5.5 && uPat < 6.5) {     // horizontal stripes (roller shutters)
     col = mix(col, pc, aaStep(0.72, fract(puv.y)));
-  } else if (uPat > 4.5 && uPat < 5.5) {     // 剖面斜线
+  } else if (uPat > 4.5 && uPat < 5.5) {     // section hatching
     float s = fract((puv.x + puv.y) * 1.0);
     col = mix(col, pc, 1.0 - aaStep(0.08, abs(s - 0.5)));
   }
-  // uZA：跟着亮灯波/银杏巷一起开关的灯（路灯头、天窗、串灯）
+  // uZA: lights switched with the light-up wave / ginkgo lane (lamp heads, skylights, string lights)
   bool zoneOff = uZA > 0.5 && waveOn(vWP, h21(floor(vWP.xz * 0.2))) < 0.5;
   bool emit = uEmit > 0.5 && !zoneOff;
   bool useNC = uHasNC > 0.5 && !zoneOff;
   vec3 winCol = vec3(-1.0);
-  // 立面窗格
+  // facade window grid
   if (uWin > 0.5 && abs(n.y) < 0.3) {
     float u = abs(n.x) > abs(n.z) ? vWP.z : vWP.x;
     float v = vWP.y - uY0;
@@ -98,7 +98,7 @@ void main() {
       vec2 lo = vec2(0.22, 0.26), hi = vec2(0.78, 0.8);
       float inside = aaStep(lo.x, f.x) * (1.0 - aaStep(hi.x, f.x)) * aaStep(lo.y, f.y) * (1.0 - aaStep(hi.y, f.y));
       float inner = aaStep(lo.x + 0.06, f.x) * (1.0 - aaStep(hi.x - 0.06, f.x)) * aaStep(lo.y + 0.07, f.y) * (1.0 - aaStep(hi.y - 0.07, f.y));
-      // 银杏巷来电时每一格都亮（其他地方随机亮一半多）
+      // when the ginkgo lane powers up every pane lights (elsewhere a random majority)
       float lit = (inZone(vWP) ? 1.0 : step(0.42, h21(id + uSeed + n.xz * 7.0))) * waveOn(vWP, h21(id * 1.37 + uSeed + n.xz * 3.0));
       vec3 glass = mix(uWinDay, lit > 0.5 ? uWinLit : uWinDark, uNight);
       float glint = (1.0 - uNight) * (1.0 - aaStep(0.06, abs(f.x - f.y * 0.6 - 0.2)));
@@ -106,7 +106,7 @@ void main() {
       col = mix(col, uInk, inside * (1.0 - inner));
       col = mix(col, glass, inner);
       if (inner > 0.5 && uNight > 0.5 && lit > 0.5) winCol = glass;
-    } else if (v < 3.4 && v > 0.3) {                         // 底商橱窗
+    } else if (v < 3.4 && v > 0.3) {                         // ground-floor shop windows
       float sx = fract(u / 5.6);
       float inside = aaStep(0.08, sx) * (1.0 - aaStep(0.92, sx)) * aaStep(0.35, v) * (1.0 - aaStep(2.7, v));
       float inner = aaStep(0.11, sx) * (1.0 - aaStep(0.89, sx)) * aaStep(0.45, v) * (1.0 - aaStep(2.6, v));
@@ -117,7 +117,7 @@ void main() {
       if (inner > 0.5 && uNight > 0.5 && on > 0.5) winCol = glass;
     }
   }
-  // 固定面色调：顶面最亮，朝太阳的侧面次之，背阳面和投影一样是"硬阴影"
+  // fixed face tones: top brightest, sun side next, shaded side matches cast shadows as "hard shadow"
   float facing = dot(normalize(vec3(n.x, 0.0, n.z) + 1e-5), normalize(vec3(uSun.x, 0.0, uSun.z)));
   float sh = 1.0 - getShadowMask();
   if (!top) sh = max(sh, step(facing, 0.0) * (n.y < 0.6 ? 0.5 : 0.0));
@@ -126,7 +126,7 @@ void main() {
   vec3 c = col * (uLit > 0.5 ? 1.0 : tone);
   if (uShadow > 0.5 && !emit) {
     vec3 shc = mix(vec3(1.0), vec3(0.70, 0.58, 0.90), sh);
-    // 半调网点：阴影里印一层浅色网点，像印刷品（世界坐标，跟着物体走）
+    // halftone: light dots printed in the shadows, like print (world space, moves with the object)
     if (uHT > 0.5 && sh > 0.5) {
       vec2 wq = (abs(n.y) > 0.5 ? vWP.xz : vec2(abs(n.x) > abs(n.z) ? vWP.z : vWP.x, vWP.y)) / 0.38;
       wq.x += 0.5 * mod(floor(wq.y), 2.0);
@@ -135,13 +135,13 @@ void main() {
     }
     c *= shc;
   }
-  // 夜：整体压暗到深靛，路灯光圈是硬边的暖色圆
+  // night: darken overall to deep indigo; lamp pools are hard-edged warm circles
   if (useNC) c = mix(c, uNC * (uShadow > 0.5 ? mix(vec3(1.0), vec3(0.8, 0.76, 0.92), sh) : vec3(1.0)), uNight);
   if (uNight > 0.0 && !emit && !useNC) {
-    // 夜色：按亮度往靛紫偏，保留一点原色相（避免黄色压暗后发橄榄绿）
+    // night tint: shift toward indigo-violet by luminance, keeping some hue (so darkened yellow doesn't turn olive)
     float lum = dot(c, vec3(0.2126, 0.7152, 0.0722));
     vec3 dark = mix(c * vec3(0.25, 0.26, 0.44), lum * vec3(0.24, 0.22, 0.46), 0.6) + vec3(0.008, 0.007, 0.024);
-    dark = mix(dark, c * vec3(0.92, 0.55, 0.6) + vec3(0.05, 0.0, 0.03), uDusk); // 黄昏：偏橙粉
+    dark = mix(dark, c * vec3(0.92, 0.55, 0.6) + vec3(0.05, 0.0, 0.03), uDusk); // dusk: orange-pink
     float pool = 0.0;
     for (int i = 0; i < 48; i++) {
       vec4 L = uLamps[i];
@@ -185,14 +185,14 @@ export function setSeason(x, z, r) { GLOBAL.uSeas.value.set(x, z, r); }
 export function setHalftone(v) { GLOBAL.uHT.value = v; }
 export function setLamps(list) { for (let i = 0; i < 48; i++) { const L = list[i]; LAMPS[i].set(L ? L[0] : 0, L ? L[1] : 0, L ? L[2] : 0, L ? L[3] : 0); } }
 
-// 便捷：带材质的网格，默认投射和接收阴影
+// Helper: mesh with material, casts and receives shadows by default
 export function mesh(geo, mat, x = 0, y = 0, z = 0, parent) {
   const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true;
   if (parent) parent.add(m); return m;
 }
 export function box(w, h, d) { const g = new THREE.BoxGeometry(w, h, d); g.translate(0, h / 2, 0); return g; }
 
-// 文字贴图（招牌）
+// Text texture (signs)
 export function signTex(text, bg, fg, w = 512, h = 160) {
   const c = document.createElement('canvas'); c.width = w; c.height = h; const g = c.getContext('2d');
   g.fillStyle = bg; g.fillRect(0, 0, w, h);
@@ -202,7 +202,7 @@ export function signTex(text, bg, fg, w = 512, h = 160) {
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
 }
 
-// ---------- 合成：描边 + 颗粒画框 ----------
+// ---------- Composite: outlines + grainy frame ----------
 const COMP_FS = /* glsl */`
 uniform sampler2D tCol, tNor, tDep;
 uniform vec2 res;
@@ -241,7 +241,7 @@ void main() {
     acc += mix(c, uInk, edge(uv));
   }
   vec3 col = acc * 0.25;
-  // 颗粒画框（输出像素坐标，y 向下）
+  // grainy frame (output pixel coords, y down)
   vec2 p = vec2(vUv.x * ${W}.0, (1.0 - vUv.y) * ${H}.0);
   vec2 q = abs(p - uFrame.xy) - uFrame.zw + uRad;
   float d = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - uRad;
@@ -286,7 +286,7 @@ export class Diorama {
     this.quadScene = new THREE.Scene(); this.quadScene.add(this.quad);
     this.quadCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
   }
-  // 阴影相机套住镜头看的那一片
+  // fit the shadow camera to the area in view
   fitShadow(target, radius) {
     const s = this.sun;
     s.target.position.copy(target);
@@ -294,7 +294,7 @@ export class Diorama {
     const c = s.shadow.camera; c.left = -radius; c.right = radius; c.top = radius; c.bottom = -radius; c.near = 10; c.far = 900;
     c.updateProjectionMatrix();
   }
-  // t：秒；frame：帧号（颗粒每 5 帧换一次）；grow：开场/结尾的长出半径
+  // t: seconds; frame: frame number (grain changes every 5 frames); grow: draw-in radius at open/close
   render(t, frame, opts = {}) {
     const r = this.r, cam = this.cam;
     cam.updateMatrixWorld();
@@ -312,17 +312,17 @@ export class Diorama {
     u.uWob.value = 22 * Math.sin(t * 0.55); u.uGrow.value = opts.grow ?? 1e9;
     r.setRenderTarget(null); r.render(this.quadScene, this.quadCam);
     const g = this.ctx; g.drawImage(r.domElement, 0, 0);
-    if (opts.text) drawText(g, opts.text, opts.textAlpha ?? 1);
+    if (opts.text) drawText(g, opts.text, opts.textAlpha ?? 1, opts.strong2);
   }
 }
 
-// 底部三行字 + 孟菲斯小标记
-export function drawText(g, [l1, l2, l3], a) {
+// Three lines of type at the bottom + small Memphis marks
+export function drawText(g, [l1, l2, l3], a, strong2 = false) {
   if (a <= 0) return;
   const y0 = FRAME.cy + FRAME.hh + 64;
   g.save(); g.globalAlpha = a; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
   g.fillStyle = '#2B2840'; g.font = '600 25px IT, SC, sans-serif'; g.fillText(l1, 960, y0 + 34);
-  g.fillStyle = '#8D8AA0'; g.font = '400 18px IT, SC, sans-serif'; g.fillText(l2, 960, y0 + 64);
+  g.fillStyle = strong2 ? '#2B2840' : '#8D8AA0'; g.font = strong2 ? '600 21px IT, SC, sans-serif' : '400 18px IT, SC, sans-serif'; g.fillText(l2, 960, y0 + 64);  // strong2: a line that must not be missed (the sign-off)
   g.fillStyle = '#B7B4C6'; g.font = '400 15px PM, SC, monospace'; g.fillText(l3, 960, y0 + 91);
   const mx = 960, my = y0;
   g.fillStyle = '#FFC93C'; g.beginPath(); g.arc(mx - 24, my, 5, 0, 7); g.fill();

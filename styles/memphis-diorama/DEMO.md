@@ -2,11 +2,11 @@
 
 One example among many. Don't reuse its story, arc, shots, props or timings.
 
-Demo: *Four Seasons in Pomelo Town* (柚子城的四季, 40 s) · `memphis-diorama.mp4` · source in [`demo/`](demo/)
+Demo: *Four Seasons in Pomelo Town* (柚子城的四季, 45 s) · `memphis-diorama.mp4` · source in [`demo/`](demo/)
 
 ## Story & structure
 
-One fictional river bend (a river, a bridge, a lane of ten houses, a plaza with one big tree, a lotus pond, fields) goes through spring, summer, autumn and winter in one take, ten seconds each. There is no protagonist: the place is the subject, and the seasons are told only by colour and by small motions.
+One fictional river bend (a river, a bridge, a lane of ten houses, a plaza with one big tree, a lotus pond, fields) goes through spring, summer, autumn and winter in one take, ten seconds each, then holds on the lit winter village for the end card. There is no protagonist: the place is the subject, and the seasons are told only by colour and by small motions.
 
 Every change of season is the same gesture, so the film reads as one piece: **the big tree on the plaza squats down for half a second, springs back, and a wave spreads from it**. Inside the ring the ground, crowns, roofs and water take the next season's colours; as the ring passes, objects act (rows of rape flowers sink, umbrellas open or fold, haystacks pop up, snow starts).
 
@@ -15,14 +15,14 @@ Every change of season is the same gesture, so the film reads as one piece: **th
 | Spring | 0–10 s | rape fields yellow, paddies flooded sky blue, pink and white blossom with flower dots | petals drift east, kites, swallows, ducks, a boat |
 | Summer | 10–20 s | rice green, crowns deep green, three parasols open | a grey-lilac cloud crosses with rain and ripples, then eight lotus flowers open one by one |
 | Autumn | 20–30 s | rice gold, grass yellow-green, crowns red, orange and yellow | haystacks pop up field by field, leaves fall, a V of geese flies south-west, swallows leave, lotus wilts |
-| Winter | 30–40 s | snow ground, white roofs and haystack caps, pastel crowns with white dots, lilac field ridges | snow, chimney smoke, a snowman appears; from 34 s dusk turns the picture pink-violet and every window and door lamp lights up at its own moment |
+| Winter | 30–39 s | snow ground, white roofs and haystack caps, pastel crowns with white dots, lilac field ridges | snow, chimney smoke, a snowman appears; from 34 s dusk turns the picture pink-violet and every window and door lamp lights up at its own moment |
 
 ![Spring](demo/stills/frame_spring.jpg) ![Summer](demo/stills/frame_summer.jpg)
 ![The tree squatting before autumn](demo/stills/frame_squat.jpg) ![Winter dusk](demo/stills/frame_winter.jpg)
 
 ## Shots
 
-One take. The camera orbits the plaza at fov 30°, high and slowly closing in; after 18 s it eases down to 0.3× speed so the pond and the village stay in frame through autumn and winter.
+One take. The camera orbits the plaza at fov 30°, high and slowly closing in; after 18 s it eases down to 0.3× speed so the pond and the village stay in frame through autumn, winter and the end card.
 
 | # | Time | Shot | Camera | Native move / note |
 |---|---|---|---|---|
@@ -35,18 +35,19 @@ One take. The camera orbits the plaza at fov 30°, high and slowly closing in; a
 | 7 | 28.8–31.9 s | the squat again; the winter wave, snow starts behind it | — | Squash and spring → Wave |
 | 8 | 32.6 s | a snowman bounces in on the plaza | — | |
 | 9 | 33.8–38.3 s | dusk; windows and door lamps light one by one, warm pools on the lane | — | |
-| 10 | 39–40 s | the frame draws back in | — | Grow the frame (closing) |
+| 10 | 39.3–44 s | end card: lines 2 and 3 of the bottom type change to the sign-off and the style name, over the lit dusk village | slow orbit | |
+| 11 | 44–45 s | the frame draws back in | — | Grow the frame (closing) |
 
-Lines 2 and 3 of the bottom type change at 10.45, 20.45 and 30.45 s, halfway through each wave.
+Lines 2 and 3 of the bottom type change at 10.45, 20.45 and 30.45 s, halfway through each wave, and at 39.3 s for the end card.
 
 ## Score structure
 
-One continuous piece, F major, 96 BPM, a bar = 2.5 s, downbeat of bar 0 at 1.8 s so the three squats land on the downbeats of bars 3, 7 and 11 (9.3, 19.3, 29.3 s). The chords loop Bbmaj7 – C – Am7 – Dm7 (IV–V–iii–vi) once per season and resolve to Fmaj7 at 36.8 s.
+One continuous piece, F major, 96 BPM, a bar = 2.5 s, downbeat of bar 0 at 1.8 s so the three squats land on the downbeats of bars 3, 7 and 11 (9.3, 19.3, 29.3 s). The chords loop Bbmaj7 – C – Am7 – Dm7 (IV–V–iii–vi) once per season and resolve to Fmaj7 at 36.8 s, which rings on under the end card.
 
 - Piano broken chords (left hand root and fifth, right hand eighth notes) run from 0.5 s to the end; the melody is always piano. Phrase A in spring and autumn, a higher phrase B in summer, A again in winter ending on a rising A–C–F.
 - Only the thickness of the accompaniment follows the season: spring adds celesta an octave above the melody and a light shaker; summer adds a soft bass line, kick and brushes (kick lowered under the rain); autumn keeps them lighter and doubles the melody on marimba; winter drops the drums, doubles the melody on a music box and holds long bass notes.
 - Every squat sounds the same: a soft low thump at the squat (T − 0.42 s), a springy rising "boing" at T, a ten-note harp run up from D, a quiet whoosh.
-- Foley, all under the music: swallows and ducks; cicadas, a distant thunder at 11.9 s, rain and drips, celesta for the lotus; leaves, haystack pops, six goose calls panned east to west; wind, a pop for the snowman, twelve celesta *tings* on F-pentatonic notes as the windows light.
+- Foley, all under the music: swallows and ducks; cicadas, a distant thunder at 11.9 s, rain and drips, celesta for the lotus; leaves, haystack pops, six goose calls panned east to west; wind, a pop for the snowman, twelve celesta *tings* on F-pentatonic notes as the windows light; at the end card (39.3 s, the next downbeat) a low piano F and a music box rising F–A–C–F.
 - Synthesised in `demo/music.py` (additive piano with two detuned strings and a hammer click, detuned-saw pad, noise reverb); mastered by `core/render/mux.sh` to −14 LUFS.
 
 ## Palette & props
@@ -59,7 +60,7 @@ One continuous piece, F major, 96 BPM, a bar = 2.5 s, downbeat of bar 0 at 1.8 s
 
 ## End card
 
-None: the frame draws back in at 39 s over the lit dusk village, with the three bottom lines fading out with it.
+No separate card: the film's own three lines under the frame carry it. At 39.3 s, over the lit dusk village, line 1 keeps the title and lines 2 and 3 change (the usual fade) to `Eian × LemoLab × Claude Opus 5.5`, drawn in the title's ink at weight 600 so it is not missed (`strong2` in `drawText`), and 孟菲斯微缩景观 · MEMPHIS DIORAMA in the data line; they hold until the frame draws back in at 44 s and fade out with it. Eian made this style and its demo. The "LemoLab × Claude Opus 5.5" sign-off belongs to this library's demo only; a user's film carries no LemoLab credit and no copy of this card.
 
 ## Build notes
 

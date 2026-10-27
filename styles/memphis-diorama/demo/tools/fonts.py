@@ -4,7 +4,7 @@ import sys, os, re, ssl, urllib.request, urllib.parse
 D = sys.argv[1]
 main = open(os.path.join(D, 'main.js'), encoding='utf-8').read()
 src = main[main.index('const TEXT = ['):main.index('const TITLE')] + main[main.index('const TITLE'):].split('\n', 1)[0]  # only the on-screen strings
-cjk = sorted(set(re.findall(r'[　-〿一-鿿＀-￯·°]', src)))
+cjk = sorted(set(re.findall(r'[　-〿一-鿿＀-￯·°×]', src)))
 latin = ''.join(chr(c) for c in range(32, 127))
 text = ''.join(cjk) + latin
 print(len(cjk), 'CJK chars')
