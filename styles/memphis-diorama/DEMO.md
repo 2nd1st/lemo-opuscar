@@ -76,7 +76,11 @@ Fonts (if missing) → picture at 60 fps with `core/render/video.mjs` (≈ 2.5 m
 | `demo/main.js` | the place, its four seasons, the timeline and the page contract (`render(t)`, `DUR`, `TEXTS(t)`) |
 | `demo/people.js` | distant figures and the walk cycle |
 | `demo/music.py` | the score and foley, written to `demo/out/mix.wav` |
-| `demo/tools/fonts.py` | subsets Noto Sans SC, Inter Tight, IBM Plex Mono to the on-screen characters |
+| `demo/tools/fonts.py` | subsets Noto Sans SC, Inter Tight, IBM Plex Mono to the on-screen characters (needs the network; input below) |
+
+**Fonts.** `python -I demo/tools/fonts.py <dir>` reads `<dir>/main.js` and takes the Chinese characters only from the text that starts at `const TEXT = [` and runs to the end of the `const TITLE` line; Latin always gets all of printable ASCII. A `main.js` without both markers stops with `ValueError: substring not found`, and a Chinese character written anywhere else (a callout, a sign texture) is not in the subset and falls back to a system font. So in your own film either keep every on-screen string inside `const TEXT = [ … ]` followed by a one-line `const TITLE = '…'` (it may be `''`), or change the `src = …` line of your copy to collect your strings. It downloads the subsets from the Google Fonts CSS2 API (`fonts.googleapis.com`, `&text=`) and the OFL texts from `raw.githubusercontent.com/google/fonts`, so it needs the network; it writes `fonts/*.woff2`, `fonts/fonts.css` and `fonts/OFL-*.txt`. `build.sh` runs it only when a `.woff2` is missing; run it again after any change to the words.
+
+**Bottom type in the demo.** The demo passes `text: [TITLE, …]` to `dio.render`, and when lines 2 and 3 change it covers them with a paper-coloured band (`fillRect(0, 948, 1920, 60)` in `main.js`) that fades. That band fits only this layout (lines 2 and 3 change, line 1 stays); for a film of your own, use `''` for unused lines and draw the cross-fade yourself (STYLE.md §10, "The bottom type").
 
 **Seasonal materials.** `S([spring, summer, autumn, winter], { patCols: […] })` in `main.js` makes a `flat()` material that remembers four colours. Each frame, `place(t)` sets `uCol` to the current season and `uCol2` to the next one, and `setSeason(x, z, r)` gives the wave's centre and radius: pixels inside the ring draw `uCol2`. For actions, `at(n, p)` returns how far season *n* has reached position *p* (0 → 1), so anything can grow, fold or fall as the ring passes it.
 
@@ -96,6 +100,40 @@ window.render = (t) => {
   dio.cam.position.set(18, 14, 18); dio.cam.lookAt(0, 1, 0); dio.fitShadow(new THREE.Vector3(0, 0, 0), 20);
   dio.render(t, Math.round(t * 60), { text: ['海边小屋  Beach Hut', '', ''] });
 };
+```
+
+**Night to day by area (the demo never does it).** The demo's dusk is global (`setNight(0.62 …)`, `setDusk`, `setLamps` in `place(t)`). For a dawn that spreads from one landmark, keep `setNight(0)` and give every changing material its night and day colours through the season wave (STYLE.md §3, §10). The night colour follows the shader's own rule (luminance toward violet, `FLAT_FS` in `memphis.js`); `n` is how far into the night (the demo's dusk stops at 0.62; go up to about 0.8 for deep night, never 1, which reads grey all over):
+
+```js
+const nightOf = (hex, n = 0.62) => {           // the shader's night colour, in JS
+  const c = new THREE.Color(hex), l = 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b;
+  const d = (v, a, b, add) => 0.4 * v * a + 0.6 * l * b + add;
+  return '#' + c.clone().lerp(new THREE.Color().setRGB(d(c.r, 0.25, 0.24, 0.008), d(c.g, 0.26, 0.22, 0.007), d(c.b, 0.44, 0.46, 0.024)), n).getHexString();
+};
+const ND = (day, o = {}) => flat(nightOf(day), { ...o, col2: day,             // night now, day once the ring has passed
+  patCol: o.patCol && nightOf(o.patCol), patCol2: o.patCol });
+const lit = flat('#FFD36E', { emit: true, col2: '#BFE4FF' });                    // a lit window or lamp head: warm, then day glass
+const pool = (x, z, r, groundDay) => {                                          // a lamp's pool: warm disc, then the ground's colour
+  const m = mesh(new THREE.CircleGeometry(r, 36).rotateX(-Math.PI / 2),
+    flat('#' + new THREE.Color(nightOf(groundDay)).lerp(new THREE.Color('#FFD36E'), 0.35).getHexString(), { col2: groundDay, shadow: false }),
+    x, 0.015, z, dio.scene);                                                     // 1.5 cm up: no z-fighting with the ground
+  m.userData.noOutline = true; m.castShadow = false; return m;
+};
+// per frame: setNight(0); setSeason(x0, z0, radius(t));   for night falling, swap each pair (flat(day, { col2: nightOf(day) }))
+```
+
+Anything that should act as the ring reaches it (a shutter rolling up, a bird taking off) times itself from the ring: the time the radius passes its distance from the centre, as `at(n, p)` does for the seasons in `main.js`.
+
+**Cutaway (the demo never does it; the engine has no section tool).** Make the near part its own group and move it in two steps; cut faces carry `pat: 5`:
+
+```js
+const near = new THREE.Group(); dio.scene.add(near);                             // front wall, roof lid, a slab of ground…
+mesh(box(12, 6, 0.4), flat('#FF9C6B', { pat: 4, patCol: '#FFB98F', patScale: 0.5 }), 0, 0, 4, near);
+const cut = flat('#E07A55', { pat: 5, patCol: '#25214A', patScale: 0.35 });     // section faces: one step darker, hatched
+mesh(box(12, 0.02, 0.4), cut, 0, 0, 4.21, near);                                 // e.g. the wall's cut top, seen once the lid is gone
+// in render(t): a = ease(…) 0→1 to open, back to 0 to close
+//   lid:  y up first, then z back   (lid.position.set(0, 3 * ease(a * 2), -12 * ease(a * 2 - 1)))
+//   wall: straight down below the ground (near.position.y = -6.5 * a); near.visible = a < 0.99;
 ```
 
 Pitfalls tied to this demo's props: reeds first read as ink scribbles (fixed with thicker stems and no outline); a constant-speed orbit lost the pond after 25 s (fixed by easing the camera down after 18 s); door-lamp light pools on the ground also lit the roofs above them (fixed by moving each pool 2.3 m out onto the lane).
