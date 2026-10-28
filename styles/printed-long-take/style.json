@@ -1,0 +1,19 @@
+{
+ "slug": "printed-long-take",
+ "num": "75",
+ "en": "Printed Long Take",
+ "cn": "印刷长镜头",
+ "category_en": "Print & Printmaking",
+ "category_cn": "印刷与版画",
+ "film": "Thirty-Three Cranes",
+ "line": "A winter valley in Hokkaido drawn as a scratchboard print, one unbroken take: red-crowned cranes wake in a steaming river, fly to a feeding field, and a carved board counts them back from 33 to 1,927.",
+ "line_cn": "北海道的冬日河谷画成刮版画，一镜到底：丹顶鹤在冒白汽的河里醒来，飞到投喂地，一块刻字木牌把它们从 33 只数回到 1,927 只。",
+ "uses": [
+  "Places and journeys",
+  "Wildlife and conservation",
+  "A place changing over years",
+  "Seasons and landscapes"
+ ],
+ "frame_sec": 15.4,
+ "dur": 60.0
+}
