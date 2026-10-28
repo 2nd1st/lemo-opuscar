@@ -391,6 +391,24 @@
   "dur": 32.4
  },
  {
+  "slug": "chalkboard",
+  "num": "73",
+  "en": "Chalkboard",
+  "cn": "黑板粉笔",
+  "cat": "手绘与绘画",
+  "cat_en": "Hand-drawn & Painting",
+  "film": "The Story of Chinese Characters",
+  "line": "On a freshly wiped classroom board, chalk writes a popular claim about two characters, wipes it, and writes 射 back through three thousand years until the answer goes under a child's question.",
+  "line_cn": "刚擦干净的教室黑板上，粉笔先写下网上流行的说法，再一擦，把「射」从三千年前一路写回来，最后在孩子的问题下面写上答案。",
+  "uses": [
+   "Where a word or character comes from",
+   "Clearing up a common misconception",
+   "A worked problem, step by step",
+   "A short lesson on one idea"
+  ],
+  "dur": 49.3
+ },
+ {
   "slug": "shadow-puppet",
   "num": "07",
   "en": "Shadow Puppetry",
@@ -542,6 +560,24 @@
    "Event posters"
   ],
   "dur": 38.4
+ },
+ {
+  "slug": "printed-long-take",
+  "num": "75",
+  "en": "Printed Long Take",
+  "cn": "印刷长镜头",
+  "cat": "印刷与版画",
+  "cat_en": "Print & Printmaking",
+  "film": "Thirty-Three Cranes",
+  "line": "A winter valley in Hokkaido drawn as a scratchboard print, one unbroken take: red-crowned cranes wake in a steaming river, fly to a feeding field, and a carved board counts them back from 33 to 1,927.",
+  "line_cn": "北海道的冬日河谷画成刮版画，一镜到底：丹顶鹤在冒白汽的河里醒来，飞到投喂地，一块刻字木牌把它们从 33 只数回到 1,927 只。",
+  "uses": [
+   "Places and journeys",
+   "Wildlife and conservation",
+   "A place changing over years",
+   "Seasons and landscapes"
+  ],
+  "dur": 60.0
  },
  {
   "slug": "swiss-motion",
@@ -746,6 +782,60 @@
    "Trade shows"
   ],
   "dur": 39.0
+ },
+ {
+  "slug": "transit-map",
+  "num": "72",
+  "en": "Transit Map",
+  "cn": "地铁线路图",
+  "cat": "信息与发布",
+  "cat_en": "Information & Keynote",
+  "film": "6 Kilometres",
+  "line": "A printed metro map grows from one 6 km line in 1993 to 21 lines and 906 km, as a camera rides the pen, dives under the river and sweeps the paper.",
+  "line_cn": "一张印在纸上的线路图，从 1993 年的 6 公里一路长到 21 条线、906 公里；镜头跟着笔尖走，压低过江，再贴着纸面扫过去。",
+  "uses": [
+   "City and transport stories",
+   "Growth over the years",
+   "Roadmaps and routes",
+   "Network explainers"
+  ],
+  "dur": 47.0
+ },
+ {
+  "slug": "isometric-picture-book",
+  "num": "74",
+  "en": "Isometric Picture Book",
+  "cn": "等距绘本",
+  "cat": "信息与发布",
+  "cat_en": "Information & Keynote",
+  "film": "Seventy-Two Seats",
+  "line": "A clean isometric gate, jet bridge and cabin where faceless travellers board in order, serif words land on the floor and a paper roof flips open, so the order of movement explains why one way fills 72 seats in nearly half the time.",
+  "line_cn": "干净的等距登机口、廊桥和机舱，背影小人按顺序登机，衬线大字落在地上，机舱顶盖像纸盖一样翻开；动的顺序本身就讲清了为什么换一种叫法能快将近一半。",
+  "uses": [
+   "Everyday rules and etiquette",
+   "Queues, flows and boarding",
+   "Comparing two ways of doing it",
+   "Public-space explainers"
+  ],
+  "dur": 59.8
+ },
+ {
+  "slug": "circuit-board",
+  "num": "76",
+  "en": "Circuit Board",
+  "cn": "电路板",
+  "cat": "信息与发布",
+  "cat_en": "Information & Keynote",
+  "film": "Seven Milliseconds",
+  "line": "The whole story is a printed circuit board seen from above: rivers are channels in the copper, places are pads, words are silkscreen, and the current runs along the traces from a dam 2,080 km to a phone charger.",
+  "line_cn": "整个故事画成一块俯视的电路板：江河是铜皮里的沟槽，地方是焊盘，字是丝印；电流顺着走线，从水坝跑过 2,080 公里，一直跑进手机充电器。",
+  "uses": [
+   "How energy and signals travel",
+   "Supply chains and routes, end to end",
+   "Inside a device or a system",
+   "Same mechanism at two scales"
+  ],
+  "dur": 60.0
  },
  {
   "slug": "rubber-hose",
@@ -1001,5 +1091,42 @@
    "Beauty"
   ],
   "dur": 32.0
+ },
+ {
+  "slug": "memphis-diorama",
+  "num": "71",
+  "en": "Memphis Diorama",
+  "cn": "孟菲斯微缩景观",
+  "cat": "材质与 3D",
+  "cat_en": "Materials & 3D",
+  "film": "Four Seasons in Pomelo Town",
+  "line": "One river bend through spring, summer, autumn and winter in one take; each season starts when the big tree squats and springs back.",
+  "line_cn": "同一个河湾一镜到底过完春夏秋冬：大树往下一蹲、再弹起来，就换一季。",
+  "uses": [
+   "Web hero scenes",
+   "Ambient loops",
+   "Seasonal series",
+   "How things work",
+   "City data maps"
+  ],
+  "dur": 45.0
+ },
+ {
+  "slug": "desktop-flythrough",
+  "num": "77",
+  "en": "Desktop Flythrough",
+  "cn": "桌面穿梭",
+  "cat": "材质与 3D",
+  "cat_en": "Materials & 3D",
+  "film": "Before the Ding",
+  "line": "A cat photo hops across app cards laid on a sunlit desk, squeezed by a press, parked in a server tower and fetched by a friend's phone, as one camera flies after it.",
+  "line_cn": "一张猫照片在阳光下的桌面上跳过一张张应用卡片：被压小、存进服务器小楼、再被朋友的手机取回，一个镜头一路跟着飞。",
+  "uses": [
+   "How an app works, step by step",
+   "Workflows across several tools",
+   "Product and feature explainers",
+   "Data moving between devices"
+  ],
+  "dur": 60.0
  }
 ]
