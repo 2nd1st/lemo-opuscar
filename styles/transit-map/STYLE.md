@@ -74,6 +74,8 @@ Example (our demo): paper #F2EEE5, ink #1B1C1E, secondary text #4A4740, river #B
 - **Legibility is measured where the text lands**: font size on the sheet × the zoom at that point, foreshortened by the tilt. Text the viewer must read keeps the native line ≥ 20 px at 1080p and the second line ≥ 12 px (≥ 16 px on the counter); a two-line label counts only when its block is ≥ 26 px tall on screen. Below that, hide it by level of detail or move the camera.
 - **Callouts** are printed on the paper: a bar 0.10 G wide in the accent (or the line being drawn), then the date in heavy figures, one native line, one second-language line; they wipe on from the bar in about 0.5 s. When a callout must sit over lines it gets a paper-coloured block with a soft shadow, no border.
 - **Cartouche**: in one corner of the sheet, an ink bar, the map's name in both languages and a one-line note in grey. It is furniture: the camera finds it, it is not a title card.
+- **The film's title is printed on the map.** At the start the title appears in the map's world: the cartouche (the map's name is the film's title), a line bullet, a station name plate by the lens, or a printed callout. Never a card or caption floating over the picture. It is bilingual like every printed text (native line above, second line below, one line each) and is held for its reading time where it lands (sizes and legibility above).
+- **The film closes on the whole network.** The last shot shows the finished network entire, in top view or a gentle tilt, every line drawn; the end title and any credit are printed on the sheet (the cartouche, or a block in a margin, in the map's own type and ink), never laid over it. A detail the story ends on (a terminus, a first section) comes before this view, not instead of it.
 - **The counter**: a dark enamel plate in the top-left corner (about 660 px wide, 86 px per row, rounded 14 px, four screws), rows with the native label above (24 px), the second label below (17 px), cream rolling drums (38 × 60 px, heavy figures), units at the right. Drums land only on sourced values; in between they spin blurred so no invented figure can be read.
 - Reading time: hold every line ≥ (CJK characters ÷ 4.5 + other characters ÷ 15) + 1.5 s.
 
@@ -136,7 +138,7 @@ Framing: the subject sits off-centre with room ahead of a moving tip; the counte
 - **A flat map**: a top view all the way through reads as a slideshow. Tilt, focus and the sheet edge are what make it an object; a still of the style should show at least one tilted view with depth of field.
 - **Paper too loud**: tooth and fibres stronger than a few percent turn the sheet into plaster or canvas.
 - **Mode by colour**: a ferry or bus line in a "ferry blue" breaks colour as identity. Use the line forms in §3.
-- **Real networks**: published colours and station names are facts, logos and branded bullets are not; the film is an unofficial tribute and says so on screen. Check every date and length against official sources; encyclopaedia figures for opening sections are often for a different span, and stations are renamed.
+- **Real networks**: published colours and station names are facts, logos and branded bullets are not; the film is an unofficial tribute and says so on screen. Check every date and length against official sources; encyclopaedia figures for opening sections are often for a different span, and stations are renamed (the data rule is in §11).
 - **Counters that interpolate** invent numbers. Land only on sourced values; spin between them.
 - **Texture resolution in tilted views**: limit the far distance of the inked region and let depth of field hide the softness.
 - **Stale ink**: when the inked texture is reused, reset the 2D transform before clearing it, or last frame's ink ghosts every other frame.
@@ -170,9 +172,22 @@ In our demo (`demo/`), the engine is generic and the film lives in two data file
 
 The agent decides the network (real or invented), what a line stands for, the order of growth, the camera route, which comparison (if any) gets a printed panel, the accent colour and what the counter counts.
 
+What does not vary, whatever the topic:
+
+- **The network is real data, checked.** Use the user's own data first (lines, stations, opening dates, lengths, ridership). Without it, find it for the topic and cross-check every figure in at least two reliable sources, the operator and government open data first, the press next, encyclopaedias only in support. Keep `FACTS.md` in the project folder: on-screen claim, value, source URL, the quoted wording, date checked; plus the figures checked and not used, and why. A figure that cannot be confirmed, or whose sources disagree, never goes on the sheet as fact: drop it, or print it with the definition it depends on (route length with or without a maglev; a station's name before or after a renaming), or ask the user when the story rests on it. Station names and line colours are facts too (§9). An invented network is only for a topic that is itself fiction or a metaphor (a product roadmap, a career): it says so on screen, and any real fact inside it is checked the same way.
+- **The map is full enough to carry the film.** One line on blank paper is not a map. The sheet carries enough lines, interchanges, geography and dated states that every shot has something new to show and the wide shots are network, not empty paper; roughly one new event (a line, an interchange, a landed value, a printed callout) every 3–5 s of film. Minimums, by kind of topic:
+
+| Topic | Lines | Named stations | Interchanges | Geography and landmarks | Dated states |
+|---|---|---|---|---|---|
+| A whole network (a city, a region), 30–60 s | ≥ 5 | ≥ 40 | ≥ 8 | ≥ 1 water body, ≥ 3 named landmarks (a hub, a railway station, an airport, a printed mark) | ≥ 4 years or stages, each with a sourced value |
+| One line or one route (a commute, a new line), up to about 20 s | the line + ≥ 3 lines it crosses, drawn with their interchanges | ≥ 8 on the line | ≥ 3 | as above | ≥ 2 (years, or times of day) |
+| A topic drawn as a network (a roadmap, a career) | ≥ 4 | ≥ 20 | ≥ 4 | printed regions or bands standing for its domains | ≥ 3 |
+
+  A longer film adds to these rather than holding the same picture longer. When the real network is smaller than the floor (a town with one tram line), draw what is real and widen the topic instead (its buses and ferries, the railway it meets, its history), never invent lines.
+
 - **Structures**: a single line built stop by stop, ending on its terminus; two rival networks growing on one sheet, then compared; a network shrinking line by line (closures) and one survivor.
-- **Openings**: a lamp or coin in close-up match-cut to a station dot; a blank sheet where the first tip starts at frame one; a low sweep over a finished map that rewinds to its first stop.
-- **Endings**: a terminus ring that becomes the end card's frame; the camera rising until the sheet's edge and the table show; a train leaving the last station off the sheet.
+- **Openings** (the title is printed on the map, §4): a lamp or coin in close-up match-cut to a station dot; a blank sheet where the first tip starts at frame one, beside the cartouche; a low sweep over a finished map that rewinds to its first stop.
+- **Endings** (every one closes on the whole network, §4): a terminus ring lands, then the camera rises to the full network with the end title printed in a margin; the camera rising until the sheet's edge and the table show; a train leaving the last station, then the full view.
 
 ---
 
