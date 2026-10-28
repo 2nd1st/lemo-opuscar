@@ -1,0 +1,19 @@
+{
+ "slug": "isometric-picture-book",
+ "num": "74",
+ "en": "Isometric Picture Book",
+ "cn": "等距绘本",
+ "category_en": "Information & Keynote",
+ "category_cn": "信息与发布",
+ "film": "Seventy-Two Seats",
+ "line": "A clean isometric gate, jet bridge and cabin where faceless travellers board in order, serif words land on the floor and a paper roof flips open, so the order of movement explains why one way fills 72 seats in nearly half the time.",
+ "line_cn": "干净的等距登机口、廊桥和机舱，背影小人按顺序登机，衬线大字落在地上，机舱顶盖像纸盖一样翻开；动的顺序本身就讲清了为什么换一种叫法能快将近一半。",
+ "uses": [
+  "Everyday rules and etiquette",
+  "Queues, flows and boarding",
+  "Comparing two ways of doing it",
+  "Public-space explainers"
+ ],
+ "frame_sec": 37.5,
+ "dur": 59.84
+}
