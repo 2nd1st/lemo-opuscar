@@ -1,0 +1,19 @@
+{
+ "slug": "chalkboard",
+ "num": "73",
+ "en": "Chalkboard",
+ "cn": "黑板粉笔",
+ "category_en": "Hand-drawn & Painting",
+ "category_cn": "手绘与绘画",
+ "film": "The Story of Chinese Characters",
+ "line": "On a freshly wiped classroom board, chalk writes a popular claim about two characters, wipes it, and writes 射 back through three thousand years until the answer goes under a child's question.",
+ "line_cn": "刚擦干净的教室黑板上，粉笔先写下网上流行的说法，再一擦，把「射」从三千年前一路写回来，最后在孩子的问题下面写上答案。",
+ "uses": [
+  "Where a word or character comes from",
+  "Clearing up a common misconception",
+  "A worked problem, step by step",
+  "A short lesson on one idea"
+ ],
+ "frame_sec": 42.5,
+ "dur": 49.28
+}
