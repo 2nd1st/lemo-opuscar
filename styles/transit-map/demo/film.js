@@ -1,12 +1,25 @@
-// 《6 公里》 6 Kilometres — Transit Map style demo.
-// A printed schematic of the Shanghai Metro grows year by year from the 6 km first section of Line 1 (1993).
-// Unofficial fan film: line colours and station names are public facts; no operator logo, our own schematic.
+// Transit Map engine: a printed octilinear network drawn by pen tips on a sheet of paper, under a perspective camera.
+// Generic: it holds no network and no story. The network is net.js (window.NET); the film's direction is timeline.js
+// (export DATA, optional export WARP). Every DATA hook below has a default, so a film defines only what it uses;
+// the full list with signatures is in STYLE.md §10 and DEMO.md "Build notes".
 // render(t) depends only on t: line growth, stations, trains, camera and counters are closed-form functions of t,
 // precomputed at load where needed (station light-up times, label placement).
 import { clamp, lerp, seg, ss, eio, eo, ei, back, monotone, track, mulberry, hash } from '/core/lib.js';
-import { DATA, WARP } from './timeline.js';
+import * as TL from './timeline.js';
 
-const { G, ST, LINES, RIVER, SUZHOU, expand, pt: gpt } = window.NET;
+const DEFAULTS = {
+  // required: DUR (story seconds), SHEET [x0, y0, x1, y1] (world units), PHASES, camera(t) -> {x, y, z, tilt, head, ap, focus?, far?, vig?, dim?}
+  WARP: null,                                   // [[filmT, storyT], ...]; default: film time = story time
+  LABEL_PREF: {}, nameAt: null, labelOnly: null, forceLabel: () => 0, hubLabelScale: z => clamp(Math.pow(.85 / z, .6), 1, 1.75),
+  noRoundel: [], roundelPos: {}, roundelAlpha: () => 1, roundelScale: z => clamp(Math.pow(.9 / z, .55), 1, 1.8),
+  drops: {}, dropRing: null,                    // ids of interchanges that fall onto the paper; dropRing(c, n, k2, helpers) overrides the landing
+  veil: () => 0, stationDim: () => 1, highlight: () => {},
+  waterLabels: null, riverLabels: () => {}, furniture: () => {}, annotations: () => {}, trains: () => {}, overlay: () => {},
+  tunnelOnly: () => false, cues: [], init: () => {},
+};
+const DATA = { ...DEFAULTS, ...TL.DATA };
+const WARP = TL.WARP || DATA.WARP || [[0, 0], [DATA.DUR, DATA.DUR]];
+const { G, ST, LINES, WATER = [], LINKS = [], expand, pt: gpt } = window.NET;
 const DUR = DATA.DUR;                     // story time (tau)
 const DUR_T = WARP[WARP.length - 1][0]; window.DUR = DUR_T;   // film time
 // film time t -> story time tau (piecewise linear: a slow 1995 beat, a longer verdict hold)
@@ -79,9 +92,28 @@ function subPath(c, path, a, b) { // trace the part [a, b] of a path into the cu
 const W = v => v * G;
 
 // river polyline (world) and distance to it
-const RIV = RIVER.map(q => [W(q[0]), W(q[1])]), SUZ = SUZHOU.map(q => [W(q[0]), W(q[1])]);
-const RIVER_W = 76;
+// water (NET.WATER): bands {line: [[x, y]...], outer, inner} (widths in G) and areas {area: [[x, y]...]} (sea, bay, harbour,
+// lake: a closed octilinear outline). With tunnel: true, lines crossing it turn dashed with a casing.
+const WAT = WATER.map(w => ({ ...w, pts: (w.line || w.area).map(q => [W(q[0]), W(q[1])]), outerW: W(w.outer ?? .81), innerW: W(w.inner ?? .75) }));
+function inPoly(poly, x, y) { let ins = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const [xi, yi] = poly[i], [xj, yj] = poly[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) ins = !ins; } return ins; }
+function inWater(x, y) { // inside a tunnel-making body of water, with the same 0.075 G margin past its edge
+  for (const w of WAT) { if (!w.tunnel) continue;
+    if (w.area) { if (inPoly(w.pts, x, y) || distPoly([...w.pts, w.pts[0]], x, y) < 7.5) return true; }
+    else if (distPoly(w.pts, x, y) < w.outerW / 2 + 7.5) return true; }
+  return false;
+}
 function distPoly(poly, x, y) { let best = 1e18; for (let i = 1; i < poly.length; i++) { const [ax, ay] = poly[i - 1], [bx, by] = poly[i], dx = bx - ax, dy = by - ay, l2 = dx * dx + dy * dy || 1; const f = clamp(((x - ax) * dx + (y - ay) * dy) / l2); best = Math.min(best, Math.hypot(x - ax - dx * f, y - ay - dy * f)); } return best; }
+
+// ---------------------------------------------------------------- modes (line form carries the mode; colour carries identity)
+// metro: solid 0.15 G · light (tram, light rail, maglev, people mover; old flag thin: true): solid 0.07 G
+// bus: hollow 0.15 G, edges max(0.04 G, 2.5 px), paper core · ferry: 0.07 G thread on a 0.25 G paper lane, never dashed
+const MODES = {
+  metro: { lw: 15, fillet: 34, minor: true }, light: { lw: 7, fillet: 30 },
+  bus: { lw: 15, fillet: 34, hollow: true, square: true, surface: true }, ferry: { lw: 7, fillet: 30, lane: 25, square: true, surface: true, pier: true },
+};
+const modeOf = L => MODES[L.mode || (L.thin ? 'light' : 'metro')];
+const lum = hex => { const v = [1, 3, 5].map(i => { const c = parseInt(hex.slice(i, i + 2), 16) / 255; return c <= .04045 ? c / 12.92 : Math.pow((c + .055) / 1.055, 2.4); }); return .2126 * v[0] + .7152 * v[1] + .0722 * v[2]; };
+const inkOn = L => L.ink ?? lum(L.color) > .4;           // ink text in the bullet on light colours
 
 // ---------------------------------------------------------------- network build
 const PATHS = {}; // key: lineId or lineId+'b'
@@ -91,13 +123,13 @@ for (const L of LINES) {
   for (const key of ['route', 'branch']) {
     if (!L[key]) continue;
     const ex = expand(L[key]);
-    const path = rounded(ex.pts.map(q => [W(q[0]), W(q[1])]), L.thin ? 30 : 34);
+    const path = rounded(ex.pts.map(q => [W(q[0]), W(q[1])]), modeOf(L).fillet);
     path.line = L.id; path.color = L.color; path.key = L.id + (key === 'branch' ? 'b' : '');
     path.st = []; // stations on the path: {id, s, x, y}
     L[key].forEach(it => { if (it === '/') return; const id = NET.sid(it); if (!id) return; const q = gpt(it); path.st.push({ id, x: W(q[0]), y: W(q[1]), s: project(path, W(q[0]), W(q[1])) }); });
     // tunnel intervals: where the path is inside the river band
     path.tun = []; let inT = false, s0 = 0;
-    for (let s = 0; s <= path.total; s += 4) { const q = pointAt(path, s), d = distPoly(RIV, q[0], q[1]); const now = d < RIVER_W / 2 + 10;
+    for (let s = 0; s <= path.total; s += 4) { const q = pointAt(path, s); const now = !modeOf(L).surface && inWater(q[0], q[1]);
       if (now && !inT) { inT = true; s0 = s; } if (!now && inT) { inT = false; path.tun.push([s0, s]); } }
     if (inT) path.tun.push([s0, path.total]);
     // minor stops between named stations
@@ -257,11 +289,11 @@ function labelText(c, n, a, scaleK = 1) {
   const w = Math.max(wz, we), lx = L.align === 'left' ? ox : L.align === 'right' ? ox - w : ox - w / 2;
   regW('st-' + n.id, nm[0] + ' ' + nm[1], n.cx + lx, n.cy + oy, n.cx + lx + w, n.cy + oy + zs + 3 * k + es, a, 26);
 }
-function roundel(c, x, y, line, sc, r = 25) {
+function roundel(c, x, y, line, sc, r = 25) {   // the line bullet: a disc for rail, a rounded square for bus and ferry
   const L = LINE[line]; c.save(); c.translate(x, y); c.scale(sc, sc);
-  c.beginPath(); c.arc(0, 0, r, 0, 7); c.fillStyle = L.color; c.fill();
-  const txt = L.id === 'P' ? '浦江' : L.id === 'M' ? '磁浮' : L.id === 'A' ? '机场' : L.id;
-  c.fillStyle = ['3', '9', '10', '13', '16', '2', '15'].includes(L.id) ? INK : '#fff';
+  c.beginPath(); if (modeOf(L).square) c.roundRect(-24, -24, 48, 48, 12); else c.arc(0, 0, r, 0, 7); c.fillStyle = L.color; c.fill();
+  const txt = L.bullet ?? L.id;
+  c.fillStyle = inkOn(L) ? INK : '#fff';
   c.font = F(800, L.id.length > 1 || txt.length > 1 ? (txt.length > 2 || /[^\x00-\x7f]/.test(txt) ? 15 : 22) : 27); c.textAlign = 'center'; c.textBaseline = 'middle';
   c.fillText(txt, 0, 1.5); c.restore();
 }
@@ -279,6 +311,61 @@ function train(c, path, s, color, a, scale = 1) {
   c.restore();
 }
 
+function surfaceLine(c, path, a, b, L, M, z) {
+  // Paper inside a bus line or around a ferry is not painted: it is erased out of the ink layer (destination-out), so the
+  // procedural paper of the WebGL pass shows through with its own tooth and light. Surface lines are drawn before every
+  // solid line, so the erase only removes water and other surface lines under them, never a metro line or a label.
+  c.save(); c.lineCap = 'round'; c.lineJoin = 'round';
+  const px = 1 / Math.max(z, .01);                                        // one screen pixel at the aim point, in world units
+  if (M.hollow) {
+    // 0.15 G with 0.04 G edges; in wide shots it widens so each edge stays >= 2.5 px and the paper core >= 2.5 px
+    const e = Math.max(4, 2.5 * px), w = Math.max(M.lw, 2 * e + 2.5 * px);
+    if (lum(L.color) > .4) { c.strokeStyle = INK; c.lineWidth = w + 2 * Math.max(1.5, px); c.beginPath(); subPath(c, path, a, b); c.stroke(); }  // light colours: an ink rim, 0.015 G or 1 px
+    c.strokeStyle = L.color; c.lineWidth = w; c.beginPath(); subPath(c, path, a, b); c.stroke();
+    c.globalCompositeOperation = 'destination-out'; c.lineWidth = w - 2 * e; c.lineCap = 'butt'; c.beginPath(); subPath(c, path, a + 1, b - 1); c.stroke();
+  } else if (M.lane) {
+    c.globalCompositeOperation = 'destination-out'; c.lineWidth = Math.max(M.lane, 10 * px); c.beginPath(); subPath(c, path, a, b); c.stroke();   // the paper lane, >= 10 px
+    c.globalCompositeOperation = 'source-over'; c.strokeStyle = L.color; c.lineWidth = M.lw; c.beginPath(); subPath(c, path, a, b); c.stroke();
+  }
+  c.restore();
+}
+function pier(c, x, y, color, sc = 1) { c.save(); c.translate(x, y); c.scale(sc, sc); c.beginPath(); c.roundRect(-8.5, -8.5, 17, 17, 4); c.fillStyle = '#fff'; c.fill(); c.lineWidth = 4; c.strokeStyle = color; c.stroke(); c.restore(); }
+function drawLinks(c, t, view) {   // NET.LINKS: {a, b, out}: in-station (white bar, ink outline) or out-of-station (ink dots)
+  for (const k of LINKS) {
+    const A = SNODE[k.a], B = SNODE[k.b]; if (!A || !B) continue;
+    const t0 = Math.max(A.t1, B.t1); if (t < t0) continue;
+    const u = eo(seg(t, t0, t0 + .35)), x1 = lerp(A.cx, B.cx, u), y1 = lerp(A.cy, B.cy, u);
+    c.save(); c.lineCap = 'round';
+    if (k.out) { const len = Math.hypot(x1 - A.cx, y1 - A.cy), n = Math.floor(len / 8); c.fillStyle = INK;
+      for (let i = 0; i <= n; i++) { const f = n ? i / n : 0; c.beginPath(); c.arc(lerp(A.cx, x1, f), lerp(A.cy, y1, f), 1.5, 0, 7); c.fill(); } }
+    else { c.strokeStyle = INK; c.lineWidth = 6 + 2 * 5.5; c.beginPath(); c.moveTo(A.cx, A.cy); c.lineTo(x1, y1); c.stroke();
+      c.strokeStyle = '#fff'; c.lineWidth = 6; c.stroke(); }
+    c.restore();
+  }
+}
+function dropRing(c, n, k2, { capsule, INK }) {   // default landing of a falling interchange: shock rings in ink and in each line's colour
+  if (k2 < 0) return;
+  if (k2 < .9) { const v = k2 / .9, cols = [...n.pts].sort((p, q) => p.tl - q.tl).map(p => LINE[p.line].color);
+    c.save(); c.globalAlpha *= (1 - v) * .75; c.lineWidth = 7; c.strokeStyle = INK; c.beginPath(); c.arc(n.cx, n.cy, 30 + 230 * eo(v), 0, 7); c.stroke();
+    cols.forEach((col, i) => { c.lineWidth = 5; c.strokeStyle = col; c.beginPath(); c.arc(n.cx, n.cy, 26 - 4 * i + (170 - 50 * i) * eo(clamp(v * (1.15 + .15 * i))), 0, 7); c.stroke(); });
+    c.restore(); }
+  capsule(c, n, 1 + .18 * Math.exp(-k2 * 14) * Math.cos(k2 * 40), 7);
+}
+function fallingCapsule(c, t) {   // every DATA.drops interchange falls for 0.42 s before it lands at t2; its shadow sharpens
+  for (const id of Object.keys(DATA.drops)) {
+    const n = SNODE[id]; if (!n) continue; const k = t - n.t2; if (!(k > -.42 && k < 0)) continue;
+    const u = 1 + k / .42, h = 1 - ei(u);
+    c.save();
+    c.globalAlpha = .35 * u; c.fillStyle = '#000'; c.filter = `blur(${(14 * h).toFixed(1)}px)`;
+    c.beginPath(); c.ellipse(n.cx + 60 * h, n.cy + 70 * h, 34 + 40 * h, 34 + 40 * h, 0, 0, 7); c.fill(); c.filter = 'none';
+    c.globalAlpha = clamp(u * 2.5);
+    const sc = 1 + 2.4 * h; c.translate(n.cx - 10 * h, n.cy - 30 * h); c.scale(sc, sc);
+    const w = (n.box[2] - n.box[0]) / 2 + 15, hh = (n.box[3] - n.box[1]) / 2 + 15;
+    c.beginPath(); c.roundRect(-Math.max(w, 28), -Math.max(hh, 28), 2 * Math.max(w, 28), 2 * Math.max(hh, 28), 28); c.fillStyle = '#fff'; c.fill(); c.lineWidth = 7; c.strokeStyle = INK; c.stroke();
+    c.restore();
+  }
+}
+
 // ---------------------------------------------------------------- the printed sheet: static furniture
 const SHEET = DATA.SHEET;
 function sheetFurniture(c, t, view) {
@@ -292,20 +379,25 @@ function drawMap(c, t, view) {
   const veil = DATA.veil(t); // 0..1: everything but the highlighted first section fades back
   // river and creek
   c.lineJoin = 'round'; c.lineCap = 'round';
-  c.save(); c.strokeStyle = RIVERE; c.lineWidth = RIVER_W + 5; c.beginPath(); RIV.forEach((q, i) => c[i ? 'lineTo' : 'moveTo'](q[0], q[1])); c.stroke();
-  c.strokeStyle = RIVERC; c.lineWidth = RIVER_W - 1; c.stroke();
-  c.lineWidth = 15; c.strokeStyle = RIVERE; c.beginPath(); SUZ.forEach((q, i) => c[i ? 'lineTo' : 'moveTo'](q[0], q[1])); c.stroke(); c.lineWidth = 11; c.strokeStyle = RIVERC; c.stroke();
+  c.save();
+  for (const w of WAT) { c.beginPath(); w.pts.forEach((q, i) => c[i ? 'lineTo' : 'moveTo'](q[0], q[1]));
+    if (w.area) { c.closePath(); c.strokeStyle = RIVERE; c.lineWidth = W(.05); c.stroke(); c.fillStyle = RIVERC; c.fill(); }   // edge 0.025 G outside the fill
+    else { c.strokeStyle = RIVERE; c.lineWidth = w.outerW; c.stroke(); c.strokeStyle = RIVERC; c.lineWidth = w.innerW; c.stroke(); } }
   c.restore();
-  DATA.riverLabels(c, t, view, { F });
+  (DATA.waterLabels || DATA.riverLabels)(c, t, view, { F });
   sheetFurniture(c, t, view);
-  // lines
+  // walking links (under everything else on the network)
+  drawLinks(c, t, view);
+  // lines: surface forms first (bus, ferry), because their paper parts are erased out of the ink layer; then solid lines
   const active = [];
-  for (const o of PH) {
+  for (const pass of [0, 1]) for (const o of PH) {
     if (t <= o.t0) continue;
-    const head = phaseHead(o, t), path = o.path, L = LINE[path.line];
+    const head = phaseHead(o, t), path = o.path, L = LINE[path.line], M = modeOf(L);
+    if ((pass === 0) !== !!M.surface) continue;
     const a = Math.min(o.s0, head), b = Math.max(o.s0, head);
     if (b - a < .5) continue;
-    const lw = L.thin ? 7 : LW;
+    const lw = M.lw;
+    if (M.surface) { surfaceLine(c, path, a, b, L, M, view.z); if (t < o.t1 + .15) active.push({ o, head, fade: 1 - seg(t, o.t1, o.t1 + .15) }); continue; }
     c.save(); c.strokeStyle = path.color; c.lineWidth = lw; c.lineCap = 'round';
     // split by tunnel intervals: dashed inside the river
     let cur = a; const cuts = path.tun.filter(([x, y]) => y > a && x < b).sort((p, q) => p[0] - q[0]);
@@ -329,7 +421,7 @@ function drawMap(c, t, view) {
   DATA.trains(c, t, { PATHS, PH, phaseHead, train, pointAt });
   // minor stops
   if (lodMinor > 0) for (const path of Object.values(PATHS)) {
-    if (LINE[path.line].thin) continue;
+    if (!modeOf(LINE[path.line]).minor) continue;
     path.minor.forEach((s, i) => { const tl = path.minorT[i]; if (t < tl) return; const q = pointAt(path, s), k = t - tl;
       c.save(); c.globalAlpha = lodMinor * (1 - .6 * veil); stopDot(c, q[0], q[1], path.color, 6.5 * (.6 + .4 * back(seg(k, 0, .25), 3)), 3.6); c.restore(); });
   }
@@ -343,10 +435,10 @@ function drawMap(c, t, view) {
       if (n.tier <= 3 || lodMinor > 0) { const p = n.pts.reduce((a, b) => a.tl <= b.tl ? a : b); const col = LINE[p.line].color;
         const sc = .6 + .4 * back(seg(k1, 0, .28), 3);
         if (k1 < .6) { c.save(); c.globalAlpha *= (1 - k1 / .6) * .6; c.lineWidth = 3; c.strokeStyle = col; c.beginPath(); c.arc(p.x, p.y, 10 + 32 * eo(k1 / .6), 0, 7); c.stroke(); c.restore(); }
-        c.globalAlpha *= n.tier <= 3 ? 1 : lodMinor; stopDot(c, p.x, p.y, col, 8.5 * sc, 4.6); }
+        c.globalAlpha *= n.tier <= 3 ? 1 : lodMinor; if (modeOf(LINE[p.line]).pier) pier(c, p.x, p.y, col, sc); else stopDot(c, p.x, p.y, col, 8.5 * sc, 4.6); }
     } else {
       const k2 = t - n.t2, drop = DATA.drops[n.id];
-      if (drop) DATA.dropRing(c, n, k2, { capsule, INK });
+      if (drop) (DATA.dropRing || dropRing)(c, n, k2, { capsule, INK });
       else { const u = seg(k2, 0, .22), sc = lerp(2.0, 1, eo(u));
         if (k2 < .55) { c.save(); c.globalAlpha *= (1 - k2 / .55) * .5; c.lineWidth = 3.5; c.strokeStyle = INK; c.beginPath(); c.arc(n.cx, n.cy, 18 + 46 * eo(k2 / .55), 0, 7); c.stroke(); c.restore(); }
         c.globalAlpha *= clamp(u * 3); capsule(c, n, sc); }
@@ -377,6 +469,7 @@ function drawMap(c, t, view) {
     labelText(c, n, a, n.tier === 1 ? DATA.hubLabelScale(z) : 1);
   }
   DATA.annotations(c, t, view, { F, INK, MUTED, pointAt, PATHS, SNODE, W, stopDot, roundel, capsule, LINE, ...RG });
+  fallingCapsule(c, t);
 }
 
 // ---------------------------------------------------------------- frame
@@ -440,7 +533,7 @@ function events() {
 
 // ---------------------------------------------------------------- boot
 const fontList = ['400 20px Inter', '500 20px Inter', '600 20px Inter', '700 20px Inter', '800 20px Inter', '500 20px NotoSC', '600 20px NotoSC', '700 20px NotoSC', '800 20px NotoSC'];
-Promise.all(fontList.map(f => document.fonts.load(f, f.includes('Noto') ? '上海地铁' : 'A1'))).then(() => document.fonts.ready).then(() => {
+Promise.all(fontList.map(f => document.fonts.load(f, f.includes('Noto') ? '地铁' : 'A1'))).then(() => document.fonts.ready).then(() => {
   plane = window.makePlane(glC, paperTexture());
   placeLabels();
   DATA.init({ PATHS, SNODE, PH, LINE, pointAt, project, W, F, meas, basis, toScreen });

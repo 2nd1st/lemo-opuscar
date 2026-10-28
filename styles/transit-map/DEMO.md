@@ -68,10 +68,13 @@ In the sheet's lower-right corner, inked at the end: a red line runs to a termin
 demo/
   build.sh       one command: fonts, events, score + mix, picture, master, reading-time check, poster and style frame
   index.html     two canvases (WebGL plane, 2D overlay), fonts, scripts
-  net.js         the network as data + expand() (octilinear bends)
+  net.js         the Shanghai network as data: stations, 21 lines (colours, bullets, ink-on-light flags, the Maglev
+                 as mode 'light'), the Huangpu and Suzhou Creek as WATER bands, expand() (octilinear bends)
   gl.js          makePlane(): paper, light, sheet edge, depth of field, vignette
-  film.js        geometry, phases, labels, camera, inked region, map drawing, events, window.TEXTS
-  timeline.js    facts (FX), WARP, phases, camera keys, annotations, time-line panel, counter, tunnel, plate, cues
+  film.js        the generic engine (no network, no story): geometry, water, line forms, phases, labels, bullets,
+                 the falling interchange, camera, inked region, map drawing, events, window.TEXTS
+  timeline.js    this film: facts (FX), WARP, phases, camera keys, the hooks below, annotations, time-line panel,
+                 counter, tunnel, plate, cues
   audio.py       score + effects + loudness loop -> mix.wav (reads events.json)
   tools/         subset.py (Noto Sans SC subset from the characters in the JS), sheet.sh (contact sheet for review)
   fonts/         Inter, the Noto Sans SC subset, OFL texts
@@ -79,6 +82,8 @@ demo/
 ```
 
 - Build: `sh styles/transit-map/demo/build.sh` from the library root. It downloads Inter and Noto Sans SC when missing (OFL, github.com/google/fonts) and the vcsl, freepats and vsco2ce sample packs (`sh tools/fetch.sh instruments <lib>`), subsets the CJK font, exports `events.json`, writes `mix.wav`, renders at 30 fps with three workers, masters with `core/render/mux.sh` (grain 1), runs `readcheck.mjs` and takes the poster and `demo/stills/styleframe.jpg` at 36.2 s. The picture renders in well under a minute on an Apple-silicon Mac; the whole build takes a few minutes.
+- Hooks this film defines in `timeline.js` (the full list is in STYLE.md §10): `LABEL_PREF` (eight stations), `nameAt` (新龙华 before 1999), `labelOnly` (names per shot), `drops` + `dropRing` (People's Square, rings in the Line 1 and Line 2 colours), `roundelPos` / `roundelAlpha` (bullet places, and bullets that leave when their chapter is over), `veil` / `stationDim` / `highlight` (the ending), `riverLabels`, `furniture` (cartouche, time-line axis, end card), `annotations` (callout, Expo star, time lines, "you are here"), `trains` (the 1993 shuttle and every line now), `overlay` (tunnel, match flash, plate, counter), `tunnelOnly`, `cues`, `init`. Everything Shanghai-specific is in `net.js` and `timeline.js`; the demo uses no bus, ferry or walking-link lines.
+- `WARP` maps film time to story time because one beat is slowed and one hold lengthened after the picture was written. A film written directly in film time needs no `WARP` (leave it out).
 - Reading time: `window.TEXTS(t)` reports every line meant to be read (callout, station names, counter rows, the time-line panel, caption, end card) with its screen box; `readcheck.mjs` passes on all 76 pieces. Map labels show by shot (an allow-list in `timeline.js`, `labelOnly`) so no name flashes past too briefly.
 - Order when editing: `net.js` / `timeline.js` → `tools/subset.py` when text changes → `node core/render/events.mjs styles/transit-map/demo` → `.venv/bin/python styles/transit-map/demo/audio.py` → render. `sh styles/transit-map/demo/tools/sheet.sh` makes a 0.5 s contact sheet in `demo/out/`.
 - 1080p frames take 30–250 ms (most 35–60 ms); the inked region is redrawn every frame at up to 4096². Needs WebGL2 with `EXT_color_buffer_float` (the depth-of-field pass reads a half-float buffer).

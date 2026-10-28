@@ -1,6 +1,8 @@
 // Schematic of the Shanghai Metro network, drawn by hand on an octilinear grid (0/45/90 degrees).
 // Unofficial: geometry is our own schematic, not the operator's map. Units: G = 1 grid step = 100 world units.
 // x grows east, y grows south. People's Square is the origin.
+// Lines: {id, color, route, branch?, mode?: 'metro' (default) | 'light' | 'bus' | 'ferry', bullet?: text in the bullet
+// (default: the id), ink?: ink text in the bullet (default: on colours lighter than 0.4 relative luminance), loop?}.
 // Route items: 'ID' = the station's point; ['ID', dx, dy] = that station, offset for this line (parallel pairs);
 // [x, y] = a bend. Stations carry {zh, en, tier}: tier 1 = big hub (label at every zoom), 2 = interchange, 3 = named stop.
 (function () {
@@ -155,26 +157,26 @@ const ST = {
 // colours: official line colours of the network (as published on the operator's maps, approximated for print)
 const LINES = [
   { id: '1', color: '#E3002B', route: ['XZ', 'LHL', 'JJLY', 'SHNZ', 'CBL', 'TYG', 'XJH', 'CSL', 'SXNL', 'HPNL', 'RMGC', 'HZL', 'SHZ', 'YCL', 'PPXC', 'GFXC', 'FJL'] },
-  { id: '2', color: '#82BF25', route: ['XJD', ['HQZ', 0, -0.08], ['HQ2', 0, -0.08], 'SHL', 'LSGL', 'ZSGY', 'JSL', 'JAS', 'NJXL', 'RMGC', 'NJDL', 'LJZ', 'DCL', ['SJDD', 0, -0.1], 'KJG', 'LYL', 'ZJGK', 'GLL', 'CS', 'PDJC'] },
-  { id: '3', color: '#FCD600', route: ['SHNZ', [-2.7, 5.9], 'SLL', 'LCL', ['YSL', -0.1, 0], ['HQL', -0.1, 0], ['YAXL', -0.1, 0], ['ZSGY', -0.1, 0], ['JSJL', -0.1, 0], ['CYL', -0.1, 0], [-4.5, -2.5], [-4.1, -2.9], ['ZPL', 0, -0.1], ['ZTL', 0, -0.1], ['SHZ', 0, -0.1], ['BSL', 0, -0.1], 'HKZQ', 'JWZ', 'CJNL', 'JYBL'] },
+  { id: '2', ink: true, color: '#82BF25', route: ['XJD', ['HQZ', 0, -0.08], ['HQ2', 0, -0.08], 'SHL', 'LSGL', 'ZSGY', 'JSL', 'JAS', 'NJXL', 'RMGC', 'NJDL', 'LJZ', 'DCL', ['SJDD', 0, -0.1], 'KJG', 'LYL', 'ZJGK', 'GLL', 'CS', 'PDJC'] },
+  { id: '3', ink: true, color: '#FCD600', route: ['SHNZ', [-2.7, 5.9], 'SLL', 'LCL', ['YSL', -0.1, 0], ['HQL', -0.1, 0], ['YAXL', -0.1, 0], ['ZSGY', -0.1, 0], ['JSJL', -0.1, 0], ['CYL', -0.1, 0], [-4.5, -2.5], [-4.1, -2.9], ['ZPL', 0, -0.1], ['ZTL', 0, -0.1], ['SHZ', 0, -0.1], ['BSL', 0, -0.1], 'HKZQ', 'JWZ', 'CJNL', 'JYBL'] },
   { id: '4', color: '#461D84', loop: true, route: [['YSL', 0.1, 0], ['HQL', 0.1, 0], ['YAXL', 0.1, 0], ['ZSGY', 0.1, 0], ['JSJL', 0.1, 0], ['CYL', 0.1, 0], [-4.3, -2.5], [-4.0, -2.8], ['ZPL', 0, 0.1], ['ZTL', 0, 0.1], ['SHZ', 0, 0.1], ['BSL', 0, 0.1], 'HLL', 'DLL', [3.8, -2.8], [4.3, -2.3], 'PDDD', ['SJDD', -0.1, 0], [4.3, 2.0], ['LCL2', -0.1, 0], [3.6, 3.9], [2.9, 3.9], 'XZNL', 'DMQL', 'DAL', [-3.0, 4.5], 'TYG', [-3.5, 4.5], ['YSL', 0.1, 0]] },
   { id: '5', color: '#944D9A', route: ['XZ', 'DCL5', 'MHKF'], branch: ['DCL5', [-5.8, 12.4], [-2.2, 16.0], [-1.8, 16.4], 'FXXC'] },
   { id: '6', color: '#D40068', route: ['GCL', [9.0, -4.5], 'JFL', 'MSL', [4.5, 0.0], ['SJDD', 0.1, 0], [4.5, 2.0], ['LCL2', 0.1, 0], 'GKXL', 'DMLU', [0.8, 9.5], 'DFTY'] },
   { id: '7', color: '#ED6F00', route: ['MLH', [-6.4, -8.8], [-3.0, -5.4], [-3.0, -2.9], 'ZPL', [-2.4, -2.3], 'CSL7', 'JAS', 'CSL', 'ZJBL', 'DAL', 'LHZL', 'YHL', 'CQL', [2.4, 7.7], [4.4, 5.7], 'GKXL', [7.1, 3.2], [7.1, 2.6], 'LYL', [8.8, 4.4], 'HXL'] },
   { id: '8', color: '#0094D8', route: ['SGL', 'JPL', 'SPL', 'HKZQ', [1.2, -4.0], [0.6, -3.4], 'QFL', [0.6, -0.6], 'RMGC', [0.6, 0.6], 'DSJ', 'LXM', 'LJBL', 'XZNL', 'ZHYSG', 'YHL', 'CSL8', 'DFTY', 'SDGL'] },
-  { id: '9', color: '#87CAED', route: ['SJNZ', [-9.6, 4.8], 'QB', 'GLL9', ['YSL', 0, 0], 'XJH', 'ZJBL', 'JSL9', 'MDL', 'LJBL', [1.2, 3.3], 'SCL', [4.2, 0.3], ['SJDD', 0, 0.2], 'YGZL', 'JHL', [10.6, 0.3], 'CL'] },
-  { id: '10', color: '#C6AFD4', route: ['XJWC', 'WJC', 'SPL', 'HLL', [1.0, -1.8], 'TTL', 'NJDL', 'YY', [1.0, 1.4], 'LXM', 'XTD', 'SXNL', 'JTDX', [-3.8, 2.4], 'HQL', 'HQ1', [-10.2, 1.4], ['HQ2', 0, 0.12], ['HQZ', 0, 0.12]], branch: ['HQ1', [-7.6, 2.4], 'JTL'] },
+  { id: '9', ink: true, color: '#87CAED', route: ['SJNZ', [-9.6, 4.8], 'QB', 'GLL9', ['YSL', 0, 0], 'XJH', 'ZJBL', 'JSL9', 'MDL', 'LJBL', [1.2, 3.3], 'SCL', [4.2, 0.3], ['SJDD', 0, 0.2], 'YGZL', 'JHL', [10.6, 0.3], 'CL'] },
+  { id: '10', ink: true, color: '#C6AFD4', route: ['XJWC', 'WJC', 'SPL', 'HLL', [1.0, -1.8], 'TTL', 'NJDL', 'YY', [1.0, 1.4], 'LXM', 'XTD', 'SXNL', 'JTDX', [-3.8, 2.4], 'HQL', 'HQ1', [-10.2, 1.4], ['HQ2', 0, 0.12], ['HQZ', 0, 0.12]], branch: ['HQ1', [-7.6, 2.4], 'JTL'] },
   { id: '11', color: '#871C2B', route: ['JDB', [-12.6, -9.6], 'SHXZ', 'ZR', 'CYL', 'LDL', 'JSL', 'JTDX', ['XJH', -0.1, 0], [-2.6, 4.1], [-2.6, 4.7], 'LH', [-0.4, 6.9], '/', [0.6, 8.5], 'DFTY', [1.4, 9.6], [4.0, 9.6], 'DSN'], branch: ['HQ11', [-12.4, -3.6], [-11.6, -2.8], 'SHXZ'] },
   { id: '12', color: '#007A60', route: ['QXL', 'CBL', 'LCL', 'LH', [-1.8, 4.7], 'DMQL', 'JSL9', 'SXNL', [-1.8, 0.7], 'NJXL', 'HZL', 'QFL', 'TTL', [2.2, -2.3], [2.5, -2.3], 'DLL', [3.6, -3.4], 'JFL', [10.4, -3.4], 'JHL'] },
-  { id: '13', color: '#E999C0', route: ['JYL', 'DDHL', 'JSJL', 'LDL', 'CSL7', ['HZL', 0, 0], [0.1, -1.0], ['NJXL', 0.1, 0.1], [-1.0, 1.1], [-0.3, 1.8], 'XTD', 'MDL', [-0.3, 4.2], 'SBDD', 'CQL', 'CSL8', 'DMLU', [6.0, 8.6], 'ZKL'] },
+  { id: '13', ink: true, color: '#E999C0', route: ['JYL', 'DDHL', 'JSJL', 'LDL', 'CSL7', ['HZL', 0, 0], [0.1, -1.0], ['NJXL', 0.1, 0.1], [-1.0, 1.1], [-0.3, 1.8], 'XTD', 'MDL', [-0.3, 4.2], 'SBDD', 'CQL', 'CSL8', 'DMLU', [6.0, 8.6], 'ZKL'] },
   { id: '14', color: '#626020', route: ['FL', [-5.8, -2.9], 'ZR', [-4.3, -2.1], [-2.4, -0.2], [-1.3, 0.9], 'HPNL', 'DSJ', 'YY', [2.0, 0.9], 'LJZ', [3.9, -1.0], 'PDDD', [10.0, -1.0], 'GQL'] },
-  { id: '15', color: '#BCA886', route: ['GCGY', [-6.6, -3.6], [-6.2, -3.2], 'DDHL', 'LSGL', 'GLL9', [-6.2, 4.0], [-3.7, 6.5], 'SHNZ', [-3.3, 8.0], 'ZZGX'] },
-  { id: '16', color: '#98D1C0', route: ['LYL', [7.6, 3.2], [7.6, 4.8], [14.6, 11.8], 'DSH'] },
+  { id: '15', ink: true, color: '#BCA886', route: ['GCGY', [-6.6, -3.6], [-6.2, -3.2], 'DDHL', 'LSGL', 'GLL9', [-6.2, 4.0], [-3.7, 6.5], 'SHNZ', [-3.3, 8.0], 'ZZGX'] },
+  { id: '16', ink: true, color: '#98D1C0', route: ['LYL', [7.6, 3.2], [7.6, 4.8], [14.6, 11.8], 'DSH'] },
   { id: '17', color: '#BC796F', route: ['HQZ', [-12.6, 0], [-15.0, 2.4], 'DFL'] },
   { id: '18', color: '#C4984F', route: ['CJNL', [3.0, -8.0], [4.0, -7.0], 'JPL', [6.1, -2.7], 'MSL', 'YGZL', [6.1, 1.7], 'LYL', [6.6, 6.6], 'YSH'] },
-  { id: 'P', name: '浦江线', color: '#B5B5B6', route: ['DFTY', [0.6, 10.2], [2.0, 11.6], 'SHGZ'] },
-  { id: 'M', name: '磁浮', color: '#008B9A', thin: true, route: ['LYL', [6.6, 2.8], [12.6, 2.8], 'PDJC'] },
-  { id: 'A', name: '机场联络线', color: '#3D688A', route: [['HQZ', 0, 0.12], [-11.6, 0.7], 'QB', [-3.0, 9.3], 'HJ', [0.2, 9.3], [1.4, 10.6], 'SLN', 'ZJZ', 'DJQ', ['PDJC', 0, 0.1]] },
+  { id: 'P', name: '浦江线', bullet: '浦江', ink: false, color: '#B5B5B6', route: ['DFTY', [0.6, 10.2], [2.0, 11.6], 'SHGZ'] },
+  { id: 'M', name: '磁浮', bullet: '磁浮', mode: 'light', color: '#008B9A', route: ['LYL', [6.6, 2.8], [12.6, 2.8], 'PDJC'] },
+  { id: 'A', name: '机场联络线', bullet: '机场', color: '#3D688A', route: [['HQZ', 0, 0.12], [-11.6, 0.7], 'QB', [-3.0, 9.3], 'HJ', [0.2, 9.3], [1.4, 10.6], 'SLN', 'ZJZ', 'DJQ', ['PDJC', 0, 0.1]] },
 ];
 
 // the Huangpu: Bund stretch north, bend east round Lujiazui, out to the Yangtze (top right)
@@ -207,5 +209,12 @@ function expand(route) {
   }
   return { pts: out, ids };
 }
-window.NET = { G, ST, LINES, RIVER, SUZHOU, pt, sid, expand };
+// water for the engine: bands (rivers, creeks: a centre line and two widths in G) and areas (sea, bay, harbour, lake:
+// a closed octilinear outline); tunnel: true makes lines crossing it run dashed underneath
+const WATER = [
+  { id: 'huangpu', line: RIVER, outer: 0.81, inner: 0.75, tunnel: true },
+  { id: 'suzhou', line: SUZHOU, outer: 0.15, inner: 0.11 },
+];
+const LINKS = [];   // walking transfers: {a, b} inside a station complex, {a, b, out: true} through the street
+window.NET = { G, ST, LINES, WATER, LINKS, pt, sid, expand };
 })();

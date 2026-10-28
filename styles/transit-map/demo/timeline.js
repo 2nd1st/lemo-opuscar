@@ -233,7 +233,7 @@ function expo(c, t, { F, INK }) {
   c.fillStyle = INK; c.textAlign = 'left'; c.textBaseline = 'alphabetic'; c.font = F(800, 40); c.fillText('2010 世博会', 40, 4); c.font = F(600, 26); c.fillText('Expo 2010', 40, 38);
   c.restore();
 }
-// the People's Square ring falls onto the paper before it lands at t2
+// People's Square falls onto the paper before it lands at t2 (the engine draws the fall); dropRing overrides the landing
 const drops = { RMGC: true };
 function dropRing(c, n, k2, { capsule, INK }) {
   if (k2 < 0) return;
@@ -243,19 +243,6 @@ function dropRing(c, n, k2, { capsule, INK }) {
     c.lineWidth = 5; c.strokeStyle = '#8CC220'; c.beginPath(); c.arc(n.cx, n.cy, 26 + 170 * eo(clamp(v * 1.15)), 0, 7); c.stroke();
     c.strokeStyle = '#E3002B'; c.beginPath(); c.arc(n.cx, n.cy, 22 + 120 * eo(clamp(v * 1.3)), 0, 7); c.stroke(); c.restore(); }
   capsule(c, n, 1 + .18 * Math.exp(-k2 * 14) * Math.cos(k2 * 40), 7);
-}
-function fallingRing(c, t) {
-  const n = H.SNODE.RMGC; const k = t - n.t2; if (!(k > -.42 && k < 0)) return;
-  const u = 1 + k / .42; // 0 -> 1 as it falls
-  const h = (1 - ei(u)); // height 1 -> 0
-  c.save();
-  // shadow on the paper grows sharper as the ring comes down
-  c.globalAlpha = .35 * u; c.fillStyle = '#000'; c.filter = `blur(${(14 * h).toFixed(1)}px)`;
-  c.beginPath(); c.ellipse(n.cx + 60 * h, n.cy + 70 * h, 34 + 40 * h, 34 + 40 * h, 0, 0, 7); c.fill(); c.filter = 'none';
-  c.globalAlpha = clamp(u * 2.5);
-  const sc = 1 + 2.4 * h; c.translate(n.cx - 10 * h, n.cy - 30 * h); c.scale(sc, sc);
-  c.beginPath(); c.roundRect(-28, -28, 56, 56, 28); c.fillStyle = '#fff'; c.fill(); c.lineWidth = 7; c.strokeStyle = '#1b1c1e'; c.stroke();
-  c.restore();
 }
 // time-line panel content: London and Shanghai drawn as two lines over one axis
 function timeLines(c, t, K) { const { F, INK, MUTED } = K; let nid = 0;
@@ -332,7 +319,7 @@ function hereMarker(c, t, K) { const { F, INK } = K;
   c.restore();
 }
 function annotations(c, t, view, k) {
-  plaque(c, t, k); expo(c, t, k); fallingRing(c, t); timeLines(c, t, k); hereMarker(c, t, k);
+  plaque(c, t, k); expo(c, t, k); timeLines(c, t, k); hereMarker(c, t, k);
 }
 
 // ------------------------------------------------------------------ trains
