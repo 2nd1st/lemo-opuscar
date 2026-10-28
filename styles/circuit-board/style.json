@@ -1,0 +1,19 @@
+{
+ "slug": "circuit-board",
+ "num": "76",
+ "en": "Circuit Board",
+ "cn": "电路板",
+ "category_en": "Information & Keynote",
+ "category_cn": "信息与发布",
+ "film": "Seven Milliseconds",
+ "line": "The whole story is a printed circuit board seen from above: rivers are channels in the copper, places are pads, words are silkscreen, and the current runs along the traces from a dam 2,080 km to a phone charger.",
+ "line_cn": "整个故事画成一块俯视的电路板：江河是铜皮里的沟槽，地方是焊盘，字是丝印；电流顺着走线，从水坝跑过 2,080 公里，一直跑进手机充电器。",
+ "uses": [
+  "How energy and signals travel",
+  "Supply chains and routes, end to end",
+  "Inside a device or a system",
+  "Same mechanism at two scales"
+ ],
+ "frame_sec": 58.0,
+ "dur": 60.0
+}
