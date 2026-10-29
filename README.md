@@ -1,11 +1,11 @@
 # Lemo-Opuscar
 
-**59 film styles, each with a short film made entirely in code.**<br>
-59 种影片风格，每种都配一支完全用代码做出来的短片。
+**66 film styles, each with a short film made entirely in code.**<br>
+66 种影片风格，每种都配一支完全用代码做出来的短片。
 
 Pick a style, bring your own story, and let Claude direct the film. Claude writes the treatment, draws every frame in code, writes an original score, mixes the sound and renders a finished MP4. No video model, no stock footage.
 
-This is the plugin directory edition (version 1.1.0): the guides, the 59 style prompts and the rendering tools, without the demo films. **The films, the gallery and the newest styles live in the main repository: [github.com/lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar).** Watch every demo film on the [gallery](https://lemomo-ai.github.io/lemo-opuscar/).
+This is the plugin directory edition (version 1.2.0): the guides, the 66 style prompts and the rendering tools, without the demo films. **The films, the gallery and the newest styles live in the main repository: [github.com/lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar).** Watch every demo film on the [gallery](https://lemomo-ai.github.io/lemo-opuscar/).
 
 ## Try it
 
