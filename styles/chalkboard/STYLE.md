@@ -36,7 +36,7 @@ Not Whiteboard Explainer: that style is a bright glossy board, coloured markers,
 
 ## 4. Type & subtitles
 
-- Chinese is hand-authored stroke data (centre lines + stroke type per stroke) drawn by the chalk engine, never a font's outline. Every character the topic needs is added to the data and checked against an OFL kai font behind it before shooting.
+- Chinese is hand-authored stroke data (centre lines + stroke type per stroke) drawn by the chalk engine, never a font's outline. Every character the topic needs is added to the data and checked against an OFL kai font behind it before shooting (how: §10, *New characters*).
 - English on the board is a single-line OFL handwriting font (EMS family) drawn by the same engine; symbols missing from the font (arrows, plus) are drawn as strokes.
 - On the board: keywords only, one line of Chinese, the next line English, a size smaller.
 - Sizes at 1080p: big characters 300–450 px; labels ≥ 55 px CJK and ≥ 30 px Latin cap height; small writing gets heavier chalk so no stroke is thinner than 3 px.
@@ -51,7 +51,9 @@ Not Whiteboard Explainer: that style is a bright glossy board, coloured markers,
 
 ## 5. Motion quality
 
-- 30 fps, continuous. Chalk speed: big characters ~0.1–0.3 s per stroke, labels ~0.04 s per stroke, with short air time between strokes; writing speeds up rather than making the voice wait.
+- 30 fps, continuous (render with `--fps 30`: `core/render/video.mjs` defaults to 24).
+- Chalk speed, measured on our demo: a big character takes about 0.1 s per stroke including the air between strokes (a ten-stroke character about 1 s), labels about 0.04 s per stroke. Writing speeds up rather than making the voice wait, but a big character written much faster than about 0.07 s per stroke stops looking like a hand.
+- When reading time and chalk speed pinch in a short film, change the words, not the hand. Ways that work (choose per film): fewer and shorter blocks on the board; big characters only for what the lesson tracks, everything else at label size; start a block while the voice is still on the previous line, so it is finished when it is named; write the next block while the last one is still being read in the same frame; hold the frame instead of moving on; make the film longer.
 - Camera eases in and out (cubic), never bounces except a whip landing.
 - Things appear only by being written, wiped, revealed by a sliding panel or by drying. Nothing fades in.
 
@@ -70,12 +72,14 @@ The camera always faces the board flat on (no perspective tilt).
 | Cut on a line crossing a seam | a connection | cause and effect; the same part in two places |
 | Wide shot of the whole wall | summary | the map of what was learnt |
 
+The room is part of the style: at least once the frame opens wide enough to read board, frame, tray and wall as a classroom (where, and what else the room holds, is the film's choice). Close shots may show only slate and frame.
+
 Rules: the subject is never smaller than a third of the frame in close shots; text blocks are never cut by the frame edge while they are read; no empty board for more than half a second. Transitions are hard cuts, a sliding panel or a line across a seam; no dissolves or page flips.
 
 ## 7. Sound palette
 
 - Voice first: it is the loudest element; music sits 15–18 dB under it and comes up only in the pauses.
-- Foley: real chalk recordings cut into grains, one grain chain per stroke, level from stroke size; a light knock on landings; the accent chalk slightly softer and duller. A felt pass for the wipe, the low roll of a sliding panel ending on a stop, room tone very low; school sounds (a distant bell) only as punctuation.
+- Foley: real chalk recordings cut into grains, one grain chain per stroke, level from stroke size; a light knock on landings; the accent chalk slightly softer and duller. A felt pass for the wipe, the low roll of a sliding panel ending on a stop, room tone very low; school sounds (a distant bell) only as punctuation. Where the recordings come from and how to cut them: §10, *Sound*.
 - Music: sparse plucked strings (a guqin model or nylon guitar) with marimba and pizzicato bass; a plucked note can be "born" from something drawn. Silence while a question or a verdict is read.
 - Mix: about −16 LUFS integrated before mastering, true peak ≤ −1.5 dBFS.
 
@@ -97,17 +101,45 @@ Rules: the subject is never smaller than a third of the frame in close shots; te
 - Small writing at 1080p disappears with the same chalk width as large writing; give small text heavier chalk.
 - Text written while the camera moves away fails reading time; hold the frame or keep the block in view.
 - Accent colour spread over arrows and decorations stops meaning anything.
+- A soft halo at the chalk's front reads as glow. The demo's `drawFront` (`props.js`) puts a faint radial gradient under its grains: in your copy, drop the gradient and keep the grains.
 - A wet streak with a hard edge looks like a cut-out.
 - Board-speak in the voice ("A plus B", component names with no meaning) is not understood: every component is said with what it means the first time it appears.
 
 ## 10. Engine
 
-- `demo/js/chalk.js`: `Stroke`, `bake(stroke, R)`, `drawStroke(ctx, stroke, t)`: the chalk itself.
-- `demo/js/hand.js`: `writeChar(ch, cx, cy, size, t, o)` (teacher or child hand), `writeLine(text, …)` (mixed Chinese and Latin), `writeLatin`, `loadSvgFont`.
-- `demo/js/hz.js`: stroke data, `"type x,y x,y …"` in a 100-unit box; add every character a new topic needs here.
-- `demo/js/r2d.js`: grain tile and deposit; `demo/js/stage.js`: slates, frame, tray, clock, painted grids.
-- `demo/js/app.js`: frame compositor (layers, wipe, wet streak, light), subtitle plate and `TEXTS`.
-- Minimal example: `writeChar('水', 800, 600, 400, 0)` after adding 水 to `hz.js`, then `bake` each stroke and draw with `drawStroke(ctx, s, t)`; open `index.html?lab=hz&chars=水` to check the proportions against the reference font.
+The demo's code is a working engine; copy it into the project folder and write the film yourself.
+
+**Copy as is:** `js/chalk.js` (`Stroke`, `bake`, `drawStroke`: the chalk), `js/hand.js` (`writeChar(ch, cx, cy, size, clock, o)`, `writeLine` for mixed Chinese and Latin, `writeLatin`, `latinWidth`, `loadSvgFont`; each returns `Stroke[]` with `t0`/`t1` set and `.end` = the time the last stroke ends), `js/r2d.js` (grain tile, deposit), `js/stage.js` (slates, frame, tray, clock, wall, `paintGrid`; world units: slate x 0…6400, y 0…1700, panel width `PW` 3200), `js/post.js`, `js/lab.js`, `tools/foley_lib.py`, `tools/subset.py` (subtitle font cut from the strings in `SUB` in `film.js`), `tools/srt.py`. `js/props.js` too, minus the glow (§9).
+
+**Adapt:** `js/hz.js` (keep its characters, add yours), `index.html` (title), `js/app.js` (the compositor: it draws the layers, wet streak, wipe, light, subtitle plate and exposes `render`, `TEXTS`, `DUR`, `EV`; edit it to the film's board instead of feeding it placeholder data).
+
+**Write yourself:** `js/film.js` (every stroke, time, camera key, voice start and subtitle, as data), the voice lines, the score and mix (`audio.py` is the demo's own score; its chalk-grain part is reusable), `build.sh`. `js/ancient.js` is the demo's old forms of one character: not an engine file.
+
+**What `app.js` reads from `build(W, H)` in `film.js`:**
+
+| Field | What it is |
+|---|---|
+| `S` | every `Stroke`, each with `layer`: `'FL'` (the sliding front panel, in panel-local units, moved by `slideX`), `'FR'` (the right panel, world units), `'BK'` (the back board, drawn only once the panel has moved), `'WORLD'` (on top, world units, drawn while `t < T.back0`); FL strokes also carry `phase` (`'pre'` = can be wiped, `wiped: true` = removed by the wipe; `'post'` = written after it). `o.R` sets bake resolution (default 2) |
+| `DUR` | length in seconds |
+| `camAt(t)` | `{cx, cy, s, shot}`: centre in world units, scale for a 1920-wide frame, shot index (motion blur is only taken within one shot) |
+| `slideX(t)` | the front panel's offset; `() => 0` if it never moves |
+| `TX` | board text for readcheck: `{id, text, layer, box:[x0,y0,x1,y1] in that layer's units, t0, t1}` |
+| `SUBS` | subtitle cues `{id, t0, t1, zh, en}` |
+| `EV` | sound events for `core/render/events.mjs`: `vo` (voice starts), `sub` (for the .srt), `chalk` (`t, d, len, color, pan, big`, one per stroke) and any of your own |
+| `G1`, `G2`, `SMALL`, `T.back0`, `wet`, `wipe` | painted grids on the front panel and back board; when the closing slide starts; the wet streak `{x0, y0, y1, xEnd, bx0, t0, t1}`; the wipe `{t0, t1, w, path}` |
+
+A film without a wet streak, a wipe, grids or a sliding panel removes those parts from its copy of `app.js` (or guards them, e.g. `if (!F.wet) return` at the top of `drawWet`, `if (!F.wipe) return null` in `drawWipeHaze`), and draws `WORLD` strokes on a condition of its own if there is no closing slide. Don't pass dummy fields to keep the compositor quiet.
+
+**New characters.** `hz.js` maps a character to its strokes in standard stroke order (GF 0023-2020); each stroke is `"type x,y x,y …"`: the centre line through its anchor points in a 100 × 100 box, y down. Types: `h` 横, `s` 竖, `p` 撇, `n` 捺, `d` 点, `t` 提, `x` 悬针竖; `z…` for turns (corners pressed); a last letter `g` ends in a hook (its last point is the hook's tip), `p` / `t` in a point, `d` in a dot. Write only the centre line: the slight bow, the rise of horizontals and the pressed entry tick are added by `writeChar`. Symbols (arrows, plus, a tick) are written the same way. A way that works:
+
+1. Take the stroke order and count from a dictionary that shows the standard order, and write down the type sequence first.
+2. Set the character large from the reference kai (LXGW WenKai, `fonts/`) on a 100-unit grid, placed as the check page places it so the numbers line up: e.g. with PIL, `ImageFont.truetype(font, 1000)` drawn into a 1000 × 1000 image at `(0, 880)` with `anchor='ls'` (left edge, baseline at 0.88 of the box), with 100-px grid lines; read each stroke's start, corners and end off it and divide by 10. Keep the anchors on the middle of the font's stroke, not its edge.
+3. Open `index.html?lab=hz&chars=<new characters>&size=400`: the chalk is drawn over the font in red. Check stroke count and order, which strokes touch or cross and which stop short, the proportion of each component, hook directions and the 撇/捺 feet; then look again at the size the film uses for it. Fix the numbers, not the font.
+4. Read it at film size the way a native reader would, before shooting (§9): a structure that looks right at 400 px over the font can still read as another character on its own.
+
+**Sound.** Three CC0 / CC BY recordings of chalk on a board from Wikimedia Commons (URLs in the demo's `build.sh`, credits in `CREDITS`) are cut into tagged grains with `python -I tools/foley_lib.py <out_dir> <name>=<file> …`: `tap`, `stroke` and `squeak` grains plus `index.json` with each grain's length, attack and brightness. The demo's `audio.py` places one grain chain per `chalk` event (length from `d`, level from `len`, the accent chalk low-passed); other recordings can be cut the same way.
+
+**Render.** `node core/render/events.mjs <film>` (events from the page), your mix, `node core/render/video.mjs <film> --fps 30`, `sh core/render/mux.sh <video> <mix> <out> 30 1`, `node core/render/readcheck.mjs <film>`. The page bakes every stroke on load (about 10 s for 500 strokes), then 20–50 ms per 1080p frame. readcheck counts from the first frame a block's box is on screen, which is when its writing starts: leave the reading time after the last stroke yourself (§4).
 
 ## 11. Variation space
 

@@ -2,6 +2,8 @@
 
 > The subject is drawn as a printed circuit board seen from straight above: the world is copper under green solder mask, routes are traces, places are pads, words are white silkscreen, and what flows (power, water, signals, goods) is light running along the copper. The camera rides that light and jumps between the scale of a map and the scale of a single component.
 > References (grammar only): real PCB design files and assembly drawings (layers, clearances, designators, detail callouts); macro photography of boards (shallow depth of field, gold sheen, soft key light); schematic and single-line diagrams (one symbol stands for one function). Draw your own boards: never copy a real board layout, a logo or a part marking.
+>
+> **Frame rate: 30 fps.** Pass `--fps 30` to `video.mjs` and `30` to `mux.sh`; this overrides the 24 fps in the DIRECTOR.md and TECHNIQUE.md examples.
 
 ## 1. Essence, and what it is not
 
@@ -38,6 +40,8 @@ Example: laminate #05190F, pour #1C6A44, rim #4AA977, gold #D9B25B, silk #F2EEE1
 - Text is world-anchored and **plotted stroke by stroke**; it stays on the board and is still there when the camera pulls back.
 - Roles: labels (a Chinese line above a smaller English line, same stroke width), board-native text in one language (designators, voltages, timestamps, km, values), micro texture (pinyin tags, notes, REV/sheet lines) which may fade below reading size.
 - Reading: a label must be fully in frame and stay there for its reading time (≥ 1.5 s + characters at 4.5/s CJK, 15/s Latin). Never let text sit in the depth-of-field bands; never cut text at the frame edge in a held shot. Title caps ≥ 60 px at 1080p.
+- Moving camera: `readcheck.mjs` starts a label's clock when it is first fully in frame and stops it the first time it leaves, so a label that slides out during a ride or whip fails even if it comes back. Before plotting a label, check where the camera path takes it for its whole reading time: place it where the path keeps it in frame, print it once the camera settles, or let it be micro texture (under ~9 px tall it is not reported).
+- Glyph coverage: the routed font draws only the characters it has. The demo's `hanzi.js` holds just the hanzi its film needed, and the Latin set is capitals, digits, common signs and a few lowercase letters (`a b d e k l m o p s u z`, enough for units like ms, km, kV). A missing character prints as `?` with no error. Check every label string against the font before building, write English labels in capitals (or add the lowercase you need), and route the hanzi you lack (§10, New hanzi).
 - With a voice, every line gets a subtitle in the bottom safe area: a dark translucent plate, Chinese over English (an open-licence sans, e.g. Noto Sans SC, subset to the characters used; never a system font), 34 px / 24 px at 1080p. The board then prints only the voice's key words and numbers, never whole sentences. Keep picture text above the subtitle band.
 
 ## 5. Motion quality
@@ -95,19 +99,43 @@ When the film explains something, a voice tells it and the board shows it at the
 - **Text in the blur or under the frame edge.** Depth of field and the vignette eat the top and bottom bands: keep labels out of them, or turn the blur down in reading shots.
 - **Too-fast holes.** A plunge into a hole under 0.6 s reads only as "darkness". Hold on the hole first, then plunge; come out of another hole the opposite way.
 - **Precision.** Zooming a single coordinate system over many orders of magnitude breaks the canvas transform. Nest boards (each with moderate units) and convert cameras between levels in double precision.
-- **Hanzi in a stroke font.** Automatic skeletons of fonts lose dots and strokes; route each character by hand and proof traditional/simplified forms (鹤 not 鶴, 换 not 換).
+- **Hanzi in a stroke font.** Automatic skeletons of fonts lose dots and strokes; route each character by hand and proof traditional/simplified forms (鹤 not 鶴, 换 not 換). A glyph that only works at small size (one component missing, two strokes merged) reads as another character on a title: proof it large (§10).
+- **The board edge by accident.** When the camera's view comes near the board outline, `Board` switches to drawing the desk and clips to the board, so a close shot near the edge suddenly shows black desk. Keep the view well inside the outline (the check uses the frame's half-diagonal plus 4% of the board width), or make the board larger than the shot needs; show the edge only when the whole board is the subject.
 
 ## 10. Engine
 
-All in `demo/src/`:
+Reference code in `demo/src/`. Copy what you use into the project's `src/` (never import from `styles/`); edit your copies freely. The build order (subtitle font, voice and check, events, score, render at 30 fps, mux, `.srt`, readcheck, stills) is in `demo/build.sh`.
 
-- `render.js` — `Board`: draws one board (a world module) for a camera `{x,y,z,r}`: laminate, copper (two-pass rim), traces, pads, vias, silk, glow (`acDashes`, `dcStream`, `flow`, `penFlow`, flashes), `texts()` for reading checks.
-- `levels.js` — nested boards: `makeLevels`, `toChild`/`toParent`, `baseOf`, `drawLevel` (composites each visible child board into its footprint).
-- `font.js` + `hanzi.js` — the routed monoline font; `drawText(ctx, str, x, y, cap, {sw, progress})` plots by stroke length.
-- `parts.js` — footprints: `bridge` (diamond rectifier), `xformer`, `reactor`, `capBank`, `chip`, `ecap`, `xfmr`, `ground`, `tag`.
-- `geo.js` — `octi` (0/45/90° routing through waypoints), `offset` (parallel lanes), `measure/at/sub`.
-- `post.js` — key light, depth of field, motes, window light, vignette.
-- Minimal new use: a world module exporting `BOARD`, `TRACES`, `PADS`, `SILK`, `LABELS` (e.g. three warehouses as pads joined by a bus, one `xformer` as a sorting hub) and a scene with one `dcStream` is a complete film board.
+**Reusable as is** (no demo content inside):
+- `render.js` — `Board(canvas, world, {unit, noDesig})`; `board.frame(cam, sc)` draws one board for a camera `{x, y, z, r}` (world centre, pixels per unit, rotation); `board.texts(cam, sc)` returns the label boxes for `window.TEXTS`; `camFor(worldPt, screenPt, z, r)` builds a camera that puts a world point at a screen point. `unit` is a typical feature size in world units: it sets where textures change octave and small features fade.
+- `levels.js` — nested boards: `makeLevels`, `toChild`/`toParent`, `baseOf`, `drawLevel`. Needed only when one board sits inside another.
+- `font.js` (+ your `hanzi.js`) — `drawText(ctx, str, x, y, cap, {sw, align, progress})`, `layout`, `textWidth`, `isHanzi`.
+- `geo.js` — `octi` (0/45/90° routing through waypoints, `'d'` diagonal first), `offset`, `measure`/`at`/`sub`/`trim`, `frameAt`.
+- `parts.js` — footprint builders returning `{pads, silk, keep, …anchors}`: `chip`, `ecap`, `xfmr`, `xformer`, `bridge` (with `flow` paths for conduction glow), `reactor`, `capBank`, `ground`, `tag`, `box`. Add your own the same way.
+- `post.js` (key light, depth of field, motes, window light, vignette), `palette.js` (every colour).
+
+**Demo content, to replace:** `main.js` (timeline, cameras, scenes, subtitles, sound events) and the world modules `world.js`, `city.js`, `house.js`, `charger.js`, `loss.js`. `render.js` also carries optional demo-specific keys, skipped when a world doesn't export them: `DAM` (the bare-copper bar), `GENS`, `PENS`, `RESERVOIR`, `RES_FLOW`, `TAIL`, and `sc.water` / `sc.gens`. `loss.js` is the smallest complete world module to read first.
+
+**A world module** exports, in its own units:
+- required: `BOARD {x0, y0, x1, y1, r, inset}`, `TRACES [{id, pts, w, layer?: 'bottom'}]` (add `m: measure(pts)` to any trace that carries light), `PADS [{x, y, shape: 'round'|'square'|'rect', r | w, h, hole?}]`;
+- optional: `LABELS [{id, text, x, y, cap, sw, align}]` (plotted by `sc.labels[id]`), `SILK [{pts, w, plot?} | {circle, w}]`, `DESIG`, `KEEP` (extra clearances), `VIAS [[x, y, r, bore]]`, `HOLES`, `FIDS`, `TPADS` (pad grids lit by `sc.lit`), `TITLE`, clearances `RIVER`, `LAKES`, `SEA`, `STREETS`, `SLOTS`, `CLEARLINES`, sizes `CLR`, `VIA_R`, `FENCE_R`, `HOLE_R`, and functions `fence()` / `stitch()` returning via positions.
+- `RIVER` entries are channels cut **out of the copper** (and are where `sc.water` flows): use them only for something that really is a gap in the board.
+
+**A scene** is the plain object `frame` reads each frame: `{t, labels: {id: 0..1}, ac: [], dc: [], glow: [], flashes: [], lit, after}`.
+- `ac` — `{trace, s0, s1, a, lam, amp, phase}` rocking dashes; with `fade` and `v` they travel forward and die away. `dc` — `{trace, head, s0, a, decay, floor, v, minPx, maxPx, headGlow}` a stream behind a head. Both are drawn in the current colour.
+- `glow` — `{pts, w, a, c}` any polyline in any light colour, with the bloom; `flashes` — `{p, r, a, c: {h, g}, maxPx}` blooms at a point.
+- `after(ctx, M, z)` — draws on top of the finished board (no bloom), for overlays such as a detail-callout circle.
+
+**Your own flows and light, without changing the engine (one way of doing it):** a second flow along a trace (a signal, goods, water in a pipe) is built in your scene from `glow` and `flashes`: each frame cut the trace with `sub(trace.m, s0, s1)` into short pieces (a head, a fading tail, dashes moving at your speed) and push them as `glow` entries with the second light colour (`PAL.water.g` or your own), plus a `flash` with `c: PAL.water` at the head. A new kind of motion or a darkness that only the board (not the light) sits under needs a small hook in **your copy** of `render.js`, e.g. `if (sc.myLight) sc.myLight(glowCtx, z, t, vb)` at the end of `glowLayer` (it then gets the bloom), or a dark fill before the silkscreen pass; a darkening of the whole frame belongs in your `main.js` between the board stack and `post`.
+
+**Page contract:** your `main.js` exposes `window.render(t)`, `DUR`, `TEXTS(t)` (collect `board.texts` for every level drawn), `EV`, `READY`, as in `core/README.md`. Motion blur averages sub-frames of `render(t)`; keep sub-frames within one shot.
+
+**Check the lettering before building:** list every character used in `LABELS`, `DESIG` and silk text that is neither in `HANZI` nor in `GLYPHS` (e.g. a few lines in node importing `font.js`, or `isHanzi` plus the glyph table); the list must be empty.
+
+**New hanzi** (`hanzi.js`): one entry per character, an array of strokes, each stroke a flat list `[x, y, x, y, …]` in a 12 × 12 box (y down), runs at 0/45/90° only. `font.js` chamfers right-angle corners and plots strokes in the order listed, so list them in writing order. A dot is a stroke about one unit long; a hook is a final short 45° run. Keep the same stroke width as the Latin: never vary width per glyph. One way to work:
+1. Make a proof page in the project folder: for each character, a 12 × 12 grid, the character from an open-licence font (e.g. Noto Sans SC) faintly underneath as a structure reference, your routed glyph on top via `drawText` at a cap of a few hundred pixels; a second row without the reference; and once at the size it is used in the film. Render it with `core/render/still.mjs`.
+2. Read the components and their proportions off the reference and route them by hand (not an automatic skeleton, which drops dots and merges strokes). Reuse shared components from glyphs you already have, so radicals match across the film (e.g. 氵, 扌, 亻 in the demo's `hanzi.js`).
+3. Look at the proof image: every component of the reference present, nothing reads as a neighbouring character (声 vs 青, 手 vs 毛), simplified forms. Fix and re-render until it reads without the reference. If a character still won't read, choose another word.
 
 ## 11. Variation space
 

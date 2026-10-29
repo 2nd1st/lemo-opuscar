@@ -66,4 +66,5 @@ The front panel slides back over the rewritten board; on the clean right panel �
 - Code: `index.html` → `js/app.js` (compositor, subtitles, `TEXTS`) → `js/film.js` (every stroke, voice start, subtitle cue and camera key, as data). Engine files are listed in STYLE.md §10. `index.html?lab=hz&chars=…` shows stroke data over the reference font.
 - Voice lengths are copied into `VO` in `js/film.js`; the picture is timed from them, so a new voice means new timings.
 - The page bakes about 500 strokes on load (about 10 s), then 20–50 ms per 1080p frame.
+- Chalk speeds as set here (`speed` in `writeChar` / `writeLine`, in sizes per second): 9–11 for the 520-unit characters, 16–22 for the title and 短, 40–90 for labels; `lspeed` 90–200 for English. What can be reused, what film.js must give app.js, new characters and the chalk recordings: STYLE.md §10.
 - Demo pitfalls: arrows inside English lines on the board are drawn from `hz.js` (the font has none); the bronze form's name is written before its hand so the label can be read while the hand waits for the voice.

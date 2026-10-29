@@ -16,10 +16,10 @@ Not a screen recording (no cursor, no glowing monitor, no real app chrome or log
 
 ## 2. Materials & rendering
 
-- three.js, physically based, neutral tone mapping. Scale: a card is 0.3–0.7 units wide (1000 canvas px per unit); a character is 1/6–1/10 of a card's width; dots 0.03 apart.
+- three.js, physically based, neutral tone mapping. Scale: a card is 0.3–0.7 units wide (1000 canvas px per unit); dots 0.03 apart. A character must be big enough to show its eyes: in the demo about 1/5–1/3 of the card it stands on (0.006–0.0075 units per pixel, so a 16-pixel sprite is about 0.1 wide); smaller casts lose their faces in a medium shot. A character may be scaled for a moment (`scale`) when the story needs it; it reads best on a beat, with a pop's overshoot.
 - **Light**: one directional sun low from the back-left (about 20° up, so a toy's shadow is two or three times its height), a 4096 soft shadow map that follows the camera target and resizes with distance; a cool-sky / warm-ground hemisphere fill, so shadows read blue and lit faces warm; a faint room environment for highlights; exponential fog thinned as the camera pulls back.
 - **Desk**: a dotted paper mat (a thin rounded slab whose size is a multiple of two dot spacings, so the printed dots line up with any 3D dots) on a procedural light-oak plane (planks, long soft grain). Soft window-light patches (blurred four-pane shapes, warm, additive, low opacity) lie under the cards. Props are plain primitives in matte or satin materials, placed so each close shot has something soft in front of or behind its subject.
-- **Cards and screens**: a rounded slab plus a canvas texture on top with a faint deterministic grain. Print is flat: one ink, mono labels in spaced caps, bold numerals, thin rules; a card head carries two lines (English mono caps over the other language in bold). A phone is a card with a dark bezel and a whole interface: status bar, a header with a name, a few message bubbles, an input field and a send button. Redraw a canvas only when its state changes; quantise continuous changes.
+- **Cards and screens**: a rounded slab plus a canvas texture on top with a faint deterministic grain. Print is flat: one ink, mono labels in spaced caps, bold numerals, thin rules; a card head carries two lines (English mono caps over the other language in bold). A phone is a card with a dark bezel and a whole interface of whatever app the story needs: a status bar, a header that names the screen, content filling the screen, controls at the bottom. Redraw a canvas only when its state changes; quantise continuous changes.
 - **Voxel cast**: instanced bevelled cubes per pixel; depth grows with distance from the silhouette; pure-black pixels are eyes, which protrude and blink (they take the colour of the pixel above). Rig: root (feet, yaw) → hinge (lying flat ↔ standing) → squash (scaled at the feet) → spin. State: `e` (0 flat sticker … 1 full toy), `hinge`, `sq`. The same picture at half resolution is the same character, smaller and chunkier.
 - **Props**: the same voxel recipe (crosses, ticks, bells) or plain rounded primitives (bricks, presses, drawers, towers, tent cards, stamps). Data that rises out of a card is extruded from its printed shape, so it still reads from above.
 - **Impact ring**: a thin accent-coloured ring spreads over the paper from an impact and fades in about a second.
@@ -31,12 +31,16 @@ Not a screen recording (no cursor, no glowing monitor, no real app chrome or log
 - Two or three support hues for the cast and props, mid-saturated, never neon; one warm cast colour against the cool ground. **Red only for failure or trouble** (an error, a weak signal), **green only for success**; data in motion may take one bright support hue so it reads apart from the route.
 - Judge the rendered frame: avoid grey on grey; keep the vignette light and the shadows tinted by the sky fill.
 - Brand use: the brand colour becomes the accent; the brand's interface colours print on the cards; the ground stays light.
+- Two example palettes besides the demo's (starting points, not a menu; the names are the keys of `COL` in `src/cards.js`):
+  - *Lilac and violet* (creative tools, music, learning): paper `#e7e4f3`, dot `#cbc5e2`, card `#fcfbff`, ink `#1d1a2e`, mute `#807a96`, line `#e2dfee`, accent `#6b4ce6`; support apricot `#f39a5b`, sky `#5fb4e8`, lemon `#f2c94c`; red `#e2483d`, green `#3fa57a`; haze `#e8e4e6`.
+  - *Cool grey and amber* (money, logistics, energy, food): paper `#e5e9ed`, dot `#c8cfd7`, card `#fdfdfc`, ink `#20252b`, mute `#7f8790`, line `#e0e4e8`, accent `#e8890c`; support teal-blue `#2f8fb0`, plum `#8a5a9e`, cream `#f4e3b5`; red `#d23a3a` (keep it clearly apart from the amber), green `#3c9c6e`; haze `#e6e4e1`.
 
 ## 4. Type & subtitles
 
 - **In the world, only keywords and numbers**: step badges (a camera-facing accent pill with a digit and one word), sizes, a name on a screen, a banner, a title card. Text meant to be read is framed above the subtitle area, held still for its reading time, and large enough at the angle it is seen: flat print reads from 55–70° down; a low camera reads a standing tent card.
-- **Titles are objects on the desk**: an opening tent card beside the first stop; at the end a large paper card dropped into the empty middle of the desk.
+- **Titles are objects on the desk**: an opening tent card beside the first stop; at the end a large paper card dropped onto open desk in the final frame. Where depends on the layout: wherever it covers no station, route or character and sits clear of the subtitle bar (the demo's stops leave the middle free; a zigzag layout may leave the front edge). Leave that space when laying out the desk.
 - Every face on screen comes from the film's own font files (cards, pills, subtitles); the mono stack falls back to the film's CJK face, never to a system face.
+- Three roles: a mono for labels and numbers (spaced caps), a sans with a heavy weight for pills, titles and subtitles, and a CJK (or other script) face both fall back to. The families are free (e.g. DM Mono or JetBrains Mono, Manrope or Space Grotesk, the Noto Sans of the film's language); the roles are not. Pixels belong to the cast, so no pixel font on the print.
 
 ### Voice-over and subtitles
 
@@ -68,13 +72,13 @@ Not a screen recording (no cursor, no glowing monitor, no real app chrome or log
 
 - One take, no cuts, no dissolves. Targets are live subjects; between keys the target follows a Hermite path with live end points; drift is a breath, not a handheld wobble.
 - At a key where a whip starts, the target rests first (or the camera stutters). A character's take-off is the natural start of a whip. A whip between far-apart stops arcs up mid-way so the stops in between stay in frame.
-- Wide shots frame the stations to fill at least 70 % of the frame width. **The film closes on the whole desk**: every stop and the route in one frame, everything moving once, the title landing in the middle.
+- Wide shots frame the stations to fill at least 70 % of the frame width. **The film closes on the whole desk**: every stop and the route in one frame, everything moving once, the title landing in open space.
 
 ## 7. Sound palette
 
 - **Score**: bright and warm, acoustic in feel: marimba (with vibraphone under long notes), plucked bass, a soft synthetic kick (a short sine sweep), claps, shaker, a quiet string pad. One key, diatonic chords, about one chord per bar. Under a voice the score is a light bed ducked about 16 dB while someone speaks; the full mallet theme plays where nobody speaks.
 - **Foley**: every action has a sound. Pop: a marimba note from the current chord plus an upward sweep. Hop: a soft tick. Landing: a felt thump. Press or stamp: a low thump with a crumble. Typing: dry key clicks. Ding: two bell notes from the chord. Camera whip: a whoosh sized by the measured camera speed. Pitched foley takes its notes from the score's chord table and sits on the 16th grid.
-- **Mix**: the voice leads (about −16 LUFS before delivery, −14 after); music 15–18 dB under the voice and lifted in the gaps; foley under the voice; true peak at or below −1.5 dBFS. The final chord holds to the last half-second.
+- **Mix**: the voice leads (about −16 LUFS before delivery, −14 after); music 15–18 dB under the voice and lifted in the gaps; foley under the voice; the mix peaks under −1.5 dBFS and `mux.sh` masters it to −14 LUFS, true peak −1.2 dBTP. The final chord holds to the last half-second.
 
 ## 8. Native moves
 
@@ -86,7 +90,7 @@ Not a screen recording (no cursor, no glowing monitor, no real app chrome or log
 - **Data run.** A stream of small bright cubes runs along the route between two stations. *Fits content like:* a download; a sync; a payment going through.
 - **Blurry, then sharp.** A picture on a screen card is printed blurred, then snaps sharp as the toy lands in it. *Fits content like:* loading; focus; a draft becoming final.
 - **UI rises.** Part of the printed interface grows into 3D out of its printed shape. *Fits content like:* progress; a metric climbing; a step badge.
-- **Curtain call.** The closing pull-back frames every stop; each hops once, left to right, the characters pop back up, and a title card drops into the middle. *Fits content like:* a recap; a team; a pipeline shown whole.
+- **Curtain call.** The closing pull-back frames every stop; each hops once, left to right, the characters pop back up, and a title card drops into open space. *Fits content like:* a recap; a team; a pipeline shown whole.
 
 ## 9. Pitfalls of the medium
 
@@ -95,6 +99,9 @@ Not a screen recording (no cursor, no glowing monitor, no real app chrome or log
 - **A standing toy hides the row behind it**: place characters beside or behind the text being read, or off the card, and check every reading frame for overlap.
 - **Text under the subtitle bar or cut at the frame edge**: keep the fixed vertical offset; show name plates and labels only in the shots that frame them whole; take camera-facing pills away before the camera moves on.
 - **Screens that read as blank**: a phone card without a whole interface reads as an empty white slab in close-up.
+- **Shadows of floating labels**: with the sun at 20°, a pill a few centimetres up throws a long shadow across the card and greys out its print. Labels and pills cast no shadow (`pill()` turns it on: set `castShadow = false`); a real floating object (a bell) may, but no shadow falls across text being read.
+- **Characters lost in the wide**: on screen a character is about `width × 1080 / (2 · dist · tan(fov / 2))` px wide. In the closing wide view keep every character at least about 35 px wide (the demo's smallest is about 37 px); otherwise frame closer, bring it forward, or scale it up for the curtain call.
+- **Voxels seen edge-on**: a standing sprite seen from far to the side reads as stripes and its eyes vanish; turn it towards the camera (`yaw`) for its key moments, and give a large picture-like sprite a thinner `depthK` (0.6–0.9).
 - **Whips over bare paper**: a fast move between far-apart cards crosses empty desk; arc it up so the stops in between pass through frame.
 - **Dead stations**: a stop where only the main action happens looks static; give it one or two small moving things that do not compete with what the voice says.
 - **Bars and ticks seen from above**: upright 3D bars and standing checkmarks turn into blobs in a top-down view; extrude them along the card or lay them flat.
@@ -105,17 +112,23 @@ Not a screen recording (no cursor, no glowing monitor, no real app chrome or log
 
 ## 10. Engine
 
-In `demo/` (three.js r170 + Canvas 2D; page contract `render(t)`, `DUR`, `EV`, `TEXTS`):
+In `demo/` (three.js r170 + Canvas 2D). Copy the folder into the project; the engine files work as they are, the film is yours to write.
 
-- `src/world.js`: renderer, sun, fog and the desk (`makeWorld({ mat: [w, h] })` lays a dotted mat on light oak); `card(world, canvas, w, h, thick)`, `dotPatch()`, `pill()` (camera-facing label), `rbox()`.
-- `src/cards.js`: palette, canvas helpers (`canvas`, `txt`, `tag`, `cardBase` with a two-line head, `grain`, `dotTile`, `tick`, `cross`).
-- `src/voxel.js`: `makeMonster(art, cell, name, depthK)` → `set({pos, yaw, e, hinge, sq, tiltX, tiltZ, scale, vis})`, `blink(on)`.
-- `src/anim.js`: `hops`, `squash`, `pop`, `beatBounce`, eases.
-- `src/camera.js`: `makeRig(ctx, camera, KEYS, SHAKES)`, the live-target rig with resting keys, banking, shakes and the vertical view offset; `src/shots.js` holds the demo's keys.
-- `src/post.js`: sub-frame accumulation, back-only depth of field, bloom, grade. `src/main.js`: the page, the speed-capped shutter and `TEXTS` (subtitle-free reading boxes projected from the world).
-- `src/captions.js`: subtitle cues from the voice clock (`src/vo.js`, written by `audio/vo_timeline.py`) and the sign-off; `?nosub=1` hides both for clean stills.
-- `src/film.js`: the demo's cards, tower, props, cast and timeline.
-- `audio/`: `vo_timeline.py` (lines on the clock), `compose.py` (score with the library sampler), `foley.py` (foley from events, pitched from the chord table, whooshes from `tools/camspeed.mjs`), `mix.py` (voice, ducked music, foley).
+- **Use as is**: `world.js`, `cards.js` (change only `COL`), `voxel.js`, `anim.js`, `camera.js`, `post.js`, `main.js`, `captions.js`, `tools/`.
+- **Write your own**: `src/film.js` (cards, props, cast, timeline, events, reading boxes), `src/shots.js` (camera keys), `audio/vo_timeline.py` (its English lines, gaps and length are the demo's), `audio/compose.py` (score); adapt `audio/foley.py` (event types) and `index.html` (title, fonts; empty `#credit`, which holds the library's sign-off).
+
+Conventions:
+
+- **Space**: 1 unit = 1000 canvas px; the mat's top is y = 0; a card's top is at its thickness. Card print reads upright from the +z side (camera `az` 0): the canvas top points to −z.
+- `world.js`: `makeWorld({ mat: [w, h], haze })` (mat sizes multiples of 0.06) → `{ renderer, scene, camera, sun, SUNDIR, tex }`. `card(world, canvas, w, h, thick)` → a group centred on the card, `userData.redraw()` after you redraw its canvas. `pill(world, text, { bg, fg, h, size, font, wt })` → a mesh; call `.face(camera)` every frame; it casts a shadow unless you turn it off. `rbox(w, h, d, r)` rounded box geometry. `dotPatch()` (lifted dots) is superseded by the flat ring (§9).
+- `cards.js`: `COL` is the whole film's palette (the mat, dots and route read it too); `MONO`, `SANS`, `CJK` are font stacks named in `index.html`'s `@font-face`; `canvas(w, h, scale)` (draw cards at 3–3.4), `txt`, `tag`, `cardBase(c, w, h, en, other)`, `grain`, `tick`, `cross`.
+- `voxel.js`: `makeMonster({ w, h, cells: [[i, j, '#hex']] }, cell, name, depthK)`; `j = 0` is the top row; pure black cells are eyes. The root sits at the centre of the feet; at `hinge = 0` the sprite lies face up on the paper with its head towards −z (so it reads as print). `set({ pos, yaw, e, hinge, sq, tiltX, tiltZ, spinX, spinZ, scale, vis })` defaults to a standing toy (`e = 1, hinge = 1`), so pass both for a sticker; `pos` is the feet. Also `.width`, `.height`, `.blink(on)`.
+- `anim.js`: `BEAT` and `BAR` are fixed at 120 BPM; change them for another tempo. `hops(t, list, rest)`: `list` in time order, each `{ t0, t1, from, to, h }` starting where the last ended; returns `{ pos, air, dir, lands, takeoffs }`, and `squash(t, lands, takeoffs, air)` turns that into `sq`. `pop(t, t0, dur, jump)` and `beatBounce(t, t0, t1, amp)` return offsets: add their `y` to `pos.y`, multiply their `sq` into yours.
+- `camera.js`: `makeRig(ctx, camera, KEYS, SHAKES)`; a key is `[t, target, dist, az, el, fov, offset?, { ease: 1 }?]`, the target a `Vector3` or the name of a live subject `ctx.subj[name](t) → Vector3`; `ease` makes the target rest there (put it where a whip starts). Shakes are `[t, amplitude, decay]`.
+- `main.js` expects `film.js` to export `DUR`, `MAT`, `GLYPHS` (characters to preload), `VO`, `END` (`{ credit }`, past `DUR` when there is no sign-off) and `build(ctx)` → `update(t)`. `build` fills `ctx.subj`, pushes sound events `{ t, type, … }` into `ctx.ev`, sets `ctx.fx = { flash }` and `ctx.read = [[id, text, t0, t1, () => corners]]` (the world points of each text meant to be read, reported through `TEXTS`). It also defines `window.DBG(t)`, which `tools/camspeed.mjs` reads. `?n=` sets the sub-frames, `?nosub=1` hides subtitles.
+- `captions.js`: cues from `VO` (`{ t0, t1, zh, en }`: `zh` is the spoken line, whatever the language).
+
+Build order (the demo's `build.sh` is the template): fonts → voice (`core/tts`, checked) → `vo_timeline.py` (writes `src/vo.js`, `vo/timeline.json`) → `tools/subset.py` (it reads `src/*.js`, so run it after the subtitles exist) → `core/render/events.mjs` → `LIB=<library> node tools/camspeed.mjs` → `compose.py` (also writes `music/harmony.json`; `foley.py` reads one chord per 2 s bar) → `foley.py` → `mix.py` → `core/render/video.mjs` → `mux.sh` → `readcheck.mjs`; the `.srt` from `vo/timeline.json` with `core/render/srt.py`. Outside `styles/` the scripts' guess of the library root is one level off: export `LIB` and point `compose.py` at it.
 
 Minimal start: a to-do card and a calendar card; a ticket sticker pops on beat 1, blinks, hops to the calendar on beat 3 while the camera whips after it, and drops into a day as a printed tag.
 
