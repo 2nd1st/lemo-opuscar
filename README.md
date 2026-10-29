@@ -144,7 +144,7 @@ Library updates and reinstalling never touch them. When the base style is update
 ### Before you start
 
 - A film takes an agent about 30–60 minutes and a fair amount of tokens.
-- You need Node 20+, ffmpeg and Python 3.11+ (or [uv](https://docs.astral.sh/uv/)); the agent installs the rest.
+- You need Node 20+, ffmpeg 7+ and Python 3.11+ (or [uv](https://docs.astral.sh/uv/)); the agent installs the rest. Ubuntu 24.04 ships ffmpeg 6.1, which is too old: use a [static build](https://johnvansickle.com/ffmpeg/).
 - Default output 1920×1080, 24 fps; other sizes on request.
 
 ### Update or uninstall

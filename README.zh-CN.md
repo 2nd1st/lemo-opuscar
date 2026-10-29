@@ -144,7 +144,7 @@ agent 会读三份指南，像一个小工作室一样开工。<br>
 ### 开始之前
 
 - 一支片子 agent 大约要做 30–60 分钟，token 用量不小。
-- 需要 Node 20+、ffmpeg 和 Python 3.11+（或 [uv](https://docs.astral.sh/uv/)），其余由 agent 安装。
+- 需要 Node 20+、ffmpeg 7+ 和 Python 3.11+（或 [uv](https://docs.astral.sh/uv/)），其余由 agent 安装。Ubuntu 24.04 自带的 ffmpeg 是 6.1，版本太旧，请换成[静态版](https://johnvansickle.com/ffmpeg/)。
 - 默认输出 1920×1080、24 fps，其他尺寸可以指定。
 
 ### 更新和卸载
