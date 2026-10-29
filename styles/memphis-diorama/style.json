@@ -6,15 +6,17 @@
  "category_en": "Materials & 3D",
  "category_cn": "材质与 3D",
  "film": "Four Seasons in Pomelo Town",
- "line": "One river bend through spring, summer, autumn and winter in one take; each season starts when the big tree squats and springs back.",
- "line_cn": "同一个河湾一镜到底过完春夏秋冬：大树往下一蹲、再弹起来，就换一季。",
+ "line": "One river bend, four seasons, one take; each turns when the big tree squats and springs back.",
+ "line_cn": "一个河湾一镜过完四季，大树一蹲一弹，就换一季。",
  "uses": [
-  "Web hero scenes",
+  "Web heroes",
   "Ambient loops",
-  "Seasonal series",
-  "How things work",
-  "City data maps"
+  "Seasons"
  ],
  "frame_sec": 25.0,
- "dur": 45.0
+ "dur": 45.0,
+ "by": {
+  "name": "EianLu",
+  "url": "https://x.com/EianLu"
+ }
 }

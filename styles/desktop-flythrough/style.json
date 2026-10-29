@@ -6,13 +6,12 @@
  "category_en": "Materials & 3D",
  "category_cn": "材质与 3D",
  "film": "Before the Ding",
- "line": "A cat photo hops across app cards laid on a sunlit desk, squeezed by a press, parked in a server tower and fetched by a friend's phone, as one camera flies after it.",
- "line_cn": "一张猫照片在阳光下的桌面上跳过一张张应用卡片：被压小、存进服务器小楼、再被朋友的手机取回，一个镜头一路跟着飞。",
+ "line": "A cat photo hops across app cards on a sunlit desk, from one phone to a friend's.",
+ "line_cn": "一张猫照片跳过桌上的应用卡片，从一台手机飞到朋友手机里，一镜跟到底。",
  "uses": [
-  "How an app works, step by step",
-  "Workflows across several tools",
-  "Product and feature explainers",
-  "Data moving between devices"
+  "App explainers",
+  "Workflows",
+  "Products"
  ],
  "frame_sec": 56.85,
  "dur": 60.0

@@ -12,7 +12,7 @@
 ⚠️ **本插件为 Claude 专用。** 风格都是按 Claude Opus 5.5 调出来的，<br>
 其他模型适配度不高，请谨慎使用。
 
-🆕 **2026-10-29 · [7 种新风格](https://lemomo-ai.github.io/lemo-opuscar/)**：孟菲斯微缩景观、地铁线路图、黑板粉笔、电路板等。[往下看 ↓](#风格)<br>
+🆕 **2026-10-29 · [7 种新风格](https://lemomo-ai.github.io/lemo-opuscar/)**：孟菲斯微缩景观（[@EianLu](https://x.com/EianLu) 提供）、地铁线路图、黑板粉笔、电路板等。[往下看 ↓](#风格)<br>
 🆕 **2026-10-22 · 新分类[「剪辑与纪实」](https://lemomo-ai.github.io/lemo-opuscar/#edit-documentary)**：8 种风格，用真实的档案、文件和数据剪成。[往下看 ↓](#剪辑与纪实)<br>
 🆕 **2026-10-22 · 新玩法[「改成你自己的风格」](#改成你自己的风格)**：改库里的风格或从空白做，存成你自己的。[往下看 ↓](#改成你自己的风格)<br>
 🆕 **2026-10-16 · 新分类[「实证影像」](https://lemomo-ai.github.io/lemo-opuscar/#evidence-films)**：8 种风格，拍真实素材，每个数字都有出处。[往下看 ↓](#实证影像)
@@ -173,6 +173,24 @@ claude plugin uninstall lemo-opuscar@lemolab
 
 <!-- styles:start -->
 
+### 🆕 最新 · 2026-10-29
+
+<table>
+<tr>
+<td width="33%" valign="top"><a href="styles/memphis-diorama/STYLE.md"><img src="docs/frames/memphis-diorama.jpg" alt="孟菲斯微缩景观"></a><br><b>孟菲斯微缩景观</b><br>Memphis Diorama<br><i>Four Seasons in Pomelo Town</i><br><sub>一个河湾一镜过完四季，大树一蹲一弹，就换一季。</sub><br><sub>由 <a href="https://x.com/EianLu">@EianLu</a> 提供</sub></td>
+<td width="33%" valign="top"><a href="styles/transit-map/STYLE.md"><img src="docs/frames/transit-map.jpg" alt="地铁线路图"></a><br><b>地铁线路图</b><br>Transit Map<br><i>6 Kilometres</i><br><sub>一张纸上的线路图，从 1993 年的 6 公里长到 21 条线、906 公里。</sub></td>
+<td width="33%" valign="top"><a href="styles/chalkboard/STYLE.md"><img src="docs/frames/chalkboard.jpg" alt="黑板粉笔"></a><br><b>黑板粉笔</b><br>Chalkboard<br><i>The Story of Chinese Characters</i><br><sub>粉笔写下网上的说法，再一擦，把「射」写回三千年前。</sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="styles/isometric-picture-book/STYLE.md"><img src="docs/frames/isometric-picture-book.jpg" alt="等距绘本"></a><br><b>等距绘本</b><br>Isometric Picture Book<br><i>Seventy-Two Seats</i><br><sub>等距的登机口和机舱里，小人按顺序登机，讲清哪种叫法快将近一半。</sub></td>
+<td width="33%" valign="top"><a href="styles/printed-long-take/STYLE.md"><img src="docs/frames/printed-long-take.jpg" alt="印刷长镜头"></a><br><b>印刷长镜头</b><br>Printed Long Take<br><i>Thirty-Three Cranes</i><br><sub>刮版画的北海道河谷一镜到底，丹顶鹤从 33 只数回到 1,927 只。</sub></td>
+<td width="33%" valign="top"><a href="styles/circuit-board/STYLE.md"><img src="docs/frames/circuit-board.jpg" alt="电路板"></a><br><b>电路板</b><br>Circuit Board<br><i>Seven Milliseconds</i><br><sub>江河变成电路板上的走线，电流从水坝跑 2,080 公里进手机充电器。</sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="styles/desktop-flythrough/STYLE.md"><img src="docs/frames/desktop-flythrough.jpg" alt="桌面穿梭"></a><br><b>桌面穿梭</b><br>Desktop Flythrough<br><i>Before the Ding</i><br><sub>一张猫照片跳过桌上的应用卡片，从一台手机飞到朋友手机里，一镜跟到底。</sub></td>
+</tr>
+</table>
+
 ### 剪辑与纪实
 
 <table>
@@ -226,7 +244,6 @@ claude plugin uninstall lemo-opuscar@lemolab
 </tr>
 <tr>
 <td width="33%" valign="top"><a href="styles/urban-sketch/STYLE.md"><img src="docs/frames/urban-sketch.jpg" alt="钢笔淡彩"></a><br><b>钢笔淡彩</b><br>Urban Sketch · Pen &amp; Wash<br><i>Where the Wind Went</i><br><sub>公园只是一张钢笔速写，风把草帽吹到哪里，哪里才有颜色。</sub></td>
-<td width="33%" valign="top"><a href="styles/chalkboard/STYLE.md"><img src="docs/frames/chalkboard.jpg" alt="黑板粉笔"></a><br><b>黑板粉笔</b><br>Chalkboard<br><i>The Story of Chinese Characters</i><br><sub>刚擦干净的教室黑板上，粉笔先写下网上流行的说法，再一擦，把「射」从三千年前一路写回来，最后在孩子的问题下面写上答案。</sub></td>
 </tr>
 </table>
 
@@ -254,7 +271,6 @@ claude plugin uninstall lemo-opuscar@lemolab
 <tr>
 <td width="33%" valign="top"><a href="styles/engraving/STYLE.md"><img src="docs/frames/engraving.jpg" alt="铜版画"></a><br><b>铜版画</b><br>Copperplate Engraving<br><i>The Honeybee, Plate VII</i><br><sub>一张博物志图版自己刻出来：雕刀推开铜版，蜜蜂一线线成形，最后手工水彩上色。</sub></td>
 <td width="33%" valign="top"><a href="styles/silkscreen-poster/STYLE.md"><img src="docs/frames/silkscreen-poster.jpg" alt="丝印旅行海报"></a><br><b>丝印旅行海报</b><br>Silkscreen Travel Poster<br><i>Three Trails</i><br><sub>三条步道各一张丝印海报，一色一刮印出来，再沿山脊一镜到底从正午爬到黄昏。</sub></td>
-<td width="33%" valign="top"><a href="styles/printed-long-take/STYLE.md"><img src="docs/frames/printed-long-take.jpg" alt="印刷长镜头"></a><br><b>印刷长镜头</b><br>Printed Long Take<br><i>Thirty-Three Cranes</i><br><sub>北海道的冬日河谷画成刮版画，一镜到底：丹顶鹤在冒白汽的河里醒来，飞到投喂地，一块刻字木牌把它们从 33 只数回到 1,927 只。</sub></td>
 </tr>
 </table>
 
@@ -287,11 +303,6 @@ claude plugin uninstall lemo-opuscar@lemolab
 <tr>
 <td width="33%" valign="top"><a href="styles/living-screencast/STYLE.md"><img src="docs/frames/living-screencast.jpg" alt="活体实机录屏"></a><br><b>活体实机录屏</b><br>Living Screencast<br><i>Clawd Moves In</i><br><sub>像素小人 Clawd 搬进 Claude 应用，一镜到底演示 Plan 模式和自检。</sub></td>
 <td width="33%" valign="top"><a href="styles/hologram-hud/STYLE.md"><img src="docs/frames/hologram-hud.jpg" alt="科幻全息界面"></a><br><b>科幻全息界面</b><br>Sci-fi Hologram HUD<br><i>Volt · Spec Scan</i><br><sub>电助力车被扫描成全息线框，目标框依次锁定电池、电机、刹车。</sub></td>
-<td width="33%" valign="top"><a href="styles/transit-map/STYLE.md"><img src="docs/frames/transit-map.jpg" alt="地铁线路图"></a><br><b>地铁线路图</b><br>Transit Map<br><i>6 Kilometres</i><br><sub>一张印在纸上的线路图，从 1993 年的 6 公里一路长到 21 条线、906 公里；镜头跟着笔尖走，压低过江，再贴着纸面扫过去。</sub></td>
-</tr>
-<tr>
-<td width="33%" valign="top"><a href="styles/isometric-picture-book/STYLE.md"><img src="docs/frames/isometric-picture-book.jpg" alt="等距绘本"></a><br><b>等距绘本</b><br>Isometric Picture Book<br><i>Seventy-Two Seats</i><br><sub>干净的等距登机口、廊桥和机舱，背影小人按顺序登机，衬线大字落在地上，机舱顶盖像纸盖一样翻开；动的顺序本身就讲清了为什么换一种叫法能快将近一半。</sub></td>
-<td width="33%" valign="top"><a href="styles/circuit-board/STYLE.md"><img src="docs/frames/circuit-board.jpg" alt="电路板"></a><br><b>电路板</b><br>Circuit Board<br><i>Seven Milliseconds</i><br><sub>整个故事画成一块俯视的电路板：江河是铜皮里的沟槽，地方是焊盘，字是丝印；电流顺着走线，从水坝跑过 2,080 公里，一直跑进手机充电器。</sub></td>
 </tr>
 </table>
 
@@ -341,10 +352,6 @@ claude plugin uninstall lemo-opuscar@lemolab
 <tr>
 <td width="33%" valign="top"><a href="styles/lowpoly-island/STYLE.md"><img src="docs/frames/lowpoly-island.jpg" alt="低多边形等距"></a><br><b>低多边形等距</b><br>Low-poly Isometric Island<br><i>The Island That Grew</i><br><sub>空海里一格格长出小岛和村庄，每放一块响一个音符，直到星空。</sub></td>
 <td width="33%" valign="top"><a href="styles/glass-product/STYLE.md"><img src="docs/frames/glass-product.jpg" alt="玻璃质感产品"></a><br><b>玻璃质感产品</b><br>Glass Product Render<br><i>Aura — Hear the Light</i><br><sub>虚构玻璃耳机 Aura 的开箱与特写。</sub></td>
-<td width="33%" valign="top"><a href="styles/memphis-diorama/STYLE.md"><img src="docs/frames/memphis-diorama.jpg" alt="孟菲斯微缩景观"></a><br><b>孟菲斯微缩景观</b><br>Memphis Diorama<br><i>Four Seasons in Pomelo Town</i><br><sub>同一个河湾一镜到底过完春夏秋冬：大树往下一蹲、再弹起来，就换一季。</sub></td>
-</tr>
-<tr>
-<td width="33%" valign="top"><a href="styles/desktop-flythrough/STYLE.md"><img src="docs/frames/desktop-flythrough.jpg" alt="桌面穿梭"></a><br><b>桌面穿梭</b><br>Desktop Flythrough<br><i>Before the Ding</i><br><sub>一张猫照片在阳光下的桌面上跳过一张张应用卡片：被压小、存进服务器小楼、再被朋友的手机取回，一个镜头一路跟着飞。</sub></td>
 </tr>
 </table>
 <!-- styles:end -->

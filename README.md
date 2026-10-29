@@ -13,7 +13,7 @@ Pick a style or make one from scratch, bring your story, and let your coding age
 ⚠️ **Built for Claude.** The styles are tuned for Claude Opus 5.5;<br>
 other models may not reproduce them well, so use them with care.
 
-🆕 **2026-10-29 · [7 new styles](https://lemomo-ai.github.io/lemo-opuscar/)**: a Memphis diorama, a metro map, a chalkboard, a circuit board and more. [See them ↓](#the-styles)<br>
+🆕 **2026-10-29 · [7 new styles](https://lemomo-ai.github.io/lemo-opuscar/)**: a Memphis diorama by [@EianLu](https://x.com/EianLu), a metro map, a chalkboard and more. [See them ↓](#the-styles)<br>
 🆕 **2026-10-22 · [Edit & Documentary](https://lemomo-ai.github.io/lemo-opuscar/#edit-documentary)**: 8 styles cut from real footage, documents and data. [See them ↓](#edit--documentary)<br>
 🆕 **2026-10-22 · [Make a style your own](#make-a-style-your-own)**: change a style or start blank, and keep it. [See how ↓](#make-a-style-your-own)<br>
 🆕 **2026-10-16 · [Evidence Films](https://lemomo-ai.github.io/lemo-opuscar/#evidence-films)**: 8 styles that film real material, every number sourced. [See them ↓](#evidence-films)
@@ -173,6 +173,24 @@ Click a frame for its `STYLE.md`.
 
 <!-- styles:start -->
 
+### 🆕 New · 2026-10-29
+
+<table>
+<tr>
+<td width="33%" valign="top"><a href="styles/memphis-diorama/STYLE.md"><img src="docs/frames/memphis-diorama.jpg" alt="Memphis Diorama"></a><br><b>Memphis Diorama</b><br><i>Four Seasons in Pomelo Town</i><br><sub>One river bend, four seasons, one take; each turns when the big tree squats and springs back.</sub><br><sub>Contributed by <a href="https://x.com/EianLu">@EianLu</a></sub></td>
+<td width="33%" valign="top"><a href="styles/transit-map/STYLE.md"><img src="docs/frames/transit-map.jpg" alt="Transit Map"></a><br><b>Transit Map</b><br><i>6 Kilometres</i><br><sub>A printed metro map grows from one 6 km line in 1993 to 21 lines and 906 km.</sub></td>
+<td width="33%" valign="top"><a href="styles/chalkboard/STYLE.md"><img src="docs/frames/chalkboard.jpg" alt="Chalkboard"></a><br><b>Chalkboard</b><br><i>The Story of Chinese Characters</i><br><sub>Chalk writes a popular claim about two characters, wipes it, and traces 射 back three thousand years.</sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="styles/isometric-picture-book/STYLE.md"><img src="docs/frames/isometric-picture-book.jpg" alt="Isometric Picture Book"></a><br><b>Isometric Picture Book</b><br><i>Seventy-Two Seats</i><br><sub>Travellers board an isometric plane, and the order shows why one way is nearly twice as fast.</sub></td>
+<td width="33%" valign="top"><a href="styles/printed-long-take/STYLE.md"><img src="docs/frames/printed-long-take.jpg" alt="Printed Long Take"></a><br><b>Printed Long Take</b><br><i>Thirty-Three Cranes</i><br><sub>Red-crowned cranes in a Hokkaido valley, one scratchboard take, counted back from 33 to 1,927.</sub></td>
+<td width="33%" valign="top"><a href="styles/circuit-board/STYLE.md"><img src="docs/frames/circuit-board.jpg" alt="Circuit Board"></a><br><b>Circuit Board</b><br><i>Seven Milliseconds</i><br><sub>Rivers become copper traces as current runs 2,080 km from a dam to a phone charger.</sub></td>
+</tr>
+<tr>
+<td width="33%" valign="top"><a href="styles/desktop-flythrough/STYLE.md"><img src="docs/frames/desktop-flythrough.jpg" alt="Desktop Flythrough"></a><br><b>Desktop Flythrough</b><br><i>Before the Ding</i><br><sub>A cat photo hops across app cards on a sunlit desk, from one phone to a friend&#x27;s.</sub></td>
+</tr>
+</table>
+
 ### Edit & Documentary
 
 <table>
@@ -226,7 +244,6 @@ Click a frame for its `STYLE.md`.
 </tr>
 <tr>
 <td width="33%" valign="top"><a href="styles/urban-sketch/STYLE.md"><img src="docs/frames/urban-sketch.jpg" alt="Urban Sketch · Pen &amp; Wash"></a><br><b>Urban Sketch · Pen &amp; Wash</b><br><i>Where the Wind Went</i><br><sub>A park that is only a pen sketch; wherever the wind carries her straw hat, colour follows.</sub></td>
-<td width="33%" valign="top"><a href="styles/chalkboard/STYLE.md"><img src="docs/frames/chalkboard.jpg" alt="Chalkboard"></a><br><b>Chalkboard</b><br><i>The Story of Chinese Characters</i><br><sub>On a freshly wiped classroom board, chalk writes a popular claim about two characters, wipes it, and writes 射 back through three thousand years until the answer goes under a child&#x27;s question.</sub></td>
 </tr>
 </table>
 
@@ -254,7 +271,6 @@ Click a frame for its `STYLE.md`.
 <tr>
 <td width="33%" valign="top"><a href="styles/engraving/STYLE.md"><img src="docs/frames/engraving.jpg" alt="Copperplate Engraving"></a><br><b>Copperplate Engraving</b><br><i>The Honeybee, Plate VII</i><br><sub>A natural-history plate engraves itself: the burin cuts the copper, the bee builds up line by line, and a watercolour wash brings it to life.</sub></td>
 <td width="33%" valign="top"><a href="styles/silkscreen-poster/STYLE.md"><img src="docs/frames/silkscreen-poster.jpg" alt="Silkscreen Travel Poster"></a><br><b>Silkscreen Travel Poster</b><br><i>Three Trails</i><br><sub>Three trail posters are screen-printed one ink at a time, then climbed in one long take from noon to dusk.</sub></td>
-<td width="33%" valign="top"><a href="styles/printed-long-take/STYLE.md"><img src="docs/frames/printed-long-take.jpg" alt="Printed Long Take"></a><br><b>Printed Long Take</b><br><i>Thirty-Three Cranes</i><br><sub>A winter valley in Hokkaido drawn as a scratchboard print, one unbroken take: red-crowned cranes wake in a steaming river, fly to a feeding field, and a carved board counts them back from 33 to 1,927.</sub></td>
 </tr>
 </table>
 
@@ -287,11 +303,6 @@ Click a frame for its `STYLE.md`.
 <tr>
 <td width="33%" valign="top"><a href="styles/living-screencast/STYLE.md"><img src="docs/frames/living-screencast.jpg" alt="Living Screencast"></a><br><b>Living Screencast</b><br><i>Clawd Moves In</i><br><sub>Clawd hops out of the terminal into the Claude app and acts out plan mode and self-checks in one take.</sub></td>
 <td width="33%" valign="top"><a href="styles/hologram-hud/STYLE.md"><img src="docs/frames/hologram-hud.jpg" alt="Sci-fi Hologram HUD"></a><br><b>Sci-fi Hologram HUD</b><br><i>Volt · Spec Scan</i><br><sub>An e-bike is scanned into a hologram; target boxes lock onto the battery, motor and brakes.</sub></td>
-<td width="33%" valign="top"><a href="styles/transit-map/STYLE.md"><img src="docs/frames/transit-map.jpg" alt="Transit Map"></a><br><b>Transit Map</b><br><i>6 Kilometres</i><br><sub>A printed metro map grows from one 6 km line in 1993 to 21 lines and 906 km, as a camera rides the pen, dives under the river and sweeps the paper.</sub></td>
-</tr>
-<tr>
-<td width="33%" valign="top"><a href="styles/isometric-picture-book/STYLE.md"><img src="docs/frames/isometric-picture-book.jpg" alt="Isometric Picture Book"></a><br><b>Isometric Picture Book</b><br><i>Seventy-Two Seats</i><br><sub>A clean isometric gate, jet bridge and cabin where faceless travellers board in order, serif words land on the floor and a paper roof flips open, so the order of movement explains why one way fills 72 seats in nearly half the time.</sub></td>
-<td width="33%" valign="top"><a href="styles/circuit-board/STYLE.md"><img src="docs/frames/circuit-board.jpg" alt="Circuit Board"></a><br><b>Circuit Board</b><br><i>Seven Milliseconds</i><br><sub>The whole story is a printed circuit board seen from above: rivers are channels in the copper, places are pads, words are silkscreen, and the current runs along the traces from a dam 2,080 km to a phone charger.</sub></td>
 </tr>
 </table>
 
@@ -341,10 +352,6 @@ Click a frame for its `STYLE.md`.
 <tr>
 <td width="33%" valign="top"><a href="styles/lowpoly-island/STYLE.md"><img src="docs/frames/lowpoly-island.jpg" alt="Low-poly Isometric Island"></a><br><b>Low-poly Isometric Island</b><br><i>The Island That Grew</i><br><sub>An island and its village grow tile by tile from an empty sea, each tile a note, into a starry night.</sub></td>
 <td width="33%" valign="top"><a href="styles/glass-product/STYLE.md"><img src="docs/frames/glass-product.jpg" alt="Glass Product Render"></a><br><b>Glass Product Render</b><br><i>Aura — Hear the Light</i><br><sub>Unboxing and close-ups of Aura, fictional glass earbuds, in strip-light sweeps and caustics.</sub></td>
-<td width="33%" valign="top"><a href="styles/memphis-diorama/STYLE.md"><img src="docs/frames/memphis-diorama.jpg" alt="Memphis Diorama"></a><br><b>Memphis Diorama</b><br><i>Four Seasons in Pomelo Town</i><br><sub>One river bend through spring, summer, autumn and winter in one take; each season starts when the big tree squats and springs back.</sub></td>
-</tr>
-<tr>
-<td width="33%" valign="top"><a href="styles/desktop-flythrough/STYLE.md"><img src="docs/frames/desktop-flythrough.jpg" alt="Desktop Flythrough"></a><br><b>Desktop Flythrough</b><br><i>Before the Ding</i><br><sub>A cat photo hops across app cards laid on a sunlit desk, squeezed by a press, parked in a server tower and fetched by a friend&#x27;s phone, as one camera flies after it.</sub></td>
 </tr>
 </table>
 <!-- styles:end -->

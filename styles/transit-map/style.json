@@ -6,13 +6,12 @@
  "category_en": "Information & Keynote",
  "category_cn": "信息与发布",
  "film": "6 Kilometres",
- "line": "A printed metro map grows from one 6 km line in 1993 to 21 lines and 906 km, as a camera rides the pen, dives under the river and sweeps the paper.",
- "line_cn": "一张印在纸上的线路图，从 1993 年的 6 公里一路长到 21 条线、906 公里；镜头跟着笔尖走，压低过江，再贴着纸面扫过去。",
+ "line": "A printed metro map grows from one 6 km line in 1993 to 21 lines and 906 km.",
+ "line_cn": "一张纸上的线路图，从 1993 年的 6 公里长到 21 条线、906 公里。",
  "uses": [
-  "City and transport stories",
-  "Growth over the years",
-  "Roadmaps and routes",
-  "Network explainers"
+  "Transport",
+  "Growth over time",
+  "Networks"
  ],
  "frame_sec": 36.2,
  "dur": 47.0
